@@ -20,9 +20,18 @@ namespace SgtSafety.NXTBluetooth
         public NXTBluetoothHelper()
         {
             localEndpoint = new BluetoothEndPoint(GetBTMacAddress(), BluetoothService.SerialPort);
+            localClient = new BluetoothClient(localEndpoint);
+            localComponent = new BluetoothComponent(localClient);
         }
 
         // METHODS
+        public void SearchDevicesAsync(EventHandler<DiscoverDevicesEventArgs> e, EventHandler<DiscoverDevicesEventArgs> e2)
+        {
+            localComponent.DiscoverDevicesAsync(255, true, true, true, true, null);
+            localComponent.DiscoverDevicesProgress += e;
+            localComponent.DiscoverDevicesComplete += e2;
+        }
+
         public async Task<bool> Send(BluetoothDeviceInfo device, string content)
         {
             // Pour éviter de bloquer l'interface, on exécute cette portion sur un autre thread

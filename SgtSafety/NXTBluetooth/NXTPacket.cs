@@ -37,7 +37,7 @@ namespace SgtSafety.NXTBluetooth
         {
             actions.Add(a);
 
-            return false;
+            return true;
         }
 
 
