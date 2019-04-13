@@ -1,6 +1,7 @@
 ﻿using InTheHand.Net;
 using InTheHand.Net.Bluetooth;
 using InTheHand.Net.Sockets;
+using SgtSafety.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,13 @@ namespace SgtSafety.NXTBluetooth
         private BluetoothEndPoint localEndpoint;
         private BluetoothClient localClient;
         private BluetoothComponent localComponent;
+        private List<BluetoothDeviceInfo> discoveredDevices;
+
+        private EventHandler connectedEvent;
+        private EventHandler<DiscoverDevicesEventArgs> deviceFound;
+        private EventHandler searchCompleted;
+        
+        private IAsyncResult discoveryAsyncState;
 
         // CONSTRUCTOR
         public NXTBluetoothHelper()
@@ -22,52 +30,105 @@ namespace SgtSafety.NXTBluetooth
             localEndpoint = new BluetoothEndPoint(GetBTMacAddress(), BluetoothService.SerialPort);
             localClient = new BluetoothClient(localEndpoint);
             localComponent = new BluetoothComponent(localClient);
+            discoveredDevices = new List<BluetoothDeviceInfo>();
         }
 
         // METHODS
-        public void SearchDevicesAsync(EventHandler<DiscoverDevicesEventArgs> e, EventHandler<DiscoverDevicesEventArgs> e2)
+        public void SearchDevicesAsync(EventHandler<DiscoverDevicesEventArgs> e1, EventHandler e2)
         {
-            localComponent.DiscoverDevicesAsync(255, true, true, true, true, null);
-            localComponent.DiscoverDevicesProgress += e;
-            localComponent.DiscoverDevicesComplete += e2;
+            localComponent.DiscoverDevicesAsync(20, true, true, true, true, null);
+            localComponent.DiscoverDevicesProgress += DiscoveryProgress;
+            localComponent.DiscoverDevicesComplete += DiscoveryCompleted;
+
+            deviceFound = e1;
+            searchCompleted = e2;
         }
 
-        public async Task<bool> Send(BluetoothDeviceInfo device, string content)
+        public void StopSearchDevicesAsync()
         {
-            // Pour éviter de bloquer l'interface, on exécute cette portion sur un autre thread
-            var task = Task.Run(() =>
+            localComponent.Dispose();
+            searchCompleted.Invoke(this, new EventArgs());
+        }
+
+        public bool PairIfNotAlreadyPaired(BluetoothDeviceInfo device)
+        {
+            BluetoothDeviceInfo[] paired = localClient.DiscoverDevices(255, false, true, false, false);
+
+            bool isPaired = false;
+            for (int i = 0; i < paired.Length; i++)
             {
-                try
+                if (device.Equals(paired[i]))
                 {
-                    var ep = new BluetoothEndPoint(device.DeviceAddress, BluetoothService.SerialPort);
-
-                    // Connexion
-                    localClient.Connect(ep);
-
-                    // On obtient le flux bluetooth (pour écrire dedans)
-                    var bluetoothStream = localClient.GetStream();
-
-                    // Si ok on envoie
-                    if (localClient.Connected && bluetoothStream != null)
-                    {
-                        // Ecriture des données dans le flux
-                        var buffer = Encoding.UTF8.GetBytes(content);
-                        bluetoothStream.Write(buffer, 0, buffer.Length);
-                        bluetoothStream.Flush();
-                        bluetoothStream.Close();
-                        return true;
-                    }
-
-                    return false;
+                    isPaired = true;
+                    break;
                 }
-                catch (Exception e)
+            }
+
+            if (!isPaired)
+            {
+                Console.WriteLine("Trying to pair...");
+                isPaired = BluetoothSecurity.PairRequest(device.DeviceAddress, "0000");
+                if (isPaired)
                 {
-                    Console.WriteLine("Erreur: " + e.Message);
+                    Console.WriteLine("Paired !");
+                    return true;
                 }
 
                 return false;
-            });
-            return await task;
+            }
+
+            return true;
+        }
+
+        // Pour se connecter à un périphérique appairé, si non appairé alors return false
+        public bool ConnectToPaired(BluetoothDeviceInfo device, EventHandler e)
+        {
+            //if (device.Authenticated)
+            //{
+            connectedEvent = e;
+            localClient.SetPin("0000");
+            localClient.BeginConnect(device.DeviceAddress, BluetoothService.SerialPort, new AsyncCallback(Connect), device);
+
+            return true;
+            //}
+
+            //return false;
+        }
+
+        public void DisconnectFromPaired()
+        {
+            localClient.EndConnect(null);
+        }
+
+        public void SendNTXPacket(NXTPacket packet)
+        {
+
+        }
+
+        // EVENTS / ASYNC CALLS
+        private void Connect(IAsyncResult result)
+        {
+            if (result.IsCompleted)
+            {
+                NXTPacket.IntroduceNXT(localClient.GetStream());
+
+                connectedEvent.Invoke(this, new EventArgs());
+            }
+        }
+
+        private void DiscoveryProgress(Object sender, DiscoverDevicesEventArgs e)
+        {
+            foreach (BluetoothDeviceInfo b in e.Devices)
+            {
+                discoveredDevices.Add(b);
+            }
+
+            deviceFound.Invoke(this, e);
+        }
+          
+        private void DiscoveryCompleted(Object sender, DiscoverDevicesEventArgs e)
+        {
+            searchCompleted.Invoke(this, new EventArgs());
         }
 
         // STATIC METHODS

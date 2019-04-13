@@ -18,5 +18,27 @@ namespace SgtSafety.Types
     {
         public const char DROP = 'd';
         public const char TAKE = 't';
+
+        private char movement;
+
+        private bool hasAction = false;
+        private char action;
+
+        public NXTAction(char movement)
+        {
+            this.movement = movement;
+        }
+
+        public NXTAction(char movement, char action)
+        {
+            this.movement = movement;
+            this.action = action;
+            this.hasAction = true;
+        }
+
+        public override string ToString()
+        {
+            return movement + (hasAction ? action.ToString() : "") + "\n";
+        }
     }
 }
