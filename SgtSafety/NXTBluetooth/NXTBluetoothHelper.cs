@@ -5,6 +5,7 @@ using SgtSafety.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -100,9 +101,13 @@ namespace SgtSafety.NXTBluetooth
             localClient.EndConnect(null);
         }
 
-        public void SendNTXPacket(NXTPacket packet)
+        public void SendNTXPacket(NXTPacket packet, bool disposePacket = false)
         {
+            NetworkStream stream = localClient.GetStream();
+            stream.Flush(); // On flush le stream pour que le NXT lise
 
+            byte[] data = packet.GetPacketData();
+            stream.Write(data, 0, data.Length);
         }
 
         // EVENTS / ASYNC CALLS

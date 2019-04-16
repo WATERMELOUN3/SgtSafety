@@ -59,7 +59,7 @@ namespace SgtSafety.NXTBluetooth
             byte[] buffer = new byte[length];
 
             s.Read(buffer, 0, length);
-            Console.WriteLine(System.Text.Encoding.ASCII.GetString(buffer));
+            Console.WriteLine(Encoding.ASCII.GetString(buffer));
             s.Flush();
 
             buffer = ToNXTPacket(Encoding.ASCII.GetBytes("toast\n"));

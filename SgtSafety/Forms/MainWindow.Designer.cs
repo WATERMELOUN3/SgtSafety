@@ -1,4 +1,4 @@
-﻿namespace SgtSafety
+﻿namespace SgtSafety.Forms
 {
     partial class MainWindow
     {
@@ -140,7 +140,7 @@
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(310, 28);
             this.button5.TabIndex = 9;
-            this.button5.Text = "Ouvrir l\'éditeur de circuit";
+            this.button5.Text = "Ouvrir l\'éditeur de circuit (circuit vide)";
             this.button5.UseVisualStyleBackColor = true;
             // 
             // button6
@@ -153,6 +153,7 @@
             this.button6.TabIndex = 10;
             this.button6.Text = "Ouvrir la télécommande";
             this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.Button6_Click);
             // 
             // MainWindow
             // 

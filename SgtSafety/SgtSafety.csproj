@@ -58,8 +58,15 @@
     <Compile Include="Forms\MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\RemoteWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RemoteWindow.Designer.cs">
+      <DependentUpon>RemoteWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="NXTBluetooth\NXTDevice.cs" />
     <Compile Include="NXTBluetooth\NXTPacket.cs" />
+    <Compile Include="NXTEnvironment\NXTBuffer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NXTBluetooth\NXTBluetoothHelper.cs" />
@@ -67,6 +74,9 @@
     <Compile Include="Types\NXTDiscoveryEventArgs.cs" />
     <EmbeddedResource Include="Forms\MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RemoteWindow.resx">
+      <DependentUpon>RemoteWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
