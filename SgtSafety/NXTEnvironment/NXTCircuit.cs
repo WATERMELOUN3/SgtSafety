@@ -11,14 +11,42 @@ namespace SgtSafety.NXTEnvironment
 
     public class NXTCircuit
     {
+        // FIELDS
         private int height;
         private int width;
-        private Case[] circuit; //i = x + width * y
+        private Case[] circuit; // i = x + width * y
 
         private List<Point> hopitaux;
-
         private List<Point> patients;
 
+        // GETTERS & SETTERS
+        public int getWidth()
+        {
+            return this.width;
+        }
+
+        public int getHeight()
+        {
+            return this.height;
+        }
+
+        public Case[] getCircuit()
+        {
+            return this.circuit;
+        }
+
+        public List<Point> getHopitaux()
+        {
+            return this.hopitaux;
+        }
+
+        public List<Point> getPatients()
+        {
+            return this.patients;
+        }
+
+
+        // CONSTRUCTORS
         public NXTCircuit(){
             this.height = 10;
             this.width = 10;
@@ -55,30 +83,13 @@ namespace SgtSafety.NXTEnvironment
             this.patients = p_patients;
         }
 
+
+        // METHODS
         private void initialiseCircuit(){
             for (int i=0; i < this.height; i++)
                 for (int j=0; j < this.width; j++)
                     circuit[i + j * this.width] = Case.EMPTY;
 
-        }
-        public int getWidth(){
-            return this.width;
-        }
-
-        public int getHeight(){
-            return this.height;
-        }    
-
-        public Case[] getCircuit(){
-            return this.circuit;
-        }
-
-        public List<Point> getHopitaux(){
-            return this.hopitaux;
-        } 
-
-        public List<Point> getPatients(){
-            return this.patients;
         }
 
         public List<Point> addHopital(Point newHopital){

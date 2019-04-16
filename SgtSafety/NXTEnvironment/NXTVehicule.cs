@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,14 +9,32 @@ namespace SgtSafety.NXTVehicule
 {
     public class NXTVehicule
     {
+        // FIELDS
         private Point position;
         private int patients;
         private Point direction;
 
+        // GETTERS & SETTERS
+        public Point getPosition()
+        {
+            return this.position;
+        }
+
+        public int getPatients()
+        {
+            return this.patients;
+        }
+
+        public Point getDirection()
+        {
+            return this.direction;
+        }
+
+        // CONSTRUCTORS
         public NXTVehicule(){
-            this.position = Point(0);
+            this.position = new Point(0);
             this.patients = 0;        
-            this.direction = Point(0);    
+            this.direction = new Point(0);    
         }
 
         public NXTVehicule(Point p_position, Point p_direction){
@@ -24,23 +43,12 @@ namespace SgtSafety.NXTVehicule
             this.direction = p_direction;
         }
 
-        public Point getPosition(){
-            return this.position;
-        }
-        
-        public int getPatients(){
-            return this.patients;
-        }
-    
-        public Point getDirection(){
-            return this.direction;
-        }
-
+        // METHODS
         public int takePatient(){
             return (++this.patients);
         }
 
-        public void dropPatient(){
+        public int dropPatient(){
             return (--this.patients);
         }
 
@@ -49,8 +57,9 @@ namespace SgtSafety.NXTVehicule
             return this.direction;
         }
 
-        public Point move(){
-
+        public Point move(){ // peut être prendre la case qui arrive en argument ?
+            // calculer la nouvelle position
+            return this.direction;
         }
     }
 }
