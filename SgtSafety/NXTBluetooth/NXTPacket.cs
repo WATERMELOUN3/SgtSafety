@@ -52,6 +52,12 @@ namespace SgtSafety.NXTBluetooth
             return ToNXTPacket(Encoding.ASCII.GetBytes(message));
         }
 
+        public NXTPacket Duplicate()
+        {
+            NXTPacket n = new NXTPacket(this.actions);
+            return n;
+        }
+
         // STATIC METHODS
         public static bool IntroduceNXT(NetworkStream s)
         {
