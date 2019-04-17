@@ -142,6 +142,7 @@
             this.button5.TabIndex = 9;
             this.button5.Text = "Ouvrir l\'éditeur de circuit (circuit vide)";
             this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.Button5_Click);
             // 
             // button6
             // 
@@ -174,7 +175,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "MainWindow";
             this.ShowIcon = false;
-            this.Text = "SgtSafety";
+            this.Text = "Sergeant Safety (Fenêtre principale)";
             this.Load += new System.EventHandler(this.MainWindow_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
