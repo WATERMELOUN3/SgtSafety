@@ -92,6 +92,7 @@
     <Compile Include="NXTBluetooth\NXTDevice.cs" />
     <Compile Include="NXTBluetooth\NXTPacket.cs" />
     <Compile Include="NXTEnvironment\NXTBuffer.cs" />
+    <Compile Include="NXTEnvironment\NXTCase.cs" />
     <Compile Include="NXTEnvironment\NXTCircuit.cs" />
     <Compile Include="NXTEnvironment\NXTVehicule.cs" />
     <Compile Include="Program.cs" />

@@ -38,7 +38,7 @@ namespace SgtSafety.NXTEnvironment
             return this.typeCase;
         }
 
-        public Case getOrientation()
+        public Orientation getOrientation()
         {
             return this.orientation;
         }
