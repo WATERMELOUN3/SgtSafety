@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SgtSafety.NXTBluetooth;
+using SgtSafety.Types;
 
 
 namespace SgtSafety.NXTEnvironment
@@ -35,7 +36,8 @@ namespace SgtSafety.NXTEnvironment
         }
 
         // CONSTRUCTORS
-        public NXTVehicule(NXTBuffer p_buffer){
+        public NXTVehicule(NXTBuffer p_buffer)
+        {
             this.position = new Point(0);
             this.patients = 0;        
             this.direction = new Point(0);
@@ -76,85 +78,192 @@ namespace SgtSafety.NXTEnvironment
             return (--this.patients);
         }
 
-        /*public Point executeCommand()
+        public void addToBuffer(NXTAction action)
         {
-            NXTPacket packet = buffer.Pop();
-            string data = System.Text.Encoding.UTF8.GetString(packet.getPacketData());
+            this.buffer.Add(action, true);
+        }
 
-            if (data.Equals(""))
+        public NXTAction executeCommand()
+        {
+            NXTAction action = buffer.Pop();
+
+            return action;
+        }
+
+        /*private void computeVirage(NXTCase curCase)
+        {
+            Orientation orient = curCase.getOrientation();
+
+            if (orient == Orientation.TOP || orient == Orientation.BOTTOM) //turn left
+            {
+                if (this.direction.X == 1 && this.direction.Y == 0)
+                {
+                    this.position += new Point(1, -1);
+                    this.direction = new Point(0, -1);
+                }
+                else if (this.direction.X == -1 && this.direction.Y == 0)
+                {
+                    this.position += new Point(-1, 1);
+                    this.direction = new Point(0, 1);
+                }
+                else if (this.direction.X == 0 && this.direction.Y == 1)
+                {
+                    this.position += new Point(1, 1);
+                    this.direction = new Point(1, 0);
+                }
+                else if (this.direction.X == 0 && this.direction.Y == -1)
+                {
+                    this.position += new Point(-1, -1);
+                    this.direction = new Point(-1, 0);
+                }
+
+            }
+            else //turn right
+            {
+                if (this.direction.X == 1 && this.direction.Y == 0)
+                {
+                    this.position += new Point(1, 1);
+                    this.direction = new Point(0, 1);
+                }
+                else if (this.direction.X == -1 && this.direction.Y == 0)
+                {
+                    this.position += new Point(-1, -1);
+                    this.direction = new Point(0, -1);
+                }
+                else if (this.direction.X == 0 && this.direction.Y == 1)
+                {
+                    this.position += new Point(-1, 1);
+                    this.direction = new Point(-1, 0);
+                }
+                else if (this.direction.X == 0 && this.direction.Y == -1)
+                {
+                    this.position += new Point(1, -1);
+                    this.direction = new Point(1, 0);
+                }
+
+            }
+        }
+
+        private void computeIntersection_STRAIGHT(NXTCase curCase)
+        {
+            if (orient == Orientation.TOP || orient == Orientation.LEFT || orient == Orientation.RIGHT) 
+            {
+                this.position += this.direction;
+            }
+        }
+
+        private void computeIntersection_LEFT(NXTCase curCase)
+        {
+            if (orient == Orientation.TOP || orient == Orientation.LEFT || orient == Orientation.BOTTOM)
+            {
+                this.direction = curCase.getOrientation();
+                this.position += this.direction;
+            }
+            else
             {
 
             }
-        }*/
+        }
 
-        /*private Point moveStraight(){
-
-            switch (currentCase())
+        private void computeIntersection_RIGHT(NXTCase curCase)
+        {
+            if (orient == Orientation.TOP || orient == Orientation.BOTTOM || orient == Orientation.RIGHT)
             {
-                case STRAIGHT:
+                this.position += this.direction;
+            }
+            else
+            {
+
+            }
+        }
+
+        private void moveStraight()
+        {
+            NXTCase curCase = currentCase();
+
+            switch (curCase.getTypeCase())
+            {
+                case Case.STAIGHT:
                     this.position += this.direction;
                     break;
 
-                case TURNLEFT:
-                    if (this.direction.X == 1 && this.direction.Y == 0)
-                    {
-                        this.position += new Point(1, -1);
-                        this.direction = new Point(0, -1);
-                    } else if (this.direction.X == -1 && this.direction.Y == 0)
-                    {
-                        this.position += new Point(-1, 1);
-                        this.direction = new Point(0, 1);
-                    } else if(this.direction.X == 0 && this.direction.Y == 1)
-                    {
-                        this.position += new Point(1, 1);
-                        this.direction = new Point(1, 0);
-                    } else if(this.direction.X == 0 && this.direction.Y == -1)
-                    {
-                        this.position += new Point(-1, -1);
-                        this.direction = new Point(-1, 0);
-                    }
-                    else
-                    {
-                        //erreur jsp quoi mettre
-                    }
+                case Case.VIRAGE:
+                    computeVirage(curCase);
                     break;
 
-                case TURNRIGHT:
-                    if (this.direction.X == 1 && this.direction.Y == 0)
-                    {
-                        this.position += new Point(1, 1);
-                        this.direction = new Point(0, 1);
-                    }
-                    else if (this.direction.X == -1 && this.direction.Y == 0)
-                    {
-                        this.position += new Point(-1, -1);
-                        this.direction = new Point(0, -1);
-                    }
-                    else if (this.direction.X == 0 && this.direction.Y == 1)
-                    {
-                        this.position += new Point(-1, 1);
-                        this.direction = new Point(-1, 0);
-                    }
-                    else if (this.direction.X == 0 && this.direction.Y == -1)
-                    {
-                        this.position += new Point(1, -1);
-                        this.direction = new Point(1, 0);
-                    }
-                    else
-                    {
-                        //erreur jsp quoi mettre
-                    }
+                case Case.INTERSECTION:
+                    computeIntersection_STRAIGHT(curCase);
                     break;
 
-                case INTERSECTION:
-                    break;
-
-                case default:
-                    //erreur jsp quoi mettre
+                default:
                     break;
             }
+        }
 
-            return this.position;
+        private void moveInterLeft()
+        {
+            NXTCase curCase = currentCase();
+
+            switch (curCase.getTypeCase())
+            {
+                case Case.STAIGHT:
+                    break;
+
+                case Case.VIRAGE:
+                    break;
+
+                case Case.INTERSECTION:
+                    computeIntersection_LEFT(curCase);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        private void moveInterRight()
+        {
+            NXTCase curCase = currentCase();
+
+            switch (curCase.getTypeCase())
+            {
+                case Case.STAIGHT:
+                    break;
+
+                case Case.VIRAGE:
+                    break;
+
+                case Case.INTERSECTION:
+                    computeIntersection_RIGHT(curCase);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        private void moveUTurn()
+        {
+            NXTCase curCase = currentCase();
+
+            switch (curCase.getTypeCase())
+            {
+                case Case.STAIGHT:
+                    this.position += this.direction;
+                    break;
+
+                case Case.VIRAGE:
+                    computeVirage(curCase);
+                    break;
+
+                case Case.INTERSECTION:
+                    computeIntersection_STRAIGHT(curCase);
+                    break;
+
+                default:
+                    break;
+            }
         }*/
+
     }
 }

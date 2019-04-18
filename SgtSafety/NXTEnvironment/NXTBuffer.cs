@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SgtSafety.Types;
 
 namespace SgtSafety.NXTEnvironment
 {
-    public class NXTBuffer : List<NXTPacket>
+    public class NXTBuffer : List<NXTAction>
     {
         // CONSTRUCTOR
         public NXTBuffer()
@@ -15,7 +16,7 @@ namespace SgtSafety.NXTEnvironment
         { }
 
         // METHODS
-        public void Add(NXTPacket p, bool FIFO = true)
+        public void Add(NXTAction p, bool FIFO = true)
         {
             if (FIFO)
                 base.Insert(0, p);
@@ -23,9 +24,9 @@ namespace SgtSafety.NXTEnvironment
                 base.Add(p);
         }
 
-        public NXTPacket Pop()
+        public NXTAction Pop()
         {
-            NXTPacket p = base[0];
+            NXTAction p = base[0];
             base.RemoveAt(0);
 
             return p;
