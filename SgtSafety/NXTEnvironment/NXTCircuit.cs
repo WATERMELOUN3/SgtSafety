@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 
 namespace SgtSafety.NXTEnvironment
 {
-    public enum Case {STRAIGHT, TURNLEFT, TURNRIGHT, INTERSECTION, EMPTY};
 
     public class NXTCircuit
     {
         // FIELDS
         private int height;
         private int width;
-        private Case[] circuit; // i = x + width * y
+        private NXTCase[] circuit; // i = x + width * y
 
         private List<Point> hopitaux;
         private List<Point> patients;
@@ -30,7 +29,7 @@ namespace SgtSafety.NXTEnvironment
             return this.height;
         }
 
-        public Case[] getCircuit()
+        public NXTCase[] getCircuit()
         {
             return this.circuit;
         }
@@ -50,7 +49,7 @@ namespace SgtSafety.NXTEnvironment
         public NXTCircuit(){
             this.height = 10;
             this.width = 10;
-            this.circuit = new Case[this.height * this.width];
+            this.circuit = new NXTCase[this.height * this.width];
             this.hopitaux = new List<Point>();
             this.patients = new List<Point>();
 
@@ -60,14 +59,14 @@ namespace SgtSafety.NXTEnvironment
         public NXTCircuit(int p_height, int p_width){
             this.height = p_height;
             this.width = p_width;
-            this.circuit = new Case[this.height * this.width];
+            this.circuit = new NXTCase[this.height * this.width];
             this.hopitaux = new List<Point>();
             this.patients = new List<Point>();
 
             initialiseCircuit();
         }
 
-        public NXTCircuit(int p_height, int p_width, Case[] p_circuit){
+        public NXTCircuit(int p_height, int p_width, NXTCase[] p_circuit){
             this.height = p_height;
             this.width = p_width;
             this.circuit = p_circuit;
@@ -75,7 +74,7 @@ namespace SgtSafety.NXTEnvironment
             this.patients = new List<Point>();
         } 
 
-        public NXTCircuit(int p_height, int p_width, Case[] p_circuit, List<Point> p_hopitaux, List<Point> p_patients){
+        public NXTCircuit(int p_height, int p_width, NXTCase[] p_circuit, List<Point> p_hopitaux, List<Point> p_patients){
             this.height = p_height;
             this.width = p_width;
             this.circuit = p_circuit;
@@ -88,7 +87,7 @@ namespace SgtSafety.NXTEnvironment
         private void initialiseCircuit(){
             for (int i=0; i < this.height; i++)
                 for (int j=0; j < this.width; j++)
-                    circuit[i + j * this.width] = Case.EMPTY;
+                    circuit[i + j * this.width] = new NXTCase(Case.EMPTY);
 
         }
 
@@ -106,10 +105,15 @@ namespace SgtSafety.NXTEnvironment
             return this.patients;
         }
 
-        public Case[] setCase(Case typeCase, Point coordCase){
-            this.circuit[coordCase.X + this.width * coordCase.Y] = typeCase;
+        public NXTCase[] setCase(NXTCase newCase, Point coordCase){
+            this.circuit[coordCase.X + this.width * coordCase.Y] = newCase;
 
             return this.circuit;
+        }
+
+        public NXTCase getCase(Point position)
+        {
+            return this.circuit[position.X + this.width * position.Y];
         }
     }
 }
