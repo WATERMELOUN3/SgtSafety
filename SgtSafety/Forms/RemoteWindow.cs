@@ -1,4 +1,5 @@
 ﻿using SgtSafety.NXTBluetooth;
+using SgtSafety.NXTEnvironment;
 using SgtSafety.Types;
 using System;
 using System.Collections.Generic;
@@ -14,38 +15,38 @@ namespace SgtSafety.Forms
 {
     public partial class RemoteWindow : Form
     {
-        NXTBluetoothHelper nxtHelper;
-        NXTPacket pStraight, pLeft, pRight, pUturn;
+        NXTAction pStraight, pLeft, pRight, pUturn;
+        NXTVehicule vehicule;
 
         private void Button3_Click(object sender, EventArgs e)
         {
-            nxtHelper.SendNTXPacket(pLeft);
+            vehicule.addToBuffer(pLeft);
         }
 
         private void Button2_Click(object sender, EventArgs e)
         {
-            nxtHelper.SendNTXPacket(pRight);
+            vehicule.addToBuffer(pRight);
         }
 
         private void Button4_Click(object sender, EventArgs e)
         {
-            nxtHelper.SendNTXPacket(pUturn);
+            vehicule.addToBuffer(pUturn);
         }
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            nxtHelper.SendNTXPacket(pStraight);
+            vehicule.addToBuffer(pStraight);
         }
 
-        public RemoteWindow(NXTBluetoothHelper nxtHelper)
+        public RemoteWindow(NXTVehicule vehicule)
         {
             InitializeComponent();
-            this.nxtHelper = nxtHelper;
+            this.vehicule = vehicule;
 
-            pStraight = new NXTPacket(new NXTAction[] { new NXTAction(NXTMovement.STRAIGHT) });
-            pLeft = new NXTPacket(new NXTAction[] { new NXTAction(NXTMovement.INTER_LEFT) });
-            pRight = new NXTPacket(new NXTAction[] { new NXTAction(NXTMovement.INTER_RIGHT) });
-            pUturn = new NXTPacket(new NXTAction[] { new NXTAction(NXTMovement.UTURN) });
+            pStraight = new NXTAction(NXTMovement.STRAIGHT);
+            pLeft = new NXTAction(NXTMovement.INTER_LEFT);
+            pRight = new NXTAction(NXTMovement.INTER_RIGHT);
+            pUturn = new NXTAction(NXTMovement.UTURN);
         }
     }
 }

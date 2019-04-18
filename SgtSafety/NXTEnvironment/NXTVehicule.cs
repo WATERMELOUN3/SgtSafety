@@ -36,30 +36,30 @@ namespace SgtSafety.NXTEnvironment
         }
 
         // CONSTRUCTORS
-        public NXTVehicule(NXTBuffer p_buffer)
+        public NXTVehicule()
         {
             this.position = new Point(0);
             this.patients = 0;        
             this.direction = new Point(0);
-            this.buffer = p_buffer;
+            this.buffer = new NXTBuffer();
             this.circuit = new NXTCircuit();
         }
 
-        public NXTVehicule(Point p_position, Point p_direction, NXTBuffer p_buffer)
+        public NXTVehicule(Point p_position, Point p_direction)
         {
             this.position = p_position;
             this.patients = 0;
             this.direction = p_direction;
-            this.buffer = p_buffer;
+            this.buffer = new NXTBuffer();
             this.circuit = new NXTCircuit();
         }
 
-        public NXTVehicule(Point p_position, Point p_direction, NXTBuffer p_buffer, NXTCircuit p_circuit)
+        public NXTVehicule(Point p_position, Point p_direction, NXTCircuit p_circuit)
         {
             this.position = p_position;
             this.patients = 0;
             this.direction = p_direction;
-            this.buffer = p_buffer;
+            this.buffer = new NXTBuffer();
             this.circuit = p_circuit;
         }
 

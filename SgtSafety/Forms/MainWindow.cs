@@ -1,6 +1,7 @@
 ﻿using InTheHand.Net.Bluetooth;
 using InTheHand.Net.Sockets;
 using SgtSafety.NXTBluetooth;
+using SgtSafety.NXTEnvironment;
 using SgtSafety.Types;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Forms;
 
 namespace SgtSafety.Forms
@@ -20,7 +22,10 @@ namespace SgtSafety.Forms
         // FIELDS
         // --------------------------------------------------------------------------
         private NXTBluetoothHelper nxtHelper;
+        private NXTVehicule vehicule;
         private delegate void SafeCallDelegate(object sender, EventArgs e);
+        private static System.Timers.Timer aTimer;
+
 
         // --------------------------------------------------------------------------
         // CONSTRUCTOR
@@ -35,7 +40,10 @@ namespace SgtSafety.Forms
         // --------------------------------------------------------------------------
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            this.vehicule = new NXTVehicule();
             nxtHelper = new NXTBluetoothHelper();
+            aTimer.Stop();
+            aTimer.Dispose();
         }
 
         // Bouton "Recherche"
@@ -118,7 +126,7 @@ namespace SgtSafety.Forms
 
         private void Button6_Click(object sender, EventArgs e)
         {
-            RemoteWindow w = new RemoteWindow(this.nxtHelper);
+            RemoteWindow w = new RemoteWindow(this.vehicule);
             w.Show();
         }
 
@@ -126,6 +134,20 @@ namespace SgtSafety.Forms
         {
             EditorWindow ew = new EditorWindow();
             ew.Show();
+        }
+        private static void SetTimer()
+        {
+            aTimer = new System.Timers.Timer(2000);
+
+            aTimer.Elapsed += OnTimedEvent;
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
+        }
+
+        private static void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            MainWindow w = (source as System.Timers.Timer).Container as MainWindow;
+            NXTAction action = w.vehicule.executeCommand();
         }
     }
 }
