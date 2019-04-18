@@ -25,6 +25,7 @@ namespace SgtSafety.Forms
         private NXTVehicule vehicule;
         private delegate void SafeCallDelegate(object sender, EventArgs e);
         private static System.Timers.Timer aTimer;
+        private RemoteWindow remoteWindow;
 
 
         // --------------------------------------------------------------------------
@@ -43,10 +44,9 @@ namespace SgtSafety.Forms
             this.vehicule = new NXTVehicule();
             nxtHelper = new NXTBluetoothHelper();
 
-            aTimer = new System.Timers.Timer(2000);
+            aTimer = new System.Timers.Timer(5000);
             aTimer.Elapsed += OnTimedEvent;
             aTimer.AutoReset = true;
-            aTimer.Enabled = true;
         }
 
         // Bouton "Recherche"
@@ -100,6 +100,7 @@ namespace SgtSafety.Forms
             {
                 button2.ForeColor = Color.Green;
                 button6.Enabled = true;
+                aTimer.Enabled = true;
             }
         }
 
@@ -129,8 +130,8 @@ namespace SgtSafety.Forms
 
         private void Button6_Click(object sender, EventArgs e)
         {
-            RemoteWindow w = new RemoteWindow(this.vehicule);
-            w.Show();
+            remoteWindow = new RemoteWindow(this.vehicule);
+            remoteWindow.Show();
         }
 
         private void Button5_Click(object sender, EventArgs e)
@@ -141,9 +142,32 @@ namespace SgtSafety.Forms
 
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
+            if (vehicule.IsBusy)
+            {
+                Console.WriteLine("Robot occupé...");
+                if (nxtHelper.IsDataAvailable())
+                {
+                    vehicule.IsBusy = false;
+                }
+                else
+                    return;
+            }
+
+            Console.WriteLine("Robot disponible !");
             NXTAction action = vehicule.executeCommand();
-            NXTPacket packet = new NXTPacket(action);
-            nxtHelper.SendNTXPacket(packet);
+            if (action != null)
+            {
+                Console.WriteLine("Ordre envoyé: " + action.ToString());
+                NXTPacket packet = new NXTPacket(action);
+                nxtHelper.SendNTXPacket(packet);
+                vehicule.IsBusy = true;
+                nxtHelper.Client.GetStream().Flush();
+            }
+
+            if (remoteWindow != null)
+            {
+                remoteWindow.UpdateBuffer(vehicule.Buffer);
+            }
         }
     }
 }

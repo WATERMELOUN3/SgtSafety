@@ -24,8 +24,11 @@ namespace SgtSafety.NXTEnvironment
         private Point direction;
         private NXTBuffer buffer;
         private NXTCircuit circuit;
+        private bool occupe = false;
 
         // GETTERS & SETTERS
+        public NXTBuffer Buffer { get { return buffer; } }
+        public bool IsBusy { get; set; }
         public Point getPosition()
         {
             return this.position;
@@ -91,7 +94,7 @@ namespace SgtSafety.NXTEnvironment
 
         public void addToBuffer(NXTAction action)
         {
-            this.buffer.Add(action, true);
+            this.buffer.Add(action, false);
         }
 
         public NXTAction executeCommand()

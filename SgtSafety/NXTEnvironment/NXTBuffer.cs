@@ -34,7 +34,7 @@ namespace SgtSafety.NXTEnvironment
 
         public bool isEmpty()
         {
-            return (this.Count() > 0);
+            return (this.Count() == 0);
         }
     }
 }

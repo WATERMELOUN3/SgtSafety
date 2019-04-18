@@ -23,6 +23,9 @@ namespace SgtSafety.NXTBluetooth
         private EventHandler<DiscoverDevicesEventArgs> deviceFound;
         private EventHandler searchCompleted;
 
+        // GETTERS & SETTERS
+        public BluetoothClient Client { get { return localClient; } }
+
         // CONSTRUCTOR
         public NXTBluetoothHelper()
         {
@@ -106,6 +109,11 @@ namespace SgtSafety.NXTBluetooth
 
             byte[] data = packet.GetPacketData();
             stream.Write(data, 0, data.Length);
+        }
+
+        public bool IsDataAvailable()
+        {
+            return localClient.Available > 0;
         }
 
         // EVENTS / ASYNC CALLS

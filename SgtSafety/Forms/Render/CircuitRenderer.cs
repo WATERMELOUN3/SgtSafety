@@ -19,14 +19,19 @@ namespace SgtSafety.Forms.Render
         private Texture2D tTurn;
         private Texture2D tIntersec;
 
+        // GETTERS & SETTERS
+        public Texture2D Texture_Straight { get { return tStraight; } }
+        public Texture2D Texture_Turn { get { return tTurn; } }
+        public Texture2D Texture_Intersection { get { return tIntersec; } }
+
         // CONSTRUCTOR
-        public CircuitRenderer(NXTCircuit circuit, ContentManager cMan)
+        public CircuitRenderer(NXTCircuit circuit, GraphicsDevice graphicsDevice)
         {
             this.circuit = circuit;
 
-            tStraight = cMan.Load<Texture2D>("Content\\droit.png");
-            tTurn = cMan.Load<Texture2D>("Content\\virage.png");
-            tIntersec = cMan.Load<Texture2D>("Content\\intersection.png");
+            tStraight = RenderTools.LoadTextureFromFile(graphicsDevice, "Data\\droit.png");
+            tTurn = RenderTools.LoadTextureFromFile(graphicsDevice, "Data\\virage.png");
+            tIntersec = RenderTools.LoadTextureFromFile(graphicsDevice, "Data\\intersection.png");
         }
 
 
