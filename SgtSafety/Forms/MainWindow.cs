@@ -121,5 +121,11 @@ namespace SgtSafety.Forms
             RemoteWindow w = new RemoteWindow(this.nxtHelper);
             w.Show();
         }
+
+        private void Button5_Click(object sender, EventArgs e)
+        {
+            EditorWindow ew = new EditorWindow();
+            ew.Show();
+        }
     }
 }
