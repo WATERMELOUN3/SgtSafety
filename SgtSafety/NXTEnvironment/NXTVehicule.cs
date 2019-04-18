@@ -10,8 +10,14 @@ using SgtSafety.Types;
 
 namespace SgtSafety.NXTEnvironment
 {
+
     public class NXTVehicule
     {
+        public static Point TOP = new Point(0, -1);
+        public static Point BOTTOM = new Point(0, 1);
+        public static Point LEFT = new Point(-1, 0);
+        public static Point RIGHT = new Point(1, 0);
+
         // FIELDS
         private Point position;
         private int patients;
@@ -65,6 +71,11 @@ namespace SgtSafety.NXTEnvironment
 
         // METHODS
 
+        private static Point addPoint(Point p1, Point p2)
+        {
+            return new Point(p1.X + p2.X, p1.Y + p2.Y);
+        }
+
         private NXTCase currentCase()
         {
             return circuit.getCase(this.position);
@@ -92,61 +103,50 @@ namespace SgtSafety.NXTEnvironment
             return action;
         }
 
+       /* private void moveStraight()
+        {
+            NXTCase curCase = currentCase();
+
+            switch (curCase.getTypeCase())
+            {
+                case Case.STRAIGHT:
+                    this.position = addPoint(this.position, this.direction);
+                    break;
+
+                case Case.VIRAGE:
+                    //computeVirage(curCase);
+                    break;
+
+                case Case.INTERSECTION:
+                    //computeIntersection_STRAIGHT(curCase);
+                    break;
+
+                default:
+                    break;
+            }
+        }*/
+
         /*private void computeVirage(NXTCase curCase)
         {
             Orientation orient = curCase.getOrientation();
 
-            if (orient == Orientation.TOP || orient == Orientation.BOTTOM) //turn left
+            switch (orient)
             {
-                if (this.direction.X == 1 && this.direction.Y == 0)
-                {
-                    this.position += new Point(1, -1);
-                    this.direction = new Point(0, -1);
-                }
-                else if (this.direction.X == -1 && this.direction.Y == 0)
-                {
-                    this.position += new Point(-1, 1);
-                    this.direction = new Point(0, 1);
-                }
-                else if (this.direction.X == 0 && this.direction.Y == 1)
-                {
-                    this.position += new Point(1, 1);
-                    this.direction = new Point(1, 0);
-                }
-                else if (this.direction.X == 0 && this.direction.Y == -1)
-                {
-                    this.position += new Point(-1, -1);
-                    this.direction = new Point(-1, 0);
-                }
+                case Orientation.BOTTOM:
+                    break;
 
+                case Orientation.TOP:
+                    break;
+
+                case Orientation.LEFT:
+                    break;
+
+                case Orientation.RIGHT:
+                    break;
             }
-            else //turn right
-            {
-                if (this.direction.X == 1 && this.direction.Y == 0)
-                {
-                    this.position += new Point(1, 1);
-                    this.direction = new Point(0, 1);
-                }
-                else if (this.direction.X == -1 && this.direction.Y == 0)
-                {
-                    this.position += new Point(-1, -1);
-                    this.direction = new Point(0, -1);
-                }
-                else if (this.direction.X == 0 && this.direction.Y == 1)
-                {
-                    this.position += new Point(-1, 1);
-                    this.direction = new Point(-1, 0);
-                }
-                else if (this.direction.X == 0 && this.direction.Y == -1)
-                {
-                    this.position += new Point(1, -1);
-                    this.direction = new Point(1, 0);
-                }
+        }*/
 
-            }
-        }
-
-        private void computeIntersection_STRAIGHT(NXTCase curCase)
+        /*private void computeIntersection_STRAIGHT(NXTCase curCase)
         {
             if (orient == Orientation.TOP || orient == Orientation.LEFT || orient == Orientation.RIGHT) 
             {
@@ -179,28 +179,7 @@ namespace SgtSafety.NXTEnvironment
             }
         }
 
-        private void moveStraight()
-        {
-            NXTCase curCase = currentCase();
 
-            switch (curCase.getTypeCase())
-            {
-                case Case.STAIGHT:
-                    this.position += this.direction;
-                    break;
-
-                case Case.VIRAGE:
-                    computeVirage(curCase);
-                    break;
-
-                case Case.INTERSECTION:
-                    computeIntersection_STRAIGHT(curCase);
-                    break;
-
-                default:
-                    break;
-            }
-        }
 
         private void moveInterLeft()
         {
