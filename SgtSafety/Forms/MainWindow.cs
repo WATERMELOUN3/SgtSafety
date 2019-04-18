@@ -142,6 +142,8 @@ namespace SgtSafety.Forms
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             NXTAction action = vehicule.executeCommand();
+            NXTPacket packet = new NXTPacket(action);
+            nxtHelper.SendNTXPacket(packet);
         }
     }
 }

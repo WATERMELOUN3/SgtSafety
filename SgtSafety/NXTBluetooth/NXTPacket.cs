@@ -11,50 +11,26 @@ namespace SgtSafety.NXTBluetooth
     public class NXTPacket
     {
         // FIELDS
-        List<NXTAction> actions;
+        NXTAction action;
 
         // CONSTRUCTOR
-        public NXTPacket()
+        public NXTPacket(NXTAction action)
         {
-            actions = new List<NXTAction>();
-        }
-
-        public NXTPacket(List<NXTAction> actions)
-        {
-            this.actions = actions;
-        }
-
-        public NXTPacket(NXTAction[] actions)
-        {
-            this.actions = new List<NXTAction>();
-            foreach (NXTAction a in actions)
-            {
-                this.actions.Add(a);
-            }
+            this.action = action;
         }
 
         // METHODS
-        public bool AddAction(NXTAction a)
-        {
-            actions.Add(a);
-
-            return true;
-        }
 
         public byte[] GetPacketData()
         {
-            string message = "";
-            foreach (NXTAction a in actions)
-            {
-                message += a.ToString();
-            }
+            string message = action.ToString();
 
             return ToNXTPacket(Encoding.ASCII.GetBytes(message));
         }
 
         public NXTPacket Duplicate()
         {
-            NXTPacket n = new NXTPacket(this.actions);
+            NXTPacket n = new NXTPacket(this.action);
             return n;
         }
 

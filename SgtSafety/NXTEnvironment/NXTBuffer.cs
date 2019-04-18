@@ -31,5 +31,10 @@ namespace SgtSafety.NXTEnvironment
 
             return p;
         }
+
+        public bool isEmpty()
+        {
+            return (this.Count() > 0);
+        }
     }
 }

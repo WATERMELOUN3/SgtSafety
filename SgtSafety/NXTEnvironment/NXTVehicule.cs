@@ -85,7 +85,9 @@ namespace SgtSafety.NXTEnvironment
 
         public NXTAction executeCommand()
         {
-            NXTAction action = buffer.Pop();
+            NXTAction action = null;
+            if (!buffer.isEmpty())
+                action = buffer.Pop();
 
             return action;
         }
