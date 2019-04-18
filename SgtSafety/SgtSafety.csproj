@@ -67,6 +67,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\CircuitPropertiesDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CircuitPropertiesDialog.Designer.cs">
+      <DependentUpon>CircuitPropertiesDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\NewCircuitDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NewCircuitDialog.Designer.cs">
+      <DependentUpon>NewCircuitDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Render\CircuitRenderer.cs" />
     <Compile Include="Forms\Render\DrawEditor.cs">
       <SubType>Component</SubType>
@@ -105,6 +117,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NewCircuitDialog.resx">
+      <DependentUpon>NewCircuitDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RemoteWindow.resx">
       <DependentUpon>RemoteWindow.cs</DependentUpon>

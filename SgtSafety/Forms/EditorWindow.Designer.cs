@@ -1,4 +1,6 @@
-﻿namespace SgtSafety.Forms
+﻿using SgtSafety.Forms.Render;
+
+namespace SgtSafety.Forms
 {
     partial class EditorWindow
     {
@@ -28,9 +30,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.drawEditor1 = new SgtSafety.Forms.DrawEditor();
+            this.drawEditor1 = new SgtSafety.Forms.Render.DrawEditor();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fichierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nouveauToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ouvrirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enregistrerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -38,13 +41,13 @@
             this.editionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.propriétésToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nouveauToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // drawEditor1
             // 
+            this.drawEditor1.Enabled = false;
             this.drawEditor1.Location = new System.Drawing.Point(12, 27);
             this.drawEditor1.Name = "drawEditor1";
             this.drawEditor1.Size = new System.Drawing.Size(731, 411);
@@ -74,6 +77,13 @@
             this.fichierToolStripMenuItem.Name = "fichierToolStripMenuItem";
             this.fichierToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.fichierToolStripMenuItem.Text = "Fichier";
+            // 
+            // nouveauToolStripMenuItem
+            // 
+            this.nouveauToolStripMenuItem.Name = "nouveauToolStripMenuItem";
+            this.nouveauToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nouveauToolStripMenuItem.Text = "Nouveau";
+            this.nouveauToolStripMenuItem.Click += new System.EventHandler(this.NouveauToolStripMenuItem_Click);
             // 
             // ouvrirToolStripMenuItem
             // 
@@ -119,12 +129,6 @@
             this.propriétésToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.propriétésToolStripMenuItem.Text = "Propriétés";
             // 
-            // nouveauToolStripMenuItem
-            // 
-            this.nouveauToolStripMenuItem.Name = "nouveauToolStripMenuItem";
-            this.nouveauToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.nouveauToolStripMenuItem.Text = "Nouveau";
-            // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
@@ -145,6 +149,7 @@
             this.Name = "EditorWindow";
             this.ShowIcon = false;
             this.Text = "Éditeur de circuit";
+            this.Load += new System.EventHandler(this.EditorWindow_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);

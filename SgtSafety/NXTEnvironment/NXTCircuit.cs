@@ -19,6 +19,7 @@ namespace SgtSafety.NXTEnvironment
         private List<Point> patients;
 
         // GETTERS & SETTERS
+        public string Nom { get; set; }
         public int getWidth()
         {
             return this.width;
@@ -56,7 +57,8 @@ namespace SgtSafety.NXTEnvironment
             initialiseCircuit();
         }
 
-        public NXTCircuit(int p_height, int p_width){
+        public NXTCircuit(int p_width, int p_height)
+        {
             this.height = p_height;
             this.width = p_width;
             this.circuit = new NXTCase[this.height * this.width];
@@ -66,7 +68,7 @@ namespace SgtSafety.NXTEnvironment
             initialiseCircuit();
         }
 
-        public NXTCircuit(int p_height, int p_width, NXTCase[] p_circuit){
+        public NXTCircuit(int p_width, int p_height, NXTCase[] p_circuit){
             this.height = p_height;
             this.width = p_width;
             this.circuit = p_circuit;
@@ -74,7 +76,7 @@ namespace SgtSafety.NXTEnvironment
             this.patients = new List<Point>();
         } 
 
-        public NXTCircuit(int p_height, int p_width, NXTCase[] p_circuit, List<Point> p_hopitaux, List<Point> p_patients){
+        public NXTCircuit(int p_width, int p_height, NXTCase[] p_circuit, List<Point> p_hopitaux, List<Point> p_patients){
             this.height = p_height;
             this.width = p_width;
             this.circuit = p_circuit;
@@ -111,9 +113,21 @@ namespace SgtSafety.NXTEnvironment
             return this.circuit;
         }
 
+        public NXTCase[] setCase(NXTCase newCase, int x, int y)
+        {
+            this.circuit[x + this.width * y] = newCase;
+
+            return this.circuit;
+        }
+
         public NXTCase getCase(Point position)
         {
             return this.circuit[position.X + this.width * position.Y];
+        }
+
+        public NXTCase getCase(int x, int y)
+        {
+            return this.circuit[x + this.width * y];
         }
     }
 }

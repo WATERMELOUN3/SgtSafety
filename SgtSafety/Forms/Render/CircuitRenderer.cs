@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using SgtSafety.NXTEnvironment;
 using System;
@@ -36,7 +37,33 @@ namespace SgtSafety.Forms.Render
             {
                 for (int y = 0; y < circuit.getHeight(); y++)
                 {
-                    
+                    NXTCase c = circuit.getCase(x, y);
+                    Texture2D t;
+                    Color col = Color.White;
+
+                    // On trouve la texture (et couleur) adaptée
+                    switch (c.getTypeCase())
+                    {
+                        case (Case.EMPTY):
+                            t = tStraight;
+                            col = Color.Black;
+                            break;
+                        case (Case.STRAIGHT):
+                            t = tStraight;
+                            break;
+                        case (Case.VIRAGE):
+                            t = tTurn;
+                            break;
+                        case (Case.INTERSECTION):
+                            t = tIntersec;
+                            break;
+                        default:
+                            t = tStraight;
+                            col = Color.Black;
+                            break;
+                    }
+
+                    sb.Draw(t, new Vector2(x * 32, y * 32), col);
                 }
             }
         }

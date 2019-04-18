@@ -42,8 +42,11 @@ namespace SgtSafety.Forms
         {
             this.vehicule = new NXTVehicule();
             nxtHelper = new NXTBluetoothHelper();
-            aTimer.Stop();
-            aTimer.Dispose();
+
+            aTimer = new System.Timers.Timer(2000);
+            aTimer.Elapsed += OnTimedEvent;
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
         }
 
         // Bouton "Recherche"
@@ -135,19 +138,10 @@ namespace SgtSafety.Forms
             EditorWindow ew = new EditorWindow();
             ew.Show();
         }
-        private static void SetTimer()
-        {
-            aTimer = new System.Timers.Timer(2000);
 
-            aTimer.Elapsed += OnTimedEvent;
-            aTimer.AutoReset = true;
-            aTimer.Enabled = true;
-        }
-
-        private static void OnTimedEvent(Object source, ElapsedEventArgs e)
+        private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
-            MainWindow w = (source as System.Timers.Timer).Container as MainWindow;
-            NXTAction action = w.vehicule.executeCommand();
+            NXTAction action = vehicule.executeCommand();
         }
     }
 }
