@@ -15,6 +15,7 @@ namespace SgtSafety.Forms
 
         protected override void Draw()
         {
+            
             base.Draw();
         }
     }

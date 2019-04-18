@@ -22,8 +22,6 @@ namespace SgtSafety.NXTBluetooth
         private EventHandler connectedEvent;
         private EventHandler<DiscoverDevicesEventArgs> deviceFound;
         private EventHandler searchCompleted;
-        
-        private IAsyncResult discoveryAsyncState;
 
         // CONSTRUCTOR
         public NXTBluetoothHelper()

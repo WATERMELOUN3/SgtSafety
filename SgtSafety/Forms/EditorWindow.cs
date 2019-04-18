@@ -16,5 +16,10 @@ namespace SgtSafety.Forms
         {
             InitializeComponent();
         }
+
+        private void ToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            
+        }
     }
 }
