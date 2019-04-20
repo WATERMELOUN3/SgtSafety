@@ -22,7 +22,7 @@ namespace SgtSafety.Types
         private char movement;
 
         private bool hasAction = false;
-        private char action;
+        private char action = ' ';
 
         public NXTAction(char movement)
         {
@@ -32,13 +32,79 @@ namespace SgtSafety.Types
         public NXTAction(char movement, char action)
         {
             this.movement = movement;
-            this.action = action;
-            this.hasAction = true;
+
+            if (action != ' ')
+            {
+                this.action = action;
+                this.hasAction = true;
+            }
+        }
+
+        public void SetAction(char a)
+        {
+            if (a == ' ')
+            {
+                hasAction = false;
+            }
+            else
+            {
+                hasAction = true;
+                action = a;
+            }
+
+        }
+
+        public NXTAction Duplicate()
+        {
+            NXTAction a = new NXTAction(this.movement, this.action);
+            return a;
         }
 
         public override string ToString()
         {
             return movement + (hasAction ? action.ToString() : "") + "\n";
+        }
+
+        public string ToFancyString()
+        {
+            string t = "";
+            switch (this.movement)
+            {
+                case NXTMovement.STRAIGHT:
+                    t = "Tout droit";
+                    break;
+                case NXTMovement.UTURN:
+                    t = "Demi-tour";
+                    break;
+                case NXTMovement.INTER_LEFT:
+                    t = "Tourner à gauche";
+                    break;
+                case NXTMovement.INTER_RIGHT:
+                    t = "Tourner à droite";
+                    break;
+                default:
+                    t = "Donnée inconnue";
+                    break;
+            }
+
+            if (hasAction)
+            {
+                t += " puis ";
+                switch (this.action)
+                {
+                    case NXTAction.TAKE:
+                        t += "prendre patient";
+                        break;
+                    case NXTAction.DROP:
+                        t += "poser patient";
+                        break;
+                    default:
+                        t += "donnée inconnue";
+                        break;
+                }
+            }
+
+            return t;
         }
     }
 }

@@ -13,10 +13,10 @@ namespace SgtSafety.NXTEnvironment
 
     public class NXTVehicule
     {
-        public static Point TOP = new Point(0, -1);
-        public static Point BOTTOM = new Point(0, 1);
-        public static Point LEFT = new Point(-1, 0);
-        public static Point RIGHT = new Point(1, 0);
+        public static readonly Point TOP = new Point(0, -1);
+        public static readonly Point BOTTOM = new Point(0, 1);
+        public static readonly Point LEFT = new Point(-1, 0);
+        public static readonly Point RIGHT = new Point(1, 0);
 
         // FIELDS
         private Point position;
@@ -24,9 +24,10 @@ namespace SgtSafety.NXTEnvironment
         private Point direction;
         private NXTBuffer buffer;
         private NXTCircuit circuit;
-        private bool occupe = false;
+        private NXTBluetoothHelper nxtHelper;
 
         // GETTERS & SETTERS
+        public NXTBluetoothHelper NxtHelper { get { return nxtHelper; } }
         public NXTBuffer Buffer { get { return buffer; } }
         public bool IsBusy { get; set; }
         public Point getPosition()
@@ -52,6 +53,8 @@ namespace SgtSafety.NXTEnvironment
             this.direction = new Point(0);
             this.buffer = new NXTBuffer();
             this.circuit = new NXTCircuit();
+            IsBusy = false;
+            nxtHelper = new NXTBluetoothHelper();
         }
 
         public NXTVehicule(Point p_position, Point p_direction)
@@ -61,6 +64,8 @@ namespace SgtSafety.NXTEnvironment
             this.direction = p_direction;
             this.buffer = new NXTBuffer();
             this.circuit = new NXTCircuit();
+            IsBusy = false;
+            nxtHelper = new NXTBluetoothHelper();
         }
 
         public NXTVehicule(Point p_position, Point p_direction, NXTCircuit p_circuit)
@@ -70,6 +75,8 @@ namespace SgtSafety.NXTEnvironment
             this.direction = p_direction;
             this.buffer = new NXTBuffer();
             this.circuit = p_circuit;
+            IsBusy = false;
+            nxtHelper = new NXTBluetoothHelper();
         }
 
         // METHODS
@@ -106,28 +113,43 @@ namespace SgtSafety.NXTEnvironment
             return action;
         }
 
-       /* private void moveStraight()
+        public bool SendNextAction()
         {
-            NXTCase curCase = currentCase();
-
-            switch (curCase.getTypeCase())
+            NXTAction action = this.executeCommand();
+            if (action != null)
             {
-                case Case.STRAIGHT:
-                    this.position = addPoint(this.position, this.direction);
-                    break;
+                Console.WriteLine("Ordre envoyé: " + action.ToString());
+                NXTPacket packet = new NXTPacket(action);
+                nxtHelper.SendNTXPacket(packet);
 
-                case Case.VIRAGE:
-                    //computeVirage(curCase);
-                    break;
-
-                case Case.INTERSECTION:
-                    //computeIntersection_STRAIGHT(curCase);
-                    break;
-
-                default:
-                    break;
+                return true;
             }
-        }*/
+            else
+                return false;
+        }
+
+        /* private void moveStraight()
+         {
+             NXTCase curCase = currentCase();
+
+             switch (curCase.getTypeCase())
+             {
+                 case Case.STRAIGHT:
+                     this.position = addPoint(this.position, this.direction);
+                     break;
+
+                 case Case.VIRAGE:
+                     //computeVirage(curCase);
+                     break;
+
+                 case Case.INTERSECTION:
+                     //computeIntersection_STRAIGHT(curCase);
+                     break;
+
+                 default:
+                     break;
+             }
+         }*/
 
         /*private void computeVirage(NXTCase curCase)
         {

@@ -21,10 +21,9 @@ namespace SgtSafety.Forms
         // --------------------------------------------------------------------------
         // FIELDS
         // --------------------------------------------------------------------------
-        private NXTBluetoothHelper nxtHelper;
         private NXTVehicule vehicule;
         private delegate void SafeCallDelegate(object sender, EventArgs e);
-        private static System.Timers.Timer aTimer;
+        private System.Timers.Timer aTimer;
         private RemoteWindow remoteWindow;
 
 
@@ -42,7 +41,6 @@ namespace SgtSafety.Forms
         private void MainWindow_Load(object sender, EventArgs e)
         {
             this.vehicule = new NXTVehicule();
-            nxtHelper = new NXTBluetoothHelper();
 
             aTimer = new System.Timers.Timer(5000);
             aTimer.Elapsed += OnTimedEvent;
@@ -60,11 +58,11 @@ namespace SgtSafety.Forms
                 button2.Enabled = false;
                 label1.Text = "Recherche Bluetooth en cours...";
 
-                nxtHelper.SearchDevicesAsync(new EventHandler<DiscoverDevicesEventArgs>(DiscoverProgress), new EventHandler(DiscoverCompleted));
+                vehicule.NxtHelper.SearchDevicesAsync(new EventHandler<DiscoverDevicesEventArgs>(DiscoverProgress), new EventHandler(DiscoverCompleted));
             }
             else
             {
-                nxtHelper.StopSearchDevicesAsync();
+                vehicule.NxtHelper.StopSearchDevicesAsync();
                 progressBar1.Style = ProgressBarStyle.Blocks;
                 progressBar1.Value = 100;
                 button2.Enabled = true;
@@ -79,12 +77,12 @@ namespace SgtSafety.Forms
             if (button2.ForeColor == Color.Black)
             {
                 BluetoothDeviceInfo device = (listBox1.SelectedItem as NXTDevice).DeviceInfo;
-                nxtHelper.PairIfNotAlreadyPaired(device);
-                nxtHelper.ConnectToPaired(device, new EventHandler(Connected));
+                vehicule.NxtHelper.PairIfNotAlreadyPaired(device);
+                vehicule.NxtHelper.ConnectToPaired(device, new EventHandler(Connected));
             }
             else if (button2.ForeColor == Color.Green)
             {
-                nxtHelper.DisconnectFromPaired();
+                vehicule.NxtHelper.DisconnectFromPaired();
                 button2.ForeColor = Color.Black;
             }
         }
@@ -130,7 +128,7 @@ namespace SgtSafety.Forms
 
         private void Button6_Click(object sender, EventArgs e)
         {
-            remoteWindow = new RemoteWindow(this.vehicule);
+            remoteWindow = new RemoteWindow(this.vehicule, this.aTimer);
             remoteWindow.Show();
         }
 
@@ -142,32 +140,35 @@ namespace SgtSafety.Forms
 
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
-            if (vehicule.IsBusy)
-            {
-                Console.WriteLine("Robot occupé...");
-                if (nxtHelper.IsDataAvailable())
-                {
-                    vehicule.IsBusy = false;
-                }
-                else
-                    return;
-            }
+            //if (vehicule.IsBusy)
+            //{
+            //    Console.WriteLine("Robot occupé...");
+            //    if (nxtHelper.Client.Available > 0)
+            //    {
+            //        vehicule.IsBusy = false;
+            //        nxtHelper.Client.GetStream().Flush();
+            //    }
+            //    else
+            //        return;
+            //}
 
-            Console.WriteLine("Robot disponible !");
-            NXTAction action = vehicule.executeCommand();
-            if (action != null)
-            {
-                Console.WriteLine("Ordre envoyé: " + action.ToString());
-                NXTPacket packet = new NXTPacket(action);
-                nxtHelper.SendNTXPacket(packet);
-                vehicule.IsBusy = true;
-                nxtHelper.Client.GetStream().Flush();
-            }
+            //Console.WriteLine("Robot disponible !");
+            //NXTAction action = vehicule.executeCommand();
+            //if (action != null)
+            //{
+            //    Console.WriteLine("Ordre envoyé: " + action.ToString());
+            //    NXTPacket packet = new NXTPacket(action);
+            //    nxtHelper.SendNTXPacket(packet);
+            //    vehicule.IsBusy = true;
+            //    nxtHelper.Client.GetStream().Flush();
+            //}
 
-            if (remoteWindow != null)
-            {
-                remoteWindow.UpdateBuffer(vehicule.Buffer);
-            }
+            //if (remoteWindow != null)
+            //{
+            //    remoteWindow.UpdateBuffer(vehicule.Buffer);
+            //}
+
+
         }
     }
 }

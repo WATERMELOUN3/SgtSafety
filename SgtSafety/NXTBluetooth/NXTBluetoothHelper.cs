@@ -19,9 +19,14 @@ namespace SgtSafety.NXTBluetooth
         private BluetoothComponent localComponent;
         private List<BluetoothDeviceInfo> discoveredDevices;
 
+        private byte[] rawBuffer;
+        private const int RAWBUFFER_SIZE = 64;
+
         private EventHandler connectedEvent;
         private EventHandler<DiscoverDevicesEventArgs> deviceFound;
         private EventHandler searchCompleted;
+
+        public EventHandler<NXTPacketReceivedEventArgs> dataReceived;
 
         // GETTERS & SETTERS
         public BluetoothClient Client { get { return localClient; } }
@@ -33,6 +38,7 @@ namespace SgtSafety.NXTBluetooth
             localClient = new BluetoothClient(localEndpoint);
             localComponent = new BluetoothComponent(localClient);
             discoveredDevices = new List<BluetoothDeviceInfo>();
+            rawBuffer = new byte[RAWBUFFER_SIZE];
         }
 
         // METHODS
@@ -109,14 +115,28 @@ namespace SgtSafety.NXTBluetooth
 
             byte[] data = packet.GetPacketData();
             stream.Write(data, 0, data.Length);
+            stream.Flush(); // On re flush pour pouvoir lire la réponse du NXT
         }
 
-        public bool IsDataAvailable()
+        public void WaitForData(EventHandler<NXTPacketReceivedEventArgs> e)
         {
-            return localClient.Available > 0;
+            this.dataReceived = e;
+            Task<int> t = this.localClient.GetStream().ReadAsync(rawBuffer, 0, rawBuffer.Length);
+            t.ContinueWith((tt) => DataReceived(tt));
         }
 
         // EVENTS / ASYNC CALLS
+        private void WaitEnded(IAsyncResult res)
+        {
+
+        }
+
+        private void DataReceived(Task<int> t)
+        {
+            localClient.GetStream().Flush(); // Si problème commenter cette ligne (ça marchait sans)
+            dataReceived.Invoke(this, new NXTPacketReceivedEventArgs(rawBuffer));
+        }
+
         private void Connect(IAsyncResult result)
         {
             if (result.IsCompleted)

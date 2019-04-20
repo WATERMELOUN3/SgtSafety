@@ -44,7 +44,7 @@ namespace SgtSafety.NXTBluetooth
             Console.WriteLine(Encoding.ASCII.GetString(buffer));
             s.Flush();
 
-            buffer = ToNXTPacket(Encoding.ASCII.GetBytes("toast\n"));
+            buffer = ToNXTPacket(Encoding.ASCII.GetBytes("SgtSafety\n"));
             s.Write(buffer, 0, buffer.Length);
 
             return true;
