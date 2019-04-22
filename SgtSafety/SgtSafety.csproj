@@ -113,7 +113,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NXTBluetooth\NXTBluetoothHelper.cs" />
     <Compile Include="Types\NXTActions.cs" />
-    <Compile Include="Types\NXTDiscoveryEventArgs.cs" />
     <Compile Include="Types\NXTPacketReceivedEventArgs.cs" />
     <EmbeddedResource Include="Forms\EditorWindow.resx">
       <DependentUpon>EditorWindow.cs</DependentUpon>

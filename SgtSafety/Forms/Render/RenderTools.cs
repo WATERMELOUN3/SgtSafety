@@ -10,6 +10,11 @@ namespace SgtSafety.Forms.Render
 {
     public static class RenderTools
     {
+        // --------------------------------------------------------------------------
+        // STATIC METHODS
+        // --------------------------------------------------------------------------
+
+        // Charge une texture directement depuis un fichier, sans passer par la compression Monogame
         public static Texture2D LoadTextureFromFile(GraphicsDevice graphicsDevice, string path)
         {
             FileStream fileStream = new FileStream(path, FileMode.Open);

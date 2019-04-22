@@ -13,7 +13,9 @@ namespace SgtSafety.NXTBluetooth
 {
     public class NXTBluetoothHelper
     {
+        // --------------------------------------------------------------------------
         // FIELDS
+        // --------------------------------------------------------------------------
         private BluetoothEndPoint localEndpoint;
         private BluetoothClient localClient;
         private BluetoothComponent localComponent;
@@ -28,20 +30,28 @@ namespace SgtSafety.NXTBluetooth
 
         public EventHandler<NXTPacketReceivedEventArgs> dataReceived;
 
+        // --------------------------------------------------------------------------
         // GETTERS & SETTERS
+        // --------------------------------------------------------------------------
         public BluetoothClient Client { get { return localClient; } }
 
+        // --------------------------------------------------------------------------
         // CONSTRUCTOR
+        // --------------------------------------------------------------------------
         public NXTBluetoothHelper()
         {
-            localEndpoint = new BluetoothEndPoint(GetBTMacAddress(), BluetoothService.SerialPort);
+            localEndpoint = new BluetoothEndPoint(GetLocalBTMacAddress(), BluetoothService.SerialPort);
             localClient = new BluetoothClient(localEndpoint);
             localComponent = new BluetoothComponent(localClient);
             discoveredDevices = new List<BluetoothDeviceInfo>();
             rawBuffer = new byte[RAWBUFFER_SIZE];
         }
 
+        // --------------------------------------------------------------------------
         // METHODS
+        // --------------------------------------------------------------------------
+
+        // Lance la recherche de périphériques bluetooth de façon asynchrone
         public void SearchDevicesAsync(EventHandler<DiscoverDevicesEventArgs> e1, EventHandler e2)
         {
             localComponent.DiscoverDevicesAsync(20, true, true, true, true, null);
@@ -52,12 +62,14 @@ namespace SgtSafety.NXTBluetooth
             searchCompleted = e2;
         }
 
+        // Arrêtre la recherche
         public void StopSearchDevicesAsync()
         {
             localComponent.Dispose();
             searchCompleted.Invoke(this, new EventArgs());
         }
 
+        // Appaire si non appairé
         public bool PairIfNotAlreadyPaired(BluetoothDeviceInfo device)
         {
             BluetoothDeviceInfo[] paired = localClient.DiscoverDevices(255, false, true, false, false);
@@ -103,11 +115,13 @@ namespace SgtSafety.NXTBluetooth
             //return false;
         }
 
+        // Se déconnecte d'un périphérique
         public void DisconnectFromPaired()
         {
             localClient.EndConnect(null);
         }
 
+        // Envoie un paquet au périphérique associé
         public void SendNTXPacket(NXTPacket packet, bool disposePacket = false)
         {
             NetworkStream stream = localClient.GetStream();
@@ -118,6 +132,7 @@ namespace SgtSafety.NXTBluetooth
             stream.Flush(); // On re flush pour pouvoir lire la réponse du NXT
         }
 
+        // Attends de façon asynchrone de recevoir des données
         public void WaitForData(EventHandler<NXTPacketReceivedEventArgs> e)
         {
             this.dataReceived = e;
@@ -125,18 +140,18 @@ namespace SgtSafety.NXTBluetooth
             t.ContinueWith((tt) => DataReceived(tt));
         }
 
+        // --------------------------------------------------------------------------
         // EVENTS / ASYNC CALLS
-        private void WaitEnded(IAsyncResult res)
-        {
+        // --------------------------------------------------------------------------
 
-        }
-
+        // Lorsque des données sont reçu de façon asynchrone
         private void DataReceived(Task<int> t)
         {
             localClient.GetStream().Flush(); // Si problème commenter cette ligne (ça marchait sans)
             dataReceived.Invoke(this, new NXTPacketReceivedEventArgs(rawBuffer));
         }
 
+        // Lorsque le client est connecté au serveur
         private void Connect(IAsyncResult result)
         {
             if (result.IsCompleted)
@@ -147,6 +162,7 @@ namespace SgtSafety.NXTBluetooth
             }
         }
 
+        // Lorsque des périphériques bluetooth sont découverts
         private void DiscoveryProgress(Object sender, DiscoverDevicesEventArgs e)
         {
             foreach (BluetoothDeviceInfo b in e.Devices)
@@ -156,14 +172,19 @@ namespace SgtSafety.NXTBluetooth
 
             deviceFound.Invoke(this, e);
         }
-          
+         
+        // Lorsque la recherche de périphériques est terminée
         private void DiscoveryCompleted(Object sender, DiscoverDevicesEventArgs e)
         {
             searchCompleted.Invoke(this, new EventArgs());
         }
 
+        // --------------------------------------------------------------------------
         // STATIC METHODS
-        public static BluetoothAddress GetBTMacAddress()
+        // --------------------------------------------------------------------------
+
+        // Retourne l'adresse MAC du périphérique Bluetooth local
+        public static BluetoothAddress GetLocalBTMacAddress()
         {
             BluetoothRadio myRadio = BluetoothRadio.PrimaryRadio;
             if (myRadio == null)

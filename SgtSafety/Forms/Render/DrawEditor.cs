@@ -12,21 +12,29 @@ namespace SgtSafety.Forms.Render
 {
     public class DrawEditor : MonoGame.Forms.Controls.UpdateWindow
     {
+        // --------------------------------------------------------------------------
         // FIELDS
+        // --------------------------------------------------------------------------
         private Texture2D background;
         private SpriteBatch spriteBatch;
         private CircuitRenderer cRend;
         private NXTCircuit circuit;
         private bool initialized = false;
 
+        // --------------------------------------------------------------------------
         // CONSTRUCTOR
+        // --------------------------------------------------------------------------
         public DrawEditor(NXTCircuit circuit)
             : base()
         {
             this.circuit = circuit;
         }
 
+        // --------------------------------------------------------------------------
         // METHODS
+        // --------------------------------------------------------------------------
+
+        // Initialise le Circuit et le CircuitRenderer
         public void InitializeCircuit(NXTCircuit c = null)
         {
             if (c != null)
@@ -35,6 +43,7 @@ namespace SgtSafety.Forms.Render
             initialized = true;
         }
 
+        // Initialisation (de tout)
         protected override void Initialize()
         {
             base.Initialize();
@@ -44,11 +53,13 @@ namespace SgtSafety.Forms.Render
             InitializeCircuit();
         }
 
+        // Appelé à chaque boucle logique
         protected override void Update(GameTime gameTime)
         {
             base.Update();
         }
 
+        // Appelé à chaque boucle graphique
         protected override void Draw()
         {
             base.Draw();

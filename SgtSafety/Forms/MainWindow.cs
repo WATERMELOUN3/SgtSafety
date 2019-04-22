@@ -23,7 +23,6 @@ namespace SgtSafety.Forms
         // --------------------------------------------------------------------------
         private NXTVehicule vehicule;
         private delegate void SafeCallDelegate(object sender, EventArgs e);
-        private System.Timers.Timer aTimer;
         private RemoteWindow remoteWindow;
 
 
@@ -36,15 +35,18 @@ namespace SgtSafety.Forms
         }
 
         // --------------------------------------------------------------------------
-        // FORM METHODS
+        // METHODS
         // --------------------------------------------------------------------------
+
+
+        // --------------------------------------------------------------------------
+        // EVENTS / ASYNC CALLS
+        // --------------------------------------------------------------------------
+
+        // Chargement de la fenêtre
         private void MainWindow_Load(object sender, EventArgs e)
         {
             this.vehicule = new NXTVehicule();
-
-            aTimer = new System.Timers.Timer(5000);
-            aTimer.Elapsed += OnTimedEvent;
-            aTimer.AutoReset = true;
         }
 
         // Bouton "Recherche"
@@ -87,6 +89,7 @@ namespace SgtSafety.Forms
             }
         }
 
+        // Evenement "connecté", s'execute lorsque la connection bluetooth est établie
         private void Connected(object sender, EventArgs e)
         {
             if (this.button6.InvokeRequired)
@@ -98,13 +101,10 @@ namespace SgtSafety.Forms
             {
                 button2.ForeColor = Color.Green;
                 button6.Enabled = true;
-                aTimer.Enabled = true;
             }
         }
 
-        // --------------------------------------------------------------------------
-        // EVENTS / ASYNC CALLS
-        // --------------------------------------------------------------------------
+        // Evenement "progression de la découverte", est appelé lorsque des périphériques bluetooth sont découverts
         private void DiscoverProgress(object sender, DiscoverDevicesEventArgs e)
         {
             foreach (BluetoothDeviceInfo b in e.Devices)
@@ -114,6 +114,7 @@ namespace SgtSafety.Forms
             }
         }
 
+        // Evenement "découverte terminée", est appelé lorsque la découverte de périphériques bluetooth est terminée
         private void DiscoverCompleted(object sender, EventArgs e)
         {
             progressBar1.Style = ProgressBarStyle.Blocks;
@@ -126,49 +127,18 @@ namespace SgtSafety.Forms
                 button2.Enabled = true;
         }
 
+        // Bouton "télécommande"
         private void Button6_Click(object sender, EventArgs e)
         {
-            remoteWindow = new RemoteWindow(this.vehicule, this.aTimer);
+            remoteWindow = new RemoteWindow(this.vehicule);
             remoteWindow.Show();
         }
 
+        // Bouton "éditeur de circuit"
         private void Button5_Click(object sender, EventArgs e)
         {
             EditorWindow ew = new EditorWindow();
             ew.Show();
-        }
-
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
-        {
-            //if (vehicule.IsBusy)
-            //{
-            //    Console.WriteLine("Robot occupé...");
-            //    if (nxtHelper.Client.Available > 0)
-            //    {
-            //        vehicule.IsBusy = false;
-            //        nxtHelper.Client.GetStream().Flush();
-            //    }
-            //    else
-            //        return;
-            //}
-
-            //Console.WriteLine("Robot disponible !");
-            //NXTAction action = vehicule.executeCommand();
-            //if (action != null)
-            //{
-            //    Console.WriteLine("Ordre envoyé: " + action.ToString());
-            //    NXTPacket packet = new NXTPacket(action);
-            //    nxtHelper.SendNTXPacket(packet);
-            //    vehicule.IsBusy = true;
-            //    nxtHelper.Client.GetStream().Flush();
-            //}
-
-            //if (remoteWindow != null)
-            //{
-            //    remoteWindow.UpdateBuffer(vehicule.Buffer);
-            //}
-
-
         }
     }
 }

@@ -10,20 +10,27 @@ namespace SgtSafety.NXTEnvironment
 {
     public class NXTBuffer : List<NXTAction>
     {
+        // --------------------------------------------------------------------------
         // CONSTRUCTOR
+        // --------------------------------------------------------------------------
         public NXTBuffer()
             : base()
         { }
 
+        // --------------------------------------------------------------------------
         // METHODS
-        public void Add(NXTAction p, bool FIFO = true)
+        // --------------------------------------------------------------------------
+
+        // Ajoute un élément au buffer, contrairement à List, on choisit si on l'ajoute au début ou à la fin)
+        public void Add(NXTAction p, bool debut = true)
         {
-            if (FIFO)
+            if (debut)
                 base.Insert(0, p);
             else
                 base.Add(p);
         }
 
+        // Fait sauter le premier index de la liste
         public NXTAction Pop()
         {
             NXTAction p = base[0];
@@ -31,7 +38,8 @@ namespace SgtSafety.NXTEnvironment
 
             return p;
         }
-
+        
+        // Retourne true si le buffer est vide, sinon false
         public bool isEmpty()
         {
             return (this.Count() == 0);

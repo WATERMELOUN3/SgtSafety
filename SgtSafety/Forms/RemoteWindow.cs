@@ -15,19 +15,21 @@ namespace SgtSafety.Forms
 {
     public partial class RemoteWindow : Form
     {
+        // --------------------------------------------------------------------------
         // FIELDS
+        // --------------------------------------------------------------------------
         private NXTAction pStraight, pLeft, pRight, pUturn;
         private NXTVehicule vehicule;
         private delegate void SafeCallDelegate(NXTBuffer buffer);
         private delegate void Button10DisableDelegate();
-        private System.Timers.Timer aTimer;
 
+        // --------------------------------------------------------------------------
         // CONSTRUCTOR
-        public RemoteWindow(NXTVehicule vehicule, System.Timers.Timer aTimer)
+        // --------------------------------------------------------------------------
+        public RemoteWindow(NXTVehicule vehicule)
         {
             InitializeComponent();
             this.vehicule = vehicule;
-            this.aTimer = aTimer;
 
             pStraight = new NXTAction(NXTMovement.STRAIGHT);
             pLeft = new NXTAction(NXTMovement.INTER_LEFT);
@@ -35,7 +37,11 @@ namespace SgtSafety.Forms
             pUturn = new NXTAction(NXTMovement.UTURN);
         }
 
+        // --------------------------------------------------------------------------
         // METHODS
+        // --------------------------------------------------------------------------
+
+        // Méthode pour désactiver le bouton 10 ("Lancer"/"Pause") sans problèmes d'inter threading
         private void Button10Disable()
         {
             if (this.button10.InvokeRequired)
@@ -49,6 +55,7 @@ namespace SgtSafety.Forms
             }
         }
 
+        // Met à jour la listBox1 pour afficher le buffer
         public void UpdateBuffer(NXTBuffer buffer)
         {
             if (this.listBox1.InvokeRequired)
@@ -66,19 +73,20 @@ namespace SgtSafety.Forms
             }
         }
 
+        // --------------------------------------------------------------------------
         // EVENTS / ASYNC CALLS
+        // --------------------------------------------------------------------------
+
+        // Bouton "Lancer"/"Pause"
         private void Button10_Click(object sender, EventArgs e)
         {
             UpdateBuffer(vehicule.Buffer);
             if (button10.Text == "Pause")
             {
-                aTimer.Enabled = false;
                 button10.Text = "Lancer";
             }
             else
             {
-                //aTimer.Enabled = true;
-
                 vehicule.SendNextAction();
                 vehicule.NxtHelper.WaitForData(new EventHandler<NXTPacketReceivedEventArgs>(PacketReceived));
                 button10.Text = "Pause";
@@ -86,6 +94,7 @@ namespace SgtSafety.Forms
             
         }
 
+        // Paquet reçu
         private void PacketReceived(object sender, NXTPacketReceivedEventArgs e)
         {
             UpdateBuffer(vehicule.Buffer);
@@ -103,6 +112,7 @@ namespace SgtSafety.Forms
             }
         }
 
+        // Bouton "Supprimer action"
         private void Button7_Click(object sender, EventArgs e)
         {
             if (listBox1.SelectedIndex != -1)
@@ -116,6 +126,7 @@ namespace SgtSafety.Forms
             }
         }
 
+        // Bouton "Gauche"
         private void Button3_Click(object sender, EventArgs e)
         {
             vehicule.addToBuffer(pLeft);
@@ -128,7 +139,7 @@ namespace SgtSafety.Forms
             if (!vehicule.Buffer.isEmpty())
             {
                 NXTAction a = vehicule.Buffer.Last().Duplicate();
-                a.SetAction(NXTAction.TAKE);
+                a.Action = NXTAction.TAKE;
 
                 vehicule.Buffer.RemoveAt(vehicule.Buffer.Count - 1);
                 vehicule.addToBuffer(a);
@@ -143,7 +154,7 @@ namespace SgtSafety.Forms
             if (!vehicule.Buffer.isEmpty())
             {
                 NXTAction a = vehicule.Buffer.Last().Duplicate();
-                a.SetAction(NXTAction.TAKE);
+                a.Action = NXTAction.DROP;
 
                 vehicule.Buffer.RemoveAt(vehicule.Buffer.Count - 1);
                 vehicule.addToBuffer(a);
@@ -152,17 +163,20 @@ namespace SgtSafety.Forms
             UpdateBuffer(vehicule.Buffer);
         }
 
+        // Bouton "supprimer tout"
         private void Button8_Click(object sender, EventArgs e)
         {
             vehicule.Buffer.Clear();
             UpdateBuffer(vehicule.Buffer);
         }
 
+        // Chargement de la fenêtre
         private void RemoteWindow_Load(object sender, EventArgs e)
         {
             this.KeyPreview = true;
         }
 
+        // Appelé lorsqu'un touche du clavier est pressée, sert pour les raccourcis
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == (Keys.Enter))
@@ -186,18 +200,21 @@ namespace SgtSafety.Forms
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
+        // Bouton "droite"
         private void Button2_Click(object sender, EventArgs e)
         {
             vehicule.addToBuffer(pRight);
             listBox1.Items.Add(pRight.ToFancyString());
         }
 
+        // Bouton "demi-tour"
         private void Button4_Click(object sender, EventArgs e)
         {
             vehicule.addToBuffer(pUturn);
             listBox1.Items.Add(pUturn.ToFancyString());
         }
 
+        // Bouton "avancer"
         private void Button1_Click(object sender, EventArgs e)
         {
             vehicule.addToBuffer(pStraight);

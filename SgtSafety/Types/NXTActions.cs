@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace SgtSafety.Types
 {
-    public class NXTMovement
+    // --------------------------------------------------------------------------
+    // TYPE ABSTRAIT NXTMovement
+    // --------------------------------------------------------------------------
+    public abstract class NXTMovement
     {
+        // --------------------------------------------------------------------------
+        // CONSTANTS
+        // --------------------------------------------------------------------------
         public const char STRAIGHT = 's';
         public const char INTER_RIGHT = 'r';
         public const char INTER_LEFT = 'l';
@@ -16,14 +22,54 @@ namespace SgtSafety.Types
 
     public class NXTAction : NXTMovement
     {
+        // --------------------------------------------------------------------------
+        // CONSTANTS
+        // --------------------------------------------------------------------------
         public const char DROP = 'd';
         public const char TAKE = 't';
 
+        // --------------------------------------------------------------------------
+        // FIELDS
+        // --------------------------------------------------------------------------
         private char movement;
 
         private bool hasAction = false;
         private char action = ' ';
 
+        // --------------------------------------------------------------------------
+        // GETTERS & SETTERS
+        // --------------------------------------------------------------------------
+        public char Movement
+        {
+            get { return movement; }
+            set { movement = value; }
+        }
+        public char Action
+        {
+            get
+            {
+                if (hasAction)
+                    return action;
+                else
+                    return ' ';
+            }
+            set
+            {
+                if (value == ' ')
+                {
+                    hasAction = false;
+                }
+                else
+                {
+                    hasAction = true;
+                    action = value;
+                }
+            }
+        }
+
+        // --------------------------------------------------------------------------
+        // CONSTRUCTORS
+        // --------------------------------------------------------------------------
         public NXTAction(char movement)
         {
             this.movement = movement;
@@ -40,31 +86,24 @@ namespace SgtSafety.Types
             }
         }
 
-        public void SetAction(char a)
-        {
-            if (a == ' ')
-            {
-                hasAction = false;
-            }
-            else
-            {
-                hasAction = true;
-                action = a;
-            }
+        // --------------------------------------------------------------------------
+        // METHODS
+        // --------------------------------------------------------------------------
 
-        }
-
+        // Duplique l'instance actuelle dans une nouvelle instance
         public NXTAction Duplicate()
         {
             NXTAction a = new NXTAction(this.movement, this.action);
             return a;
         }
 
+        // Donne la chaîne de caractères (pour envoyer le paquet)
         public override string ToString()
         {
             return movement + (hasAction ? action.ToString() : "") + "\n";
         }
 
+        // Donne la chaîne de caractères rédigés, pour l'affichage
         public string ToFancyString()
         {
             string t = "";

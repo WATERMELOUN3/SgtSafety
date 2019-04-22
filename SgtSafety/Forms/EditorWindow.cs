@@ -14,13 +14,22 @@ namespace SgtSafety.Forms
 {
     public partial class EditorWindow : Form
     {
+        // --------------------------------------------------------------------------
+        // FIELDS
+        // --------------------------------------------------------------------------
         private NXTCircuit circuit;
 
+        // --------------------------------------------------------------------------
+        // CONSTRUCTOR
+        // --------------------------------------------------------------------------
         public EditorWindow()
         {
             InitializeComponent();
         }
 
+        // --------------------------------------------------------------------------
+        // EVENTS / ASYNC CALLS
+        // --------------------------------------------------------------------------
         private void ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Éditeur fait par Alexis GÉLIN--ANDRIEU.\nLibrairies utilisées: Monogame, Monogame.Forms.", "A propos...", MessageBoxButtons.OK, MessageBoxIcon.Information);

@@ -12,19 +12,25 @@ namespace SgtSafety.Forms.Render
 {
     public class CircuitRenderer
     {
+        // --------------------------------------------------------------------------
         // FIELDS
+        // --------------------------------------------------------------------------
         private NXTCircuit circuit;
 
         private Texture2D tStraight;
         private Texture2D tTurn;
         private Texture2D tIntersec;
 
+        // --------------------------------------------------------------------------
         // GETTERS & SETTERS
+        // --------------------------------------------------------------------------
         public Texture2D Texture_Straight { get { return tStraight; } }
         public Texture2D Texture_Turn { get { return tTurn; } }
         public Texture2D Texture_Intersection { get { return tIntersec; } }
 
+        // --------------------------------------------------------------------------
         // CONSTRUCTOR
+        // --------------------------------------------------------------------------
         public CircuitRenderer(NXTCircuit circuit, GraphicsDevice graphicsDevice)
         {
             this.circuit = circuit;
@@ -34,20 +40,21 @@ namespace SgtSafety.Forms.Render
             tIntersec = RenderTools.LoadTextureFromFile(graphicsDevice, "Data\\intersection.png");
         }
 
-
+        // --------------------------------------------------------------------------
         // METHODS
+        // --------------------------------------------------------------------------
         public void Render(SpriteBatch sb)
         {
-            for (int x = 0; x < circuit.getWidth(); x++)
+            for (int x = 0; x < circuit.Width; x++)
             {
-                for (int y = 0; y < circuit.getHeight(); y++)
+                for (int y = 0; y < circuit.Height; y++)
                 {
                     NXTCase c = circuit.getCase(x, y);
                     Texture2D t;
                     Color col = Color.White;
 
                     // On trouve la texture (et couleur) adaptée
-                    switch (c.getTypeCase())
+                    switch (c.TypeCase)
                     {
                         case (Case.EMPTY):
                             t = tStraight;

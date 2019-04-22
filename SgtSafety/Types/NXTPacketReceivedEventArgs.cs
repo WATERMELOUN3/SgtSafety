@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace SgtSafety.Types
 {
+    /*
+     * Type utilisé pour la reception de donnée asynchrone
+     */
+
     public class NXTPacketReceivedEventArgs : EventArgs
     {
         private readonly byte[] data;
