@@ -10,7 +10,9 @@ namespace SgtSafety.NXTEnvironment
 
     public class NXTCircuit
     {
+        // --------------------------------------------------------------------------
         // FIELDS
+        // --------------------------------------------------------------------------
         private int height;
         private int width;
         private NXTCase[] circuit; // i = x + width * y
@@ -18,35 +20,34 @@ namespace SgtSafety.NXTEnvironment
         private List<Point> hopitaux;
         private List<Point> patients;
 
+        // --------------------------------------------------------------------------
         // GETTERS & SETTERS
+        // --------------------------------------------------------------------------
         public string Nom { get; set; }
-        public int getWidth()
+        public int Width
         {
-            return this.width;
+            get { return this.width; }
+        }
+        public int Height
+        {
+            get { return this.height; }
+        }
+        public NXTCase[] Circuit
+        {
+            get { return this.circuit; }
+        }
+        public List<Point> Hopitaux
+        {
+            get { return this.hopitaux; }
+        }
+        public List<Point> Patients
+        {
+            get { return this.patients; }
         }
 
-        public int getHeight()
-        {
-            return this.height;
-        }
-
-        public NXTCase[] getCircuit()
-        {
-            return this.circuit;
-        }
-
-        public List<Point> getHopitaux()
-        {
-            return this.hopitaux;
-        }
-
-        public List<Point> getPatients()
-        {
-            return this.patients;
-        }
-
-
+        // --------------------------------------------------------------------------
         // CONSTRUCTORS
+        // --------------------------------------------------------------------------
         public NXTCircuit(){
             this.height = 10;
             this.width = 10;
@@ -85,14 +86,19 @@ namespace SgtSafety.NXTEnvironment
         }
 
 
+        // --------------------------------------------------------------------------
         // METHODS
-        private void initialiseCircuit(){
+        // --------------------------------------------------------------------------
+
+        // Initialise le circuit avec des cases (vides par défaut)
+        private void initialiseCircuit(Case c = Case.EMPTY){
             for (int i=0; i < this.height; i++)
                 for (int j=0; j < this.width; j++)
-                    circuit[i + j * this.width] = new NXTCase(Case.EMPTY);
+                    circuit[i + j * this.width] = new NXTCase(c);
 
         }
 
+        // Ajoute un hopital
         public List<Point> addHopital(Point newHopital){
             if (!hopitaux.Contains(newHopital))
                 hopitaux.Add(newHopital);
@@ -100,6 +106,7 @@ namespace SgtSafety.NXTEnvironment
             return this.hopitaux;
         }
 
+        // Ajoute un patient
         public List<Point> addPatient(Point newPatient){
             if (!patients.Contains(newPatient))
                 patients.Add(newPatient);
@@ -107,24 +114,28 @@ namespace SgtSafety.NXTEnvironment
             return this.patients;
         }
 
-        public NXTCase[] setCase(NXTCase newCase, Point coordCase){
+        // Défini la case voulu
+        public NXTCase[] setCase(Point coordCase, NXTCase newCase){
             this.circuit[coordCase.X + this.width * coordCase.Y] = newCase;
 
             return this.circuit;
         }
 
-        public NXTCase[] setCase(NXTCase newCase, int x, int y)
+        // Surcharge avec int à la place de Point
+        public NXTCase[] setCase(int x, int y, NXTCase newCase)
         {
             this.circuit[x + this.width * y] = newCase;
 
             return this.circuit;
         }
 
+        // Obtient la case aux coordonnées choisis
         public NXTCase getCase(Point position)
         {
             return this.circuit[position.X + this.width * position.Y];
         }
 
+        // Surcharge avec int à la place de Point
         public NXTCase getCase(int x, int y)
         {
             return this.circuit[x + this.width * y];

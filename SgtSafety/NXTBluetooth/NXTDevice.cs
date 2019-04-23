@@ -9,7 +9,9 @@ namespace SgtSafety.NXTBluetooth
 {
     public class NXTDevice
     {
-        // FIELDS
+        // --------------------------------------------------------------------------
+        // FIELDS (GETTERS & SETTERS)
+        // --------------------------------------------------------------------------
         public string DeviceName { get; set; }
         public bool IsAuthenticated { get; set; }
         public bool IsConnected { get; set; }
@@ -20,7 +22,9 @@ namespace SgtSafety.NXTBluetooth
         public bool Remembered { get; set; }
         public BluetoothDeviceInfo DeviceInfo { get; set; }
 
+        // --------------------------------------------------------------------------
         // CONSTRUCTOR
+        // --------------------------------------------------------------------------
         public NXTDevice(BluetoothDeviceInfo device_info)
         {
             if (device_info != null)
@@ -37,7 +41,9 @@ namespace SgtSafety.NXTBluetooth
             }
         }
 
+        // --------------------------------------------------------------------------
         // METHODS
+        // --------------------------------------------------------------------------
         public override string ToString()
         {
             return DeviceName;

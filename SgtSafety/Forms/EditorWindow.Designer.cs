@@ -30,7 +30,6 @@ namespace SgtSafety.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this.drawEditor1 = new SgtSafety.Forms.Render.DrawEditor();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fichierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nouveauToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,15 +43,6 @@ namespace SgtSafety.Forms
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // drawEditor1
-            // 
-            this.drawEditor1.Enabled = false;
-            this.drawEditor1.Location = new System.Drawing.Point(12, 27);
-            this.drawEditor1.Name = "drawEditor1";
-            this.drawEditor1.Size = new System.Drawing.Size(731, 411);
-            this.drawEditor1.TabIndex = 0;
-            this.drawEditor1.Text = "drawEditor1";
             // 
             // menuStrip1
             // 
@@ -142,7 +132,6 @@ namespace SgtSafety.Forms
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(756, 450);
-            this.Controls.Add(this.drawEditor1);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip1;

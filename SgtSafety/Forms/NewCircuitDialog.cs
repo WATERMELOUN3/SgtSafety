@@ -12,15 +12,24 @@ namespace SgtSafety.Forms
 {
     public partial class NewCircuitDialog : Form
     {
+        // --------------------------------------------------------------------------
+        // FIELDS (GETTERS & SETTERS)
+        // --------------------------------------------------------------------------
         public string Nom { get; private set; }
         public int CWidth { get; private set; }
         public int CHeight { get; private set; }
 
+        // --------------------------------------------------------------------------
+        // CONSTRUCTOR
+        // --------------------------------------------------------------------------
         public NewCircuitDialog()
         {
             InitializeComponent();
         }
 
+        // --------------------------------------------------------------------------
+        // EVENTS / ASYNC CALLS
+        // --------------------------------------------------------------------------
         private void Button1_Click(object sender, EventArgs e)
         {
             if (textBox1.Text.Equals(string.Empty))

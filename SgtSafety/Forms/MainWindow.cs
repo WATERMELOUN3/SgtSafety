@@ -21,10 +21,9 @@ namespace SgtSafety.Forms
         // --------------------------------------------------------------------------
         // FIELDS
         // --------------------------------------------------------------------------
-        private NXTBluetoothHelper nxtHelper;
         private NXTVehicule vehicule;
         private delegate void SafeCallDelegate(object sender, EventArgs e);
-        private static System.Timers.Timer aTimer;
+        private RemoteWindow remoteWindow;
 
 
         // --------------------------------------------------------------------------
@@ -36,17 +35,18 @@ namespace SgtSafety.Forms
         }
 
         // --------------------------------------------------------------------------
-        // FORM METHODS
+        // METHODS
         // --------------------------------------------------------------------------
+
+
+        // --------------------------------------------------------------------------
+        // EVENTS / ASYNC CALLS
+        // --------------------------------------------------------------------------
+
+        // Chargement de la fenêtre
         private void MainWindow_Load(object sender, EventArgs e)
         {
             this.vehicule = new NXTVehicule();
-            nxtHelper = new NXTBluetoothHelper();
-
-            aTimer = new System.Timers.Timer(2000);
-            aTimer.Elapsed += OnTimedEvent;
-            aTimer.AutoReset = true;
-            aTimer.Enabled = true;
         }
 
         // Bouton "Recherche"
@@ -60,11 +60,11 @@ namespace SgtSafety.Forms
                 button2.Enabled = false;
                 label1.Text = "Recherche Bluetooth en cours...";
 
-                nxtHelper.SearchDevicesAsync(new EventHandler<DiscoverDevicesEventArgs>(DiscoverProgress), new EventHandler(DiscoverCompleted));
+                vehicule.NxtHelper.SearchDevicesAsync(new EventHandler<DiscoverDevicesEventArgs>(DiscoverProgress), new EventHandler(DiscoverCompleted));
             }
             else
             {
-                nxtHelper.StopSearchDevicesAsync();
+                vehicule.NxtHelper.StopSearchDevicesAsync();
                 progressBar1.Style = ProgressBarStyle.Blocks;
                 progressBar1.Value = 100;
                 button2.Enabled = true;
@@ -79,16 +79,17 @@ namespace SgtSafety.Forms
             if (button2.ForeColor == Color.Black)
             {
                 BluetoothDeviceInfo device = (listBox1.SelectedItem as NXTDevice).DeviceInfo;
-                nxtHelper.PairIfNotAlreadyPaired(device);
-                nxtHelper.ConnectToPaired(device, new EventHandler(Connected));
+                vehicule.NxtHelper.PairIfNotAlreadyPaired(device);
+                vehicule.NxtHelper.ConnectToPaired(device, new EventHandler(Connected));
             }
             else if (button2.ForeColor == Color.Green)
             {
-                nxtHelper.DisconnectFromPaired();
+                vehicule.NxtHelper.DisconnectFromPaired();
                 button2.ForeColor = Color.Black;
             }
         }
 
+        // Evenement "connecté", s'execute lorsque la connection bluetooth est établie
         private void Connected(object sender, EventArgs e)
         {
             if (this.button6.InvokeRequired)
@@ -103,9 +104,7 @@ namespace SgtSafety.Forms
             }
         }
 
-        // --------------------------------------------------------------------------
-        // EVENTS / ASYNC CALLS
-        // --------------------------------------------------------------------------
+        // Evenement "progression de la découverte", est appelé lorsque des périphériques bluetooth sont découverts
         private void DiscoverProgress(object sender, DiscoverDevicesEventArgs e)
         {
             foreach (BluetoothDeviceInfo b in e.Devices)
@@ -115,6 +114,7 @@ namespace SgtSafety.Forms
             }
         }
 
+        // Evenement "découverte terminée", est appelé lorsque la découverte de périphériques bluetooth est terminée
         private void DiscoverCompleted(object sender, EventArgs e)
         {
             progressBar1.Style = ProgressBarStyle.Blocks;
@@ -127,23 +127,18 @@ namespace SgtSafety.Forms
                 button2.Enabled = true;
         }
 
+        // Bouton "télécommande"
         private void Button6_Click(object sender, EventArgs e)
         {
-            RemoteWindow w = new RemoteWindow(this.vehicule);
-            w.Show();
+            remoteWindow = new RemoteWindow(this.vehicule);
+            remoteWindow.Show();
         }
 
+        // Bouton "éditeur de circuit"
         private void Button5_Click(object sender, EventArgs e)
         {
             EditorWindow ew = new EditorWindow();
             ew.Show();
-        }
-
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
-        {
-            NXTAction action = vehicule.executeCommand();
-            NXTPacket packet = new NXTPacket(action);
-            nxtHelper.SendNTXPacket(packet);
         }
     }
 }
