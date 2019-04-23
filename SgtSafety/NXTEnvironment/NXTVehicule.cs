@@ -20,6 +20,7 @@ namespace SgtSafety.NXTEnvironment
         public static readonly Point BOTTOM = new Point(0, 1);
         public static readonly Point LEFT = new Point(-1, 0);
         public static readonly Point RIGHT = new Point(1, 0);
+        public static readonly Point ERROR = new Point(-5, -5);
 
         // --------------------------------------------------------------------------
         // FIELDS
@@ -109,12 +110,12 @@ namespace SgtSafety.NXTEnvironment
         }
 
         // Prend un patient (renvoie le nombre de patients après)
-        public int takePatient(){
+        private int takePatient(){
             return (++this.patients);
         }
 
         // Lache un patient (renvoie le nombre de patients après)
-        public int dropPatient(){
+        private int dropPatient(){
             return (--this.patients);
         }
 
@@ -124,12 +125,28 @@ namespace SgtSafety.NXTEnvironment
             this.buffer.Add(action, false);
         }
 
+        //Execute l'action envoyée en paramètre
+        private void executeAction(NXTAction action)
+        {
+            char actiontd = action.Action;
+            NXTCase caseCur = currentCase();
+
+            this.position = addPoint(this.position, caseCur.goThrough(action, this.direction));
+            if (actiontd == NXTAction.TAKE)
+                this.takePatient();
+            else if (actiontd == NXTAction.DROP)
+                this.dropPatient();
+        }
+
         // Retourne la prochaine action à executer, ou null si il n'y a pas d'action
         public NXTAction executeCommand()
         {
             NXTAction action = null;
             if (!buffer.isEmpty())
+            {
                 action = buffer.Pop();
+                executeAction(action);
+            }
 
             return action;
         }
