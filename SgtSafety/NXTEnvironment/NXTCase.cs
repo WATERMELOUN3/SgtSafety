@@ -105,12 +105,13 @@ namespace SgtSafety.NXTEnvironment
         //Retourne le point correspondant à un déplacement UTURN
         private Point goUTurn(Point direction)
         {
+            Point newDirection = NXTVehicule.oppositeDirection(direction);
             switch (this.typeCase)
             {
                 case Case.STRAIGHT:
-                    return direction;
+                    return newDirection;
                 case Case.VIRAGE:
-                    return goThroughVirage(direction);
+                    return goThroughVirage(newDirection);
                 case Case.INTERSECTION:
                     return NXTVehicule.ERROR;
                 default:

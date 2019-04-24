@@ -98,9 +98,24 @@ namespace SgtSafety.NXTEnvironment
         // --------------------------------------------------------------------------
 
         // Addition de points, à déplacer dans classe statique "MathTools"
-        private static Point addPoint(Point p1, Point p2)
+        public static Point addPoint(Point p1, Point p2)
         {
             return new Point(p1.X + p2.X, p1.Y + p2.Y);
+        }
+
+        //Retourne l'opposé d'une direction
+        public static Point oppositeDirection(Point pDirection)
+        {
+            if (pDirection == RIGHT)
+                return NXTVehicule.LEFT;
+            else if (pDirection == LEFT)
+                return NXTVehicule.RIGHT;
+            else if (pDirection == TOP)
+                return NXTVehicule.BOTTOM;
+            else if (pDirection == BOTTOM)
+                return NXTVehicule.TOP;
+
+            return NXTVehicule.ERROR;
         }
 
         // Retourne la case sur laquelle de vehicule est
@@ -131,7 +146,9 @@ namespace SgtSafety.NXTEnvironment
             char actiontd = action.Action;
             NXTCase caseCur = currentCase();
 
+            Console.WriteLine(this.position);
             this.position = addPoint(this.position, caseCur.goThrough(action, this.direction));
+            Console.WriteLine(this.position);
             if (actiontd == NXTAction.TAKE)
                 this.takePatient();
             else if (actiontd == NXTAction.DROP)
@@ -166,149 +183,6 @@ namespace SgtSafety.NXTEnvironment
             else
                 return false;
         }
-
-        /* private void moveStraight()
-         {
-             NXTCase curCase = currentCase();
-
-             switch (curCase.getTypeCase())
-             {
-                 case Case.STRAIGHT:
-                     this.position = addPoint(this.position, this.direction);
-                     break;
-
-                 case Case.VIRAGE:
-                     //computeVirage(curCase);
-                     break;
-
-                 case Case.INTERSECTION:
-                     //computeIntersection_STRAIGHT(curCase);
-                     break;
-
-                 default:
-                     break;
-             }
-         }*/
-
-        /*private void computeVirage(NXTCase curCase)
-        {
-            Orientation orient = curCase.getOrientation();
-
-            switch (orient)
-            {
-                case Orientation.BOTTOM:
-                    break;
-
-                case Orientation.TOP:
-                    break;
-
-                case Orientation.LEFT:
-                    break;
-
-                case Orientation.RIGHT:
-                    break;
-            }
-        }*/
-
-        /*private void computeIntersection_STRAIGHT(NXTCase curCase)
-        {
-            if (orient == Orientation.TOP || orient == Orientation.LEFT || orient == Orientation.RIGHT) 
-            {
-                this.position += this.direction;
-            }
-        }
-
-        private void computeIntersection_LEFT(NXTCase curCase)
-        {
-            if (orient == Orientation.TOP || orient == Orientation.LEFT || orient == Orientation.BOTTOM)
-            {
-                this.direction = curCase.getOrientation();
-                this.position += this.direction;
-            }
-            else
-            {
-
-            }
-        }
-
-        private void computeIntersection_RIGHT(NXTCase curCase)
-        {
-            if (orient == Orientation.TOP || orient == Orientation.BOTTOM || orient == Orientation.RIGHT)
-            {
-                this.position += this.direction;
-            }
-            else
-            {
-
-            }
-        }
-
-
-
-        private void moveInterLeft()
-        {
-            NXTCase curCase = currentCase();
-
-            switch (curCase.getTypeCase())
-            {
-                case Case.STAIGHT:
-                    break;
-
-                case Case.VIRAGE:
-                    break;
-
-                case Case.INTERSECTION:
-                    computeIntersection_LEFT(curCase);
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-        private void moveInterRight()
-        {
-            NXTCase curCase = currentCase();
-
-            switch (curCase.getTypeCase())
-            {
-                case Case.STAIGHT:
-                    break;
-
-                case Case.VIRAGE:
-                    break;
-
-                case Case.INTERSECTION:
-                    computeIntersection_RIGHT(curCase);
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-        private void moveUTurn()
-        {
-            NXTCase curCase = currentCase();
-
-            switch (curCase.getTypeCase())
-            {
-                case Case.STAIGHT:
-                    this.position += this.direction;
-                    break;
-
-                case Case.VIRAGE:
-                    computeVirage(curCase);
-                    break;
-
-                case Case.INTERSECTION:
-                    computeIntersection_STRAIGHT(curCase);
-                    break;
-
-                default:
-                    break;
-            }
-        }*/
 
     }
 }
