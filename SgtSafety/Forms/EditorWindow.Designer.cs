@@ -41,6 +41,7 @@ namespace SgtSafety.Forms
             this.resetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.propriétésToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -80,12 +81,14 @@ namespace SgtSafety.Forms
             this.ouvrirToolStripMenuItem.Name = "ouvrirToolStripMenuItem";
             this.ouvrirToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.ouvrirToolStripMenuItem.Text = "Ouvrir";
+            this.ouvrirToolStripMenuItem.Click += new System.EventHandler(this.OuvrirToolStripMenuItem_Click);
             // 
             // enregistrerToolStripMenuItem
             // 
             this.enregistrerToolStripMenuItem.Name = "enregistrerToolStripMenuItem";
             this.enregistrerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.enregistrerToolStripMenuItem.Text = "Enregistrer";
+            this.enregistrerToolStripMenuItem.Click += new System.EventHandler(this.EnregistrerToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -110,13 +113,13 @@ namespace SgtSafety.Forms
             // resetToolStripMenuItem
             // 
             this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
-            this.resetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.resetToolStripMenuItem.Text = "Remettre à zéro";
             // 
             // propriétésToolStripMenuItem
             // 
             this.propriétésToolStripMenuItem.Name = "propriétésToolStripMenuItem";
-            this.propriétésToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.propriétésToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.propriétésToolStripMenuItem.Text = "Propriétés";
             // 
             // toolStripMenuItem1
@@ -126,6 +129,13 @@ namespace SgtSafety.Forms
             this.toolStripMenuItem1.Size = new System.Drawing.Size(76, 20);
             this.toolStripMenuItem1.Text = "A propos...";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.ToolStripMenuItem1_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.InitialDirectory = "Circuits";
+            this.openFileDialog1.Title = "Ouvrir un circuit";
+            this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.OpenFileDialog1_FileOk);
             // 
             // EditorWindow
             // 
@@ -160,5 +170,6 @@ namespace SgtSafety.Forms
         private System.Windows.Forms.ToolStripMenuItem resetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem propriétésToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }

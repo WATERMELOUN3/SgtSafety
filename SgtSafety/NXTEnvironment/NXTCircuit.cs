@@ -1,14 +1,15 @@
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SgtSafety.NXTEnvironment
 {
-
-    public class NXTCircuit
+    [DataContract(Name = "Circuit", Namespace = "SgtSafety")]
+    public class NXTCircuit : IExtensibleDataObject
     {
         // --------------------------------------------------------------------------
         // FIELDS
@@ -20,29 +21,53 @@ namespace SgtSafety.NXTEnvironment
         private List<Point> hopitaux;
         private List<Point> patients;
 
+        private ExtensionDataObject extensionData_Value;
+
         // --------------------------------------------------------------------------
         // GETTERS & SETTERS
         // --------------------------------------------------------------------------
+        [DataMember]
         public string Nom { get; set; }
+        [DataMember]
         public int Width
         {
             get { return this.width; }
+            set { this.width = value; }
         }
+        [DataMember]
         public int Height
         {
             get { return this.height; }
+            set { this.height = value; }
         }
+        [DataMember]
         public NXTCase[] Circuit
         {
             get { return this.circuit; }
+            set { this.circuit = value; }
         }
+        [DataMember]
         public List<Point> Hopitaux
         {
             get { return this.hopitaux; }
+            set { this.hopitaux = value; }
         }
+        [DataMember]
         public List<Point> Patients
         {
             get { return this.patients; }
+            set { this.patients = value; }
+        }
+        public ExtensionDataObject ExtensionData
+        {
+            get
+            {
+                return extensionData_Value;
+            }
+            set
+            {
+                extensionData_Value = value;
+            }
         }
 
         // --------------------------------------------------------------------------
@@ -139,6 +164,20 @@ namespace SgtSafety.NXTEnvironment
         public NXTCase getCase(int x, int y)
         {
             return this.circuit[x + this.width * y];
+        }
+
+        // Vérifie si des coordonnées sont compris dans la dimension du circuit
+        public bool IsWithinBounds(Point p)
+        {
+            if (p.X >= 0 && p.X < this.width && p.Y >= 0 && p.Y < this.height)
+                return true;
+            else
+                return false;
+        }
+
+        public bool IsWithinBounds(int x, int y)
+        {
+            return IsWithinBounds(new Point(x, y));
         }
     }
 }

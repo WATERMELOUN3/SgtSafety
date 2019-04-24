@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using MonoGame.Forms.Services;
 using SgtSafety.NXTEnvironment;
 using System;
 using System.Collections.Generic;
@@ -16,10 +18,17 @@ namespace SgtSafety.Forms.Render
         // FIELDS
         // --------------------------------------------------------------------------
         private Texture2D background;
-        private SpriteBatch spriteBatch;
-        private CircuitRenderer cRend;
+        private Texture2D tOrigin;
+        private Texture2D tPixel;
         private NXTCircuit circuit;
         private bool initialized = false;
+        private KeyboardState oldKeyState;
+
+        private Camera camera;
+
+        private SpriteBatch spriteBatch;
+        private CircuitRenderer cRend;
+        private Cursor cursor;
 
         // --------------------------------------------------------------------------
         // CONSTRUCTOR
@@ -28,18 +37,25 @@ namespace SgtSafety.Forms.Render
             : base()
         {
             this.circuit = circuit;
+            oldKeyState = new KeyboardState();
         }
 
         // --------------------------------------------------------------------------
         // METHODS
         // --------------------------------------------------------------------------
 
-        // Initialise le Circuit et le CircuitRenderer
+        // Initialise le Circuit, le CircuitRenderer, la Camera et le Cursor
         public void InitializeCircuit(NXTCircuit c = null)
         {
             if (c != null)
                 this.circuit = c;
+
+            tPixel = new Texture2D(this.GraphicsDevice, 1, 1);
+            tPixel.SetData<Color>(new Color[] { Color.White });
+
             cRend = new CircuitRenderer(circuit, this.GraphicsDevice);
+            cursor = new Cursor(cRend, tPixel);
+            camera = new Camera(this.GraphicsDevice.Viewport);
             initialized = true;
         }
 
@@ -50,6 +66,7 @@ namespace SgtSafety.Forms.Render
 
             spriteBatch = new SpriteBatch(this.GraphicsDevice);
             background = RenderTools.LoadTextureFromFile(this.GraphicsDevice, "Data\\damier.png");
+            tOrigin = RenderTools.LoadTextureFromFile(this.GraphicsDevice, "Data\\origine.png");
             InitializeCircuit();
         }
 
@@ -57,6 +74,42 @@ namespace SgtSafety.Forms.Render
         protected override void Update(GameTime gameTime)
         {
             base.Update();
+
+            KeyboardState k = Keyboard.GetState();
+            MouseState m = Mouse.GetState();
+
+            if (m.X > 0 && m.Y > 0)
+            {
+                camera.UpdateCamera();
+                cursor.UpdateCursor(camera);
+
+                if (k.IsKeyDown(Keys.Space) && oldKeyState.IsKeyUp(Keys.Space))
+                {
+                    cursor.NextCursor();
+                    Console.WriteLine("Next cursor");
+                }
+
+                if (k.IsKeyDown(Keys.R) && oldKeyState.IsKeyUp(Keys.R))
+                {
+                    cursor.Rotate();
+                    Console.WriteLine("Rotated");
+                }
+
+                if (circuit.IsWithinBounds(cursor.Location))
+                {
+                    if (m.LeftButton == ButtonState.Pressed)
+                    {
+                        circuit.setCase(cursor.Location, cursor.SelectedCase.Duplicate());
+                        Console.WriteLine("Click !");
+                    }
+                    else if (m.RightButton == ButtonState.Pressed)
+                    {
+                        circuit.setCase(cursor.Location, new NXTCase(Case.EMPTY));
+                    }
+                }
+            }
+
+            oldKeyState = k;
         }
 
         // Appelé à chaque boucle graphique
@@ -66,13 +119,17 @@ namespace SgtSafety.Forms.Render
 
             spriteBatch.Begin();
             spriteBatch.Draw(background, new Vector2(0, 0), Color.White);
+            spriteBatch.End();
 
             if (circuit != null && initialized)
             {
+                spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, camera.Transform);
                 cRend.Render(spriteBatch);
+                spriteBatch.Draw(tOrigin, new Vector2(-16, -16), Color.White);
+                cursor.DrawCursor(spriteBatch, camera);
+                spriteBatch.End();
             }
-
-            spriteBatch.End();
+            
         }
     }
 }

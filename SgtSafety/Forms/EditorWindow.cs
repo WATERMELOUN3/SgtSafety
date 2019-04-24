@@ -5,10 +5,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace SgtSafety.Forms
 {
@@ -60,6 +64,37 @@ namespace SgtSafety.Forms
             this.drawEditor1.TabIndex = 0;
             this.drawEditor1.Text = "drawEditor1";
             this.Controls.Add(this.drawEditor1);
+        }
+
+        private void EnregistrerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DataContractSerializer serializer = new DataContractSerializer(typeof(NXTCircuit));
+
+            if (!Directory.Exists("Circuits"))
+                Directory.CreateDirectory("Circuits");
+            Stream stream = new FileStream("Circuits\\" + circuit.Nom, FileMode.Create, FileAccess.Write);
+
+            serializer.WriteObject(stream, circuit);
+            stream.Close();
+        }
+
+        private void OuvrirToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.ShowDialog();
+        }
+
+        private void OpenFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            Stream stream = new FileStream(openFileDialog1.FileName, FileMode.Open, FileAccess.Read);
+            XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(stream, new XmlDictionaryReaderQuotas());
+            DataContractSerializer ser = new DataContractSerializer(typeof(NXTCircuit));
+
+            NXTCircuit c = (NXTCircuit)ser.ReadObject(reader, true);
+            reader.Close();
+            stream.Close();
+
+            this.circuit = c;
+            this.drawEditor1.InitializeCircuit(this.circuit);
         }
     }
 }
