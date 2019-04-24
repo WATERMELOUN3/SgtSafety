@@ -148,6 +148,7 @@ namespace SgtSafety.Forms
             this.Name = "EditorWindow";
             this.ShowIcon = false;
             this.Text = "Éditeur de circuit";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditorWindow_FormClosing);
             this.Load += new System.EventHandler(this.EditorWindow_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

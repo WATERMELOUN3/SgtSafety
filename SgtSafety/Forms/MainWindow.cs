@@ -1,5 +1,6 @@
 ﻿using InTheHand.Net.Bluetooth;
 using InTheHand.Net.Sockets;
+using Microsoft.Xna.Framework;
 using SgtSafety.NXTBluetooth;
 using SgtSafety.NXTEnvironment;
 using SgtSafety.Types;
@@ -7,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,7 +24,6 @@ namespace SgtSafety.Forms
         private NXTVehicule vehicule;
         private delegate void SafeCallDelegate(object sender, EventArgs e);
         private RemoteWindow remoteWindow;
-
 
         // --------------------------------------------------------------------------
         // CONSTRUCTOR
@@ -46,7 +45,7 @@ namespace SgtSafety.Forms
         // Chargement de la fenêtre
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            this.vehicule = new NXTVehicule();
+            this.vehicule = new NXTVehicule(new Point(0, 2), NXTVehicule.TOP);
         }
 
         // Bouton "Recherche"
@@ -76,16 +75,16 @@ namespace SgtSafety.Forms
         // Bouton "Se connecter télécommandé"
         private void Button2_Click(object sender, EventArgs e)
         {
-            if (button2.ForeColor == Color.Black)
+            if (button2.ForeColor == System.Drawing.Color.Black)
             {
                 BluetoothDeviceInfo device = (listBox1.SelectedItem as NXTDevice).DeviceInfo;
                 vehicule.NxtHelper.PairIfNotAlreadyPaired(device);
                 vehicule.NxtHelper.ConnectToPaired(device, new EventHandler(Connected));
             }
-            else if (button2.ForeColor == Color.Green)
+            else if (button2.ForeColor == System.Drawing.Color.Green)
             {
                 vehicule.NxtHelper.DisconnectFromPaired();
-                button2.ForeColor = Color.Black;
+                button2.ForeColor = System.Drawing.Color.Black;
             }
         }
 
@@ -99,7 +98,7 @@ namespace SgtSafety.Forms
             }
             else
             {
-                button2.ForeColor = Color.Green;
+                button2.ForeColor = System.Drawing.Color.Green;
                 button6.Enabled = true;
             }
         }
@@ -138,7 +137,9 @@ namespace SgtSafety.Forms
         private void Button5_Click(object sender, EventArgs e)
         {
             EditorWindow ew = new EditorWindow();
-            ew.Show();
+            ew.ShowDialog();
+
+            vehicule.Circuit = ew.Circuit;
         }
     }
 }
