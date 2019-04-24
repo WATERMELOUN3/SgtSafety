@@ -105,17 +105,17 @@ namespace SgtSafety.NXTEnvironment
                     return NXTVehicule.ERROR;
 
                 case Orientation.LEFT:
-                    if (direction == NXTVehicule.RIGHT)
-                        return NXTVehicule.BOTTOM;
-                    else if (direction == NXTVehicule.TOP)
-                        return NXTVehicule.LEFT;
-                    return NXTVehicule.ERROR;
-
-                case Orientation.RIGHT:
                     if (direction == NXTVehicule.LEFT)
                         return NXTVehicule.TOP;
                     else if (direction == NXTVehicule.BOTTOM)
                         return NXTVehicule.RIGHT;
+                    return NXTVehicule.ERROR;
+
+                case Orientation.RIGHT:
+                    if (direction == NXTVehicule.RIGHT)
+                        return NXTVehicule.BOTTOM;
+                    else if (direction == NXTVehicule.TOP)
+                        return NXTVehicule.LEFT;
                     return NXTVehicule.ERROR;
 
                 case Orientation.TOP:
@@ -167,26 +167,26 @@ namespace SgtSafety.NXTEnvironment
         {
             switch (this.orientation)
             {
-                case Orientation.BOTTOM:
+                case Orientation.TOP:
                     if (direction == NXTVehicule.TOP)
                         return NXTVehicule.LEFT;
                     else if (direction == NXTVehicule.LEFT)
                         return NXTVehicule.BOTTOM;
                     else if (direction == NXTVehicule.RIGHT)
                         return NXTVehicule.RIGHT;
-                    return NXTVehicule.ERROR;
-
-                case Orientation.LEFT:
-                    if (direction == NXTVehicule.TOP)
-                        return NXTVehicule.LEFT;
-                    else if (direction == NXTVehicule.BOTTOM)
-                        return NXTVehicule.BOTTOM;
-                    else if (direction == NXTVehicule.RIGHT)
-                        return NXTVehicule.TOP;
                     return NXTVehicule.ERROR;
 
                 case Orientation.RIGHT:
                     if (direction == NXTVehicule.TOP)
+                        return NXTVehicule.LEFT;
+                    else if (direction == NXTVehicule.BOTTOM)
+                        return NXTVehicule.BOTTOM;
+                    else if (direction == NXTVehicule.RIGHT)
+                        return NXTVehicule.TOP;
+                    return NXTVehicule.ERROR;
+
+                case Orientation.LEFT:
+                    if (direction == NXTVehicule.TOP)
                         return NXTVehicule.TOP;
                     else if (direction == NXTVehicule.BOTTOM)
                         return NXTVehicule.RIGHT;
@@ -194,7 +194,7 @@ namespace SgtSafety.NXTEnvironment
                         return NXTVehicule.BOTTOM;
                     return NXTVehicule.ERROR;
 
-                case Orientation.TOP:
+                case Orientation.BOTTOM:
                     if (direction == NXTVehicule.BOTTOM)
                         return NXTVehicule.RIGHT;
                     else if (direction == NXTVehicule.LEFT)
@@ -212,19 +212,10 @@ namespace SgtSafety.NXTEnvironment
         {
             switch (this.orientation)
             {
-                case Orientation.BOTTOM:
+                case Orientation.TOP:
                     if (direction == NXTVehicule.TOP)
                         return NXTVehicule.RIGHT;
                     else if (direction == NXTVehicule.LEFT)
-                        return NXTVehicule.LEFT;
-                    else if (direction == NXTVehicule.RIGHT)
-                        return NXTVehicule.BOTTOM;
-                    return NXTVehicule.ERROR;
-
-                case Orientation.LEFT:
-                    if (direction == NXTVehicule.TOP)
-                        return NXTVehicule.TOP;
-                    else if (direction == NXTVehicule.BOTTOM)
                         return NXTVehicule.LEFT;
                     else if (direction == NXTVehicule.RIGHT)
                         return NXTVehicule.BOTTOM;
@@ -232,6 +223,15 @@ namespace SgtSafety.NXTEnvironment
 
                 case Orientation.RIGHT:
                     if (direction == NXTVehicule.TOP)
+                        return NXTVehicule.TOP;
+                    else if (direction == NXTVehicule.BOTTOM)
+                        return NXTVehicule.LEFT;
+                    else if (direction == NXTVehicule.RIGHT)
+                        return NXTVehicule.BOTTOM;
+                    return NXTVehicule.ERROR;
+
+                case Orientation.LEFT:
+                    if (direction == NXTVehicule.TOP)
                         return NXTVehicule.RIGHT;
                     else if (direction == NXTVehicule.BOTTOM)
                         return NXTVehicule.BOTTOM;
@@ -239,7 +239,7 @@ namespace SgtSafety.NXTEnvironment
                         return NXTVehicule.TOP;
                     return NXTVehicule.ERROR;
 
-                case Orientation.TOP:
+                case Orientation.BOTTOM:
                     if (direction == NXTVehicule.BOTTOM)
                         return NXTVehicule.LEFT;
                     else if (direction == NXTVehicule.LEFT)
