@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using SgtSafety.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -178,6 +179,77 @@ namespace SgtSafety.NXTEnvironment
         public bool IsWithinBounds(int x, int y)
         {
             return IsWithinBounds(new Point(x, y));
+        }
+
+        // Donne une liste de points qui correspondent aux cases accessibles depuis la case fournie en argument
+        public List<Point> GetNeighbours(Point p)
+        {
+            NXTCase c = this.getCase(p);
+            List<Point> neighbours = new List<Point>();
+            
+            if (c.TypeCase == Case.STRAIGHT)
+            {
+                if (c.CaseOrientation == Orientation.TOP || c.CaseOrientation == Orientation.BOTTOM)
+                {
+                    neighbours.Add(new Point(p.X, p.Y + 1));
+                    neighbours.Add(new Point(p.X, p.Y - 1));
+                }
+                else
+                {
+                    neighbours.Add(new Point(p.X + 1, p.Y));
+                    neighbours.Add(new Point(p.X - 1, p.Y));
+                }
+            }
+            else if (c.TypeCase == Case.VIRAGE)
+            {
+                switch (c.CaseOrientation)
+                {
+                    case Orientation.TOP:
+                        neighbours.Add(new Point(p.X, p.Y + 1));
+                        neighbours.Add(new Point(p.X + 1, p.Y));
+                        break;
+                    case Orientation.RIGHT:
+                        neighbours.Add(new Point(p.X, p.Y + 1));
+                        neighbours.Add(new Point(p.X - 1, p.Y));
+                        break;
+                    case Orientation.BOTTOM:
+                        neighbours.Add(new Point(p.X, p.Y - 1));
+                        neighbours.Add(new Point(p.X - 1, p.Y));
+                        break;
+                    case Orientation.LEFT:
+                        neighbours.Add(new Point(p.X, p.Y - 1));
+                        neighbours.Add(new Point(p.X + 1, p.Y));
+                        break;
+                }
+            }
+            else if (c.TypeCase == Case.INTERSECTION)
+            {
+                switch (c.CaseOrientation)
+                {
+                    case Orientation.TOP:
+                        neighbours.Add(new Point(p.X, p.Y + 1));
+                        neighbours.Add(new Point(p.X + 1, p.Y));
+                        neighbours.Add(new Point(p.X - 1, p.Y));
+                        break;
+                    case Orientation.RIGHT:
+                        neighbours.Add(new Point(p.X, p.Y + 1));
+                        neighbours.Add(new Point(p.X, p.Y - 1));
+                        neighbours.Add(new Point(p.X - 1, p.Y));
+                        break;
+                    case Orientation.BOTTOM:
+                        neighbours.Add(new Point(p.X, p.Y - 1));
+                        neighbours.Add(new Point(p.X - 1, p.Y));
+                        neighbours.Add(new Point(p.X + 1, p.Y));
+                        break;
+                    case Orientation.LEFT:
+                        neighbours.Add(new Point(p.X, p.Y - 1));
+                        neighbours.Add(new Point(p.X, p.Y + 1));
+                        neighbours.Add(new Point(p.X + 1, p.Y));
+                        break;
+                }
+            }
+
+            return neighbours;
         }
     }
 }

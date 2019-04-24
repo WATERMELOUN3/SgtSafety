@@ -24,6 +24,14 @@ namespace SgtSafety.Forms
         private NXTCircuit circuit;
 
         // --------------------------------------------------------------------------
+        // GETTERS & SETTERS
+        // --------------------------------------------------------------------------
+        public NXTCircuit Circuit
+        {
+            get { return circuit; }
+        }
+
+        // --------------------------------------------------------------------------
         // CONSTRUCTOR
         // --------------------------------------------------------------------------
         public EditorWindow()
@@ -95,6 +103,11 @@ namespace SgtSafety.Forms
 
             this.circuit = c;
             this.drawEditor1.InitializeCircuit(this.circuit);
+        }
+
+        private void EditorWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.drawEditor1.Dispose();
         }
     }
 }
