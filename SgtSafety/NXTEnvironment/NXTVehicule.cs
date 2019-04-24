@@ -145,9 +145,11 @@ namespace SgtSafety.NXTEnvironment
         {
             char actiontd = action.Action;
             NXTCase caseCur = currentCase();
+            Point newDir = caseCur.goThrough(action, this.direction);
 
             Console.WriteLine(this.position);
-            this.position = addPoint(this.position, caseCur.goThrough(action, this.direction));
+            this.position = addPoint(this.position, newDir);
+            this.direction = newDir;
             Console.WriteLine(this.position);
             if (actiontd == NXTAction.TAKE)
                 this.takePatient();
