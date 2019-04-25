@@ -56,7 +56,7 @@ namespace SgtSafety.NXTIA
 
         private int weight(int src, int neighbour)
         {
-            return 0;
+            return 1;
         }
 
         private void updateDistance(int s1, int s2)
@@ -79,7 +79,18 @@ namespace SgtSafety.NXTIA
             return path;
         }
 
-        private void Dijkstra(Point source, Point goal)
+        public List<Point> intListToPointList(List<int> liste)
+        {
+            List<Point> newListe = new List<Point>();
+            int i;
+
+            for(i=0; i < liste.Count; ++i)
+                newListe.Add(circuit.intToPoint(liste.ElementAt(i)));
+
+            return newListe;
+        }
+
+        private List<Point> Dijkstra(Point source, Point goal)
         {
             int curr;
             int src = circuit.getIntFromPoint(source),
@@ -95,9 +106,50 @@ namespace SgtSafety.NXTIA
                     updateDistance(curr, circuit.getIntFromPoint(neighbour));
             }
 
-            List<int> path = getPath(src, gl);
+            List<Point> path = intListToPointList(getPath(src, gl));
+
+            return path;
         }
 
+        private List<double> getDistancesPatients(Point start, List<Point> patients)
+        {
+            List<double> dist = new List<double>();
+            double d;
+            foreach(Point p in patients)
+            {
+                d = (Math.Abs(Math.Sqrt(Math.Pow(start.X - p.X, 2) - Math.Pow(start.Y - p.Y, 2)));
+                dist.Add(d);
+            }
+
+            return dist;
+        }
+
+        public List<Point> definePath(Point start)
+        {
+            List<Point> path = new List<Point>();
+            List<Point> patients = circuit.Patients;
+            List<Point> hopitaux = circuit.Hopitaux;
+            Point hopital = hopitaux.ElementAt(0);
+            List<double> distancesPatients = getDistancesPatients(start, patients);
+            Point patient1, patient2;
+
+            if (distancesPatients.ElementAt(0) > distancesPatients.ElementAt(1))
+            {
+                patient1 = patients.ElementAt(1);
+                patient2 = patients.ElementAt(0);
+            }
+            else
+            {
+                patient1 = patients.ElementAt(0);
+                patient2 = patients.ElementAt(1);
+            }
+
+            path.AddRange(Dijkstra(start, patient1));
+            path.AddRange(Dijkstra(patient1, patient2));
+            path.AddRange(Dijkstra(patient2, hopital));
+
+            return path;
+        }
 
     }
 }
