@@ -10,36 +10,94 @@ namespace SgtSafety.NXTIA
 {
     class IAAStar : IA
     {
+        private int nbCasesCircuit;
+        private int[] distance;
+        private int[] parent;
+
         public IAAStar()
             : base()
         {
-            
+            nbCasesCircuit = circuit.getNbCases();
         }
 
         public IAAStar(NXTVehicule p_vehicule)
             : base(p_vehicule)
         {
-
+            nbCasesCircuit = circuit.getNbCases();
         }
 
-        public void computeTrajectory(Point objectif)
+        private void initialise(int source)
         {
-            Point startingPoint = vehicule.Position;
-            Point current;
-            List<Point> exploredCases = new List<Point>();
-            List<Point> notEvaluated = new List<Point>();
-            List<Point> successors = new List<Point>();
-
-            notEvaluated.Add(startingPoint);
-
-            while (notEvaluated.Count > 0)
+            int i;
+            distance = new int[nbCasesCircuit];
+            parent = new int[nbCasesCircuit];
+            for (i = 0; i < nbCasesCircuit; ++i)
             {
-                current = lowestFScorePoint();
+                distance[i] = int.MaxValue;
+            }
+            distance[source] = 0;
+        }
 
-                notEvaluated.Remove(current);
+        private int distMin(List<int> allCases)
+        {
+            int minimum = int.MaxValue;
+            int sommet = -1;
 
-                exploredCases.Add(current);
+            foreach (int c in allCases)
+            {
+                if (distance[c] < minimum)
+                {
+                    minimum = distance[c];
+                    sommet = c;
+                }
+            }
+            return sommet;
+        }
+
+        private int weight(int src, int neighbour)
+        {
+            return 0;
+        }
+
+        private void updateDistance(int s1, int s2)
+        {
+            if (distance[s2] > distance[s1] + weight(s1, s2))
+            {
+                distance[s2] = distance[s1] + weight(s1, s2);
+                parent[s2] = s1;
             }
         }
+        private List<int> getPath(int src, int goal)
+        {
+            List<int> path = new List<int>();
+            int s = goal;
+            while (s != src)
+            {
+                path.Add(s);
+                s = parent[s];
+            }
+            return path;
+        }
+
+        private void Dijkstra(Point source, Point goal)
+        {
+            int curr;
+            int src = circuit.getIntFromPoint(source),
+                gl = circuit.getIntFromPoint(goal);
+            initialise(src);
+            List<int> allCases = circuit.getAllCases();
+
+            while (allCases.Count > 0)
+            {
+                curr = distMin(allCases);
+                allCases.Remove(curr);
+                foreach (Point neighbour in circuit.GetNeighbours(circuit.intToPoint(curr)))
+                    updateDistance(curr, circuit.getIntFromPoint(neighbour));
+            }
+
+            List<int> path = getPath(src, gl);
+        }
+
+
     }
 }

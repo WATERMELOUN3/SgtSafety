@@ -62,11 +62,6 @@ namespace SgtSafety.NXTEnvironment
             set { circuit = value; }
         }
 
-        public NXTCircuit Circuit
-        {
-            get { return circuit; }
-        }
-
         // --------------------------------------------------------------------------
         // CONSTRUCTORS
         // --------------------------------------------------------------------------
