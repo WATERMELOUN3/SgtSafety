@@ -129,8 +129,9 @@
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(310, 28);
             this.button4.TabIndex = 8;
-            this.button4.Text = "Ouvrir le simulateur";
+            this.button4.Text = "Ouvrir le simulateur / affichage";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.Button4_Click);
             // 
             // button5
             // 

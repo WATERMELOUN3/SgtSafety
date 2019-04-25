@@ -105,6 +105,15 @@
       <DependentUpon>RemoteWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Render\RenderTools.cs" />
+    <Compile Include="Forms\Render\Simulation.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\SimulationWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SimulationWindow.Designer.cs">
+      <DependentUpon>SimulationWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="NXTBluetooth\NXTDevice.cs" />
     <Compile Include="NXTBluetooth\NXTPacket.cs" />
     <Compile Include="NXTEnvironment\NXTBuffer.cs" />
@@ -127,6 +136,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RemoteWindow.resx">
       <DependentUpon>RemoteWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SimulationWindow.resx">
+      <DependentUpon>SimulationWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

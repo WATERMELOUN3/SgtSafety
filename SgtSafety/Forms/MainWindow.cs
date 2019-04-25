@@ -141,5 +141,11 @@ namespace SgtSafety.Forms
 
             vehicule.Circuit = ew.Circuit;
         }
+
+        // Bouton "ouvrir le simulateur / affichage"
+        private void Button4_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
