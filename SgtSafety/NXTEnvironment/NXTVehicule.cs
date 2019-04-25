@@ -20,7 +20,7 @@ namespace SgtSafety.NXTEnvironment
         public static readonly Point BOTTOM = new Point(0, 1);
         public static readonly Point LEFT = new Point(-1, 0);
         public static readonly Point RIGHT = new Point(1, 0);
-        public static readonly Point ERROR = new Point(-5, -5);
+        public static readonly Point ERROR = new Point(int.MinValue, int.MinValue);
 
         // --------------------------------------------------------------------------
         // FIELDS
@@ -153,7 +153,8 @@ namespace SgtSafety.NXTEnvironment
             Point newDir = caseCur.goThrough(action, this.direction);
 
             Console.WriteLine(this.position);
-            this.position = addPoint(this.position, newDir);
+            if (newDir != ERROR)
+                this.position = addPoint(this.position, newDir);
             this.direction = newDir;
             Console.WriteLine(this.position);
             if (actiontd == NXTAction.TAKE)

@@ -167,6 +167,41 @@ namespace SgtSafety.NXTEnvironment
             return this.circuit[x + this.width * y];
         }
 
+        public int getIntFromPoint(Point p)
+        {
+            return p.X + this.width * p.Y;
+        }
+
+        public Point intToPoint(int coord)
+        {
+            return new Point(coord % width, (int)coord / this.width);
+        }
+
+        public List<int> getAllCases()
+        {
+            List<int> liste = new List<int>();
+            NXTCase casee;
+            int i;
+            for (i = 0; i < height * width; ++i)
+            {
+                casee = getCase(intToPoint(i));
+                if (casee.TypeCase != Case.EMPTY)
+                    liste.Add(i);
+            }
+
+            return liste;
+        }
+
+        public int getNbCases()
+        {
+            int nb = 0;
+            foreach (NXTCase casee in circuit)
+                if (casee.TypeCase != Case.EMPTY)
+                    ++nb;
+
+            return nb;
+        }
+
         // Vérifie si des coordonnées sont compris dans la dimension du circuit
         public bool IsWithinBounds(Point p)
         {

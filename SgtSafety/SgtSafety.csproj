@@ -120,6 +120,8 @@
     <Compile Include="NXTEnvironment\NXTCase.cs" />
     <Compile Include="NXTEnvironment\NXTCircuit.cs" />
     <Compile Include="NXTEnvironment\NXTVehicule.cs" />
+    <Compile Include="NXTIA\IA.cs" />
+    <Compile Include="NXTIA\IAAStar.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NXTBluetooth\NXTBluetoothHelper.cs" />
