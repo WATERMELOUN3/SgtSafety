@@ -49,21 +49,13 @@ namespace SgtSafety.Forms
 
         private void NouveauToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            NewCircuitDialog d = new NewCircuitDialog();
-            d.ShowDialog();
-
-            circuit = new NXTCircuit(d.CWidth, d.CHeight);
-            circuit.Nom = d.Nom;
-            d.Dispose();
+            NewCircuit();
+            this.drawEditor1.InitializeCircuit(this.circuit);
         }
 
         private void EditorWindow_Load(object sender, EventArgs e)
         {
-            NewCircuitDialog d = new NewCircuitDialog();
-            d.ShowDialog();
-
-            circuit = new NXTCircuit(d.CWidth, d.CHeight);
-            circuit.Nom = d.Nom;
+            NewCircuit();
 
             this.drawEditor1 = new DrawEditor(circuit);
             this.drawEditor1.Location = new System.Drawing.Point(12, 27);
@@ -72,6 +64,27 @@ namespace SgtSafety.Forms
             this.drawEditor1.TabIndex = 0;
             this.drawEditor1.Text = "drawEditor1";
             this.Controls.Add(this.drawEditor1);
+
+            this.drawEditor1.InitializeCircuit(this.circuit);
+        }
+
+        private void NewCircuit()
+        {
+            NewCircuitDialog d = new NewCircuitDialog();
+            d.ShowDialog();
+
+            if (d.AlreadyInstanced)
+            {
+                LoadCircuit(d.Nom);
+            }
+            else
+            {
+                circuit = new NXTCircuit(d.CWidth, d.CHeight);
+                circuit.Nom = d.Nom;
+            }
+
+            if (d.CloseAfterLoad)
+                this.Close();
         }
 
         private void EnregistrerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -93,7 +106,12 @@ namespace SgtSafety.Forms
 
         private void OpenFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
-            Stream stream = new FileStream(openFileDialog1.FileName, FileMode.Open, FileAccess.Read);
+            LoadCircuit(openFileDialog1.FileName);
+        }
+
+        private void LoadCircuit(string path)
+        {
+            Stream stream = new FileStream(path, FileMode.Open, FileAccess.Read);
             XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(stream, new XmlDictionaryReaderQuotas());
             DataContractSerializer ser = new DataContractSerializer(typeof(NXTCircuit));
 
@@ -102,12 +120,12 @@ namespace SgtSafety.Forms
             stream.Close();
 
             this.circuit = c;
-            this.drawEditor1.InitializeCircuit(this.circuit);
         }
 
         private void EditorWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this.drawEditor1.Dispose();
+            if (this.drawEditor1 != null)
+                this.drawEditor1.Dispose();
         }
 
         private void QuitterToolStripMenuItem_Click(object sender, EventArgs e)
