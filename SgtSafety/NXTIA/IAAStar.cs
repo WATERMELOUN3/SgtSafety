@@ -187,7 +187,8 @@ namespace SgtSafety.NXTIA
 
         public void sendPathToVehicule(Point start)
         {
-            List<Point> path = definePath(start);
+            List<Point> path = new List<Point>();
+            path.AddRange(definePath(start));
             List<NXTAction> pathActions = pointToAction(path, start);
             buffer.Clear();
 
