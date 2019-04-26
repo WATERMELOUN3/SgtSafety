@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Forms.Controls;
 using SgtSafety.NXTEnvironment;
 using SgtSafety.NXTIA;
+using SgtSafety.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,10 +55,15 @@ namespace SgtSafety.Forms.Render
             camera = new Camera(this.GraphicsDevice.Viewport);
             ia = new IAAStar(this.vehicule);
 
-            List<Point> chemin = ia.definePath(new Point(0, 3));
+            List<Point> chemin = ia.sendPathToVehicule(new Point(0, 3));
             foreach (Point p in chemin)
             {
                 vehicule.Circuit.getCase(p).CaseColor = Color.Blue;
+            }
+
+            foreach (NXTAction a in vehicule.Buffer)
+            {
+                Console.WriteLine(a.ToFancyString());
             }
         }
 

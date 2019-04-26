@@ -74,7 +74,7 @@ namespace SgtSafety.Forms.Render
                             col = Color.Black;
                             break;
                     }
-                    Console.WriteLine(col);
+
                     //sb.Draw(t, new Vector2(x * 32, y * 32), col);
                     sb.Draw(t, new Vector2(x * 32 + 16, y * 32 + 16), new Rectangle(0, 0, t.Width, t.Height), col, (((float)c.CaseOrientation) / 2) * (float)Math.PI, new Vector2(t.Width / 2, t.Height / 2), 1.0f, SpriteEffects.None, 0); // Deprecated but OK
                 }

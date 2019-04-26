@@ -185,7 +185,7 @@ namespace SgtSafety.NXTIA
             return liste;
         }
 
-        public void sendPathToVehicule(Point start)
+        public List<Point> sendPathToVehicule(Point start)
         {
             List<Point> path = new List<Point>();
             path.AddRange(definePath(start));
@@ -194,6 +194,8 @@ namespace SgtSafety.NXTIA
 
             buffer.AddRange(pathActions);
             sendToVehiculeBuffer();
+
+            return path;
         }
 
     }
