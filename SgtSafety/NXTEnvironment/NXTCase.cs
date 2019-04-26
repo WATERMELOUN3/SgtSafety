@@ -23,6 +23,7 @@ namespace SgtSafety.NXTEnvironment
         // --------------------------------------------------------------------------
         private Case typeCase;
         private Orientation orientation;
+        private Color color;
 
         private ExtensionDataObject extensionData_Value;
 
@@ -41,6 +42,12 @@ namespace SgtSafety.NXTEnvironment
             get { return orientation; }
             set { orientation = value; }
         }
+        [DataMember]
+        public Color CaseColor
+        {
+            get { return color; }
+            set { color = value; }
+        }
         public ExtensionDataObject ExtensionData
         {
             get
@@ -58,18 +65,21 @@ namespace SgtSafety.NXTEnvironment
         // --------------------------------------------------------------------------
         public NXTCase()
         {
+            this.color = Color.White;
             this.typeCase = Case.EMPTY;
             this.orientation = Orientation.TOP;
         }
 
         public NXTCase(Case p_type)
         {
+            this.color = Color.White;
             this.typeCase = p_type;
             this.orientation = Orientation.TOP;
         }
 
         public NXTCase(Case p_type, Orientation p_orientation)
         {
+            this.color = Color.White;
             this.typeCase = p_type;
             this.orientation = p_orientation;
         }

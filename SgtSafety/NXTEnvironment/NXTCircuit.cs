@@ -117,7 +117,7 @@ namespace SgtSafety.NXTEnvironment
         // --------------------------------------------------------------------------
 
         // Initialise le circuit avec des cases (vides par défaut)
-        private void initialiseCircuit(Case c = Case.EMPTY){
+        public void initialiseCircuit(Case c = Case.EMPTY){
             for (int i=0; i < this.height; i++)
                 for (int j=0; j < this.width; j++)
                     circuit[i + j * this.width] = new NXTCase(c);
@@ -194,12 +194,7 @@ namespace SgtSafety.NXTEnvironment
 
         public int getNbCases()
         {
-            int nb = 0;
-            foreach (NXTCase casee in circuit)
-                if (casee.TypeCase != Case.EMPTY)
-                    ++nb;
-
-            return nb;
+            return width * height;
         }
 
         // Vérifie si des coordonnées sont compris dans la dimension du circuit
@@ -285,6 +280,19 @@ namespace SgtSafety.NXTEnvironment
             }
 
             return neighbours;
+        }
+
+        public void ColorHP()
+        {
+            foreach (Point p in hopitaux)
+            {
+                getCase(p).CaseColor = Color.Red;
+            }
+
+            foreach (Point p in patients)
+            {
+                getCase(p).CaseColor = Color.Green;
+            }
         }
     }
 }

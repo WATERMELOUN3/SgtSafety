@@ -117,7 +117,7 @@ namespace SgtSafety.NXTIA
             double d;
             foreach(Point p in patients)
             {
-                d = (Math.Abs(Math.Sqrt(Math.Pow(start.X - p.X, 2) - Math.Pow(start.Y - p.Y, 2)));
+                d = (Math.Abs(Math.Sqrt(Math.Pow(start.X - p.X, 2) - Math.Pow(start.Y - p.Y, 2))));
                 dist.Add(d);
             }
 

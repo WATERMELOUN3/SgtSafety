@@ -61,6 +61,20 @@ namespace SgtSafety.NXTEnvironment
             get { return circuit; }
             set { circuit = value; }
         }
+        public Orientation ToOrientation
+        {
+            get
+            {
+                if (this.direction.Equals(TOP))
+                    return Orientation.TOP;
+                else if (this.direction.Equals(RIGHT))
+                    return Orientation.RIGHT;
+                else if (this.direction.Equals(LEFT))
+                    return Orientation.LEFT;
+                else
+                    return Orientation.BOTTOM;
+            }
+        }
 
         // --------------------------------------------------------------------------
         // CONSTRUCTORS

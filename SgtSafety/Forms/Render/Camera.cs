@@ -76,9 +76,9 @@ namespace SgtSafety.Forms.Render
             {
                 Zoom = .35f;
             }
-            if (Zoom > 2f)
+            if (Zoom > 4f)
             {
-                Zoom = 2f;
+                Zoom = 4f;
             }
         }
 

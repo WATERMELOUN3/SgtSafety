@@ -109,5 +109,25 @@ namespace SgtSafety.Forms
         {
             this.drawEditor1.Dispose();
         }
+
+        private void QuitterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void ResetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.circuit.initialiseCircuit();
+        }
+
+        private void SupprimerHôpitauxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.circuit.Hopitaux.Clear();
+        }
+
+        private void SupprimerPatientsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.circuit.Patients.Clear();
+        }
     }
 }
