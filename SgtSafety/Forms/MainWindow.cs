@@ -21,7 +21,8 @@ namespace SgtSafety.Forms
         // --------------------------------------------------------------------------
         // FIELDS
         // --------------------------------------------------------------------------
-        private NXTVehicule vehicule;
+        private NXTVehicule remoteVehicule;
+        private NXTVehicule autoVehicule;
         private delegate void SafeCallDelegate(object sender, EventArgs e);
         private RemoteWindow remoteWindow;
 
@@ -45,7 +46,8 @@ namespace SgtSafety.Forms
         // Chargement de la fenêtre
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            this.vehicule = new NXTVehicule(new Point(0, 2), NXTVehicule.TOP);
+            this.remoteVehicule = new NXTVehicule(new Point(0, 2), NXTVehicule.TOP);
+            this.autoVehicule = new NXTVehicule(new Point(0, 3), NXTVehicule.TOP);
         }
 
         // Bouton "Recherche"
@@ -59,11 +61,11 @@ namespace SgtSafety.Forms
                 button2.Enabled = false;
                 label1.Text = "Recherche Bluetooth en cours...";
 
-                vehicule.NxtHelper.SearchDevicesAsync(new EventHandler<DiscoverDevicesEventArgs>(DiscoverProgress), new EventHandler(DiscoverCompleted));
+                remoteVehicule.NxtHelper.SearchDevicesAsync(new EventHandler<DiscoverDevicesEventArgs>(DiscoverProgress), new EventHandler(DiscoverCompleted));
             }
             else
             {
-                vehicule.NxtHelper.StopSearchDevicesAsync();
+                remoteVehicule.NxtHelper.StopSearchDevicesAsync();
                 progressBar1.Style = ProgressBarStyle.Blocks;
                 progressBar1.Value = 100;
                 button2.Enabled = true;
@@ -78,28 +80,42 @@ namespace SgtSafety.Forms
             if (button2.ForeColor == System.Drawing.Color.Black)
             {
                 BluetoothDeviceInfo device = (listBox1.SelectedItem as NXTDevice).DeviceInfo;
-                vehicule.NxtHelper.PairIfNotAlreadyPaired(device);
-                vehicule.NxtHelper.ConnectToPaired(device, new EventHandler(Connected));
+                remoteVehicule.NxtHelper.PairIfNotAlreadyPaired(device);
+                remoteVehicule.NxtHelper.ConnectToPaired(device, new EventHandler(ConnectedRemote));
             }
             else if (button2.ForeColor == System.Drawing.Color.Green)
             {
-                vehicule.NxtHelper.DisconnectFromPaired();
+                remoteVehicule.NxtHelper.DisconnectFromPaired();
                 button2.ForeColor = System.Drawing.Color.Black;
             }
         }
 
         // Evenement "connecté", s'execute lorsque la connection bluetooth est établie
-        private void Connected(object sender, EventArgs e)
+        private void ConnectedRemote(object sender, EventArgs e)
         {
             if (this.button6.InvokeRequired)
             {
-                var d = new SafeCallDelegate(Connected);
+                var d = new SafeCallDelegate(ConnectedRemote);
                 this.Invoke(d, new object[] { sender, e });
             }
             else
             {
                 button2.ForeColor = System.Drawing.Color.Green;
                 button6.Enabled = true;
+            }
+        }
+
+        private void ConnectedAuto(object sender, EventArgs e)
+        {
+            if (this.button4.InvokeRequired)
+            {
+                var d = new SafeCallDelegate(ConnectedAuto);
+                this.Invoke(d, new object[] { sender, e });
+            }
+            else
+            {
+                button3.ForeColor = System.Drawing.Color.Green;
+                button4.Enabled = true;
             }
         }
 
@@ -129,7 +145,7 @@ namespace SgtSafety.Forms
         // Bouton "télécommande"
         private void Button6_Click(object sender, EventArgs e)
         {
-            remoteWindow = new RemoteWindow(this.vehicule);
+            remoteWindow = new RemoteWindow(this.remoteVehicule);
             remoteWindow.Show();
         }
 
@@ -139,13 +155,30 @@ namespace SgtSafety.Forms
             EditorWindow ew = new EditorWindow();
             ew.ShowDialog();
 
-            vehicule.Circuit = ew.Circuit;
+            remoteVehicule.Circuit = ew.Circuit;
+            autoVehicule.Circuit = ew.Circuit;
         }
 
         // Bouton "ouvrir le simulateur / affichage"
         private void Button4_Click(object sender, EventArgs e)
         {
+            SimulationWindow sw = new SimulationWindow(autoVehicule);
+            sw.Show();
+        }
 
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            if (button3.ForeColor == System.Drawing.Color.Black)
+            {
+                BluetoothDeviceInfo device = (listBox1.SelectedItem as NXTDevice).DeviceInfo;
+                autoVehicule.NxtHelper.PairIfNotAlreadyPaired(device);
+                autoVehicule.NxtHelper.ConnectToPaired(device, new EventHandler(ConnectedAuto));
+            }
+            else if (button3.ForeColor == System.Drawing.Color.Green)
+            {
+                autoVehicule.NxtHelper.DisconnectFromPaired();
+                button3.ForeColor = System.Drawing.Color.Black;
+            }
         }
     }
 }

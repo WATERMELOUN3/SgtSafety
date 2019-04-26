@@ -42,6 +42,8 @@ namespace SgtSafety.Forms
             this.propriétésToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.supprimerHôpitauxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.supprimerPatientsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -100,12 +102,15 @@ namespace SgtSafety.Forms
             this.quitterToolStripMenuItem.Name = "quitterToolStripMenuItem";
             this.quitterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.quitterToolStripMenuItem.Text = "Quitter";
+            this.quitterToolStripMenuItem.Click += new System.EventHandler(this.QuitterToolStripMenuItem_Click);
             // 
             // editionToolStripMenuItem
             // 
             this.editionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.resetToolStripMenuItem,
-            this.propriétésToolStripMenuItem});
+            this.propriétésToolStripMenuItem,
+            this.supprimerHôpitauxToolStripMenuItem,
+            this.supprimerPatientsToolStripMenuItem});
             this.editionToolStripMenuItem.Name = "editionToolStripMenuItem";
             this.editionToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
             this.editionToolStripMenuItem.Text = "Edition";
@@ -113,8 +118,9 @@ namespace SgtSafety.Forms
             // resetToolStripMenuItem
             // 
             this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
-            this.resetToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.resetToolStripMenuItem.Text = "Remettre à zéro";
+            this.resetToolStripMenuItem.Click += new System.EventHandler(this.ResetToolStripMenuItem_Click);
             // 
             // propriétésToolStripMenuItem
             // 
@@ -136,6 +142,20 @@ namespace SgtSafety.Forms
             this.openFileDialog1.InitialDirectory = "Circuits";
             this.openFileDialog1.Title = "Ouvrir un circuit";
             this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.OpenFileDialog1_FileOk);
+            // 
+            // supprimerHôpitauxToolStripMenuItem
+            // 
+            this.supprimerHôpitauxToolStripMenuItem.Name = "supprimerHôpitauxToolStripMenuItem";
+            this.supprimerHôpitauxToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.supprimerHôpitauxToolStripMenuItem.Text = "Supprimer hôpitaux";
+            this.supprimerHôpitauxToolStripMenuItem.Click += new System.EventHandler(this.SupprimerHôpitauxToolStripMenuItem_Click);
+            // 
+            // supprimerPatientsToolStripMenuItem
+            // 
+            this.supprimerPatientsToolStripMenuItem.Name = "supprimerPatientsToolStripMenuItem";
+            this.supprimerPatientsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.supprimerPatientsToolStripMenuItem.Text = "Supprimer patients";
+            this.supprimerPatientsToolStripMenuItem.Click += new System.EventHandler(this.SupprimerPatientsToolStripMenuItem_Click);
             // 
             // EditorWindow
             // 
@@ -172,5 +192,7 @@ namespace SgtSafety.Forms
         private System.Windows.Forms.ToolStripMenuItem propriétésToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.ToolStripMenuItem supprimerHôpitauxToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem supprimerPatientsToolStripMenuItem;
     }
 }

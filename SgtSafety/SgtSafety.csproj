@@ -178,6 +178,9 @@
     <Content Include="Data\origine.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\robot.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Data\virage.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -95,6 +95,18 @@ namespace SgtSafety.Forms.Render
                     Console.WriteLine("Rotated");
                 }
 
+                if (k.IsKeyDown(Keys.H) && oldKeyState.IsKeyUp(Keys.H))
+                {
+                    circuit.addHopital(cursor.Location);
+                    circuit.ColorHP();
+                }
+
+                if (k.IsKeyDown(Keys.P) && oldKeyState.IsKeyUp(Keys.P))
+                {
+                    circuit.addPatient(cursor.Location);
+                    circuit.ColorHP();
+                }
+
                 if (circuit.IsWithinBounds(cursor.Location))
                 {
                     if (m.LeftButton == ButtonState.Pressed)
