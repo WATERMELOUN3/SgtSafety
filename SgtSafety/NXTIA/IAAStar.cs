@@ -125,7 +125,7 @@ namespace SgtSafety.NXTIA
             return dist;
         }
 
-        private List<Point> definePath(Point start)
+        /*private List<Point> definePath(Point start)
         {
             List<Point> path = new List<Point>();
             List<Point> patients = circuit.Patients;
@@ -151,33 +151,73 @@ namespace SgtSafety.NXTIA
 
 
             return path;
+        }*/
+
+        private List<Point> definePath(Point start)
+        {
+            List<Point> path1 = new List<Point>(),
+                        path2 = new List<Point>();
+            List<Point> patients = circuit.Patients;
+            List<Point> hopitaux = circuit.Hopitaux;
+            Point hopital = hopitaux.ElementAt(0);
+            Point patient1 = patients.ElementAt(1),
+                  patient2 = patients.ElementAt(0);
+
+            path1.AddRange(Dijkstra(start, patient1));
+            path1.AddRange(Dijkstra(patient1, hopital));
+            path1.AddRange(Dijkstra(hopital, patient2));
+            path1.AddRange(Dijkstra(patient2, hopital));
+
+            path2.AddRange(Dijkstra(start, patient2));
+            path2.AddRange(Dijkstra(patient2, hopital));
+            path2.AddRange(Dijkstra(hopital, patient1));
+            path2.AddRange(Dijkstra(patient1, hopital));
+
+            if (path1.Count > path2.Count)
+            {
+                Console.WriteLine(path2.Count + " déplacements !");
+                return path2;
+            }
+            Console.WriteLine(path1.Count + " déplacements !");
+            return path1;
         }
 
-        private NXTAction directionToAction(Point pos, Point direction, Point directionPrec)
+        private NXTAction directionToAction(Point pos, Point direction, Point directionPrec, bool take=false, bool drop=false)
         {
             NXTCase currentCase = circuit.getCase(pos);
+            NXTAction action = new NXTAction(NXTMovement.STRAIGHT);
             if (currentCase.goThrough(pStraight, directionPrec).Equals(direction))
-                return pStraight;
+                action.Movement = NXTMovement.STRAIGHT;
             else if (currentCase.goThrough(pUturn, directionPrec).Equals(direction))
-                return pUturn;
+                action.Movement = NXTMovement.UTURN;
             else if (currentCase.goThrough(pLeft, directionPrec).Equals(direction))
-                return pLeft;
+                action.Movement = NXTMovement.INTER_LEFT;
             else if (currentCase.goThrough(pRight, directionPrec).Equals(direction))
-                return pRight;
+                action.Movement = NXTMovement.INTER_RIGHT;
 
-            return pStraight;
+            if (take)
+                action.Action = NXTAction.TAKE;
+            else if (drop)
+                action.Action = NXTAction.DROP;
+
+            return action;
         }
 
-        private List<NXTAction> pointToAction(List<Point> path, Point start)
+        private List<NXTAction> pointToAction(List<Point> path, Point start, Point directionStart)
         {
             List<NXTAction> liste = new List<NXTAction>();
-            Point prec = start, direction, directionPrec;
+            Point prec = start, direction, directionPrec = directionStart;
 
             foreach (Point p in path)
             {
                 direction = new Point(p.X - prec.X, p.Y - prec.Y);
-                directionPrec = direction;
-                liste.Add(directionToAction(p, direction, directionPrec));
+                if (circuit.hasPatient(p))
+                    liste.Add(directionToAction(p, direction, directionPrec, true));
+                else if (circuit.hasHopital(p))
+                    liste.Add(directionToAction(p, direction, directionPrec, false, true));
+                else
+                    liste.Add(directionToAction(p, direction, directionPrec));
+
                 prec = p;
                 directionPrec = direction;
             }
@@ -187,9 +227,8 @@ namespace SgtSafety.NXTIA
 
         public List<Point> sendPathToVehicule(Point start)
         {
-            List<Point> path = new List<Point>();
-            path.AddRange(definePath(start));
-            List<NXTAction> pathActions = pointToAction(path, start);
+            List<Point> path = definePath(start);
+            List<NXTAction> pathActions = pointToAction(path, start, vehicule.Direction);
             buffer.Clear();
 
             buffer.AddRange(pathActions);
