@@ -139,7 +139,10 @@ namespace SgtSafety.Forms
 
             // Si il y a un périphérique au moins, on active les boutons "Se connecter"
             if (listBox1.Items.Count > 0)
+            {
                 button2.Enabled = true;
+                button3.Enabled = true;
+            }
         }
 
         // Bouton "télécommande"

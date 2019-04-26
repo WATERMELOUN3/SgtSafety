@@ -20,6 +20,7 @@ namespace SgtSafety.NXTIA
         {
             this.vehicule = new NXTVehicule();
             this.circuit = vehicule.Circuit;
+            this.buffer = new NXTBuffer();
             pStraight = new NXTAction(NXTMovement.STRAIGHT);
             pLeft = new NXTAction(NXTMovement.INTER_LEFT);
             pRight = new NXTAction(NXTMovement.INTER_RIGHT);
@@ -30,6 +31,7 @@ namespace SgtSafety.NXTIA
         {
             this.vehicule = p_vehicule;
             this.circuit = vehicule.Circuit;
+            this.buffer = new NXTBuffer();
             pStraight = new NXTAction(NXTMovement.STRAIGHT);
             pLeft = new NXTAction(NXTMovement.INTER_LEFT);
             pRight = new NXTAction(NXTMovement.INTER_RIGHT);
