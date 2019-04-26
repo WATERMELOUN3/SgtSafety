@@ -124,6 +124,20 @@ namespace SgtSafety.NXTEnvironment
 
         }
 
+        public bool hasPatient(Point p)
+        {
+            if (patients.Contains(p))
+                return true;
+            return false;
+        }
+
+        public bool hasHopital(Point p)
+        {
+            if (hopitaux.Contains(p))
+                return true;
+            return false;
+        }
+
         // Ajoute un hopital
         public List<Point> addHopital(Point newHopital){
             if (!hopitaux.Contains(newHopital))
