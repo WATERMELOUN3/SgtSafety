@@ -284,7 +284,7 @@ namespace SgtSafety.NXTEnvironment
             else if (movement == NXTMovement.UTURN)
                 return goUTurn(direction);
 
-            return new Point(1, 1);
+            return NXTVehicule.ERROR;
         }
     }
 }

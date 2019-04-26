@@ -14,26 +14,35 @@ namespace SgtSafety.NXTIA
         protected NXTVehicule vehicule;
         protected NXTCircuit circuit;
         protected NXTBuffer buffer;
+        protected NXTAction pStraight, pLeft, pRight, pUturn;
 
         public IA()
         {
             this.vehicule = new NXTVehicule();
             this.circuit = vehicule.Circuit;
+            pStraight = new NXTAction(NXTMovement.STRAIGHT);
+            pLeft = new NXTAction(NXTMovement.INTER_LEFT);
+            pRight = new NXTAction(NXTMovement.INTER_RIGHT);
+            pUturn = new NXTAction(NXTMovement.UTURN);
         }
 
         public IA(NXTVehicule p_vehicule)
         {
             this.vehicule = p_vehicule;
             this.circuit = vehicule.Circuit;
+            pStraight = new NXTAction(NXTMovement.STRAIGHT);
+            pLeft = new NXTAction(NXTMovement.INTER_LEFT);
+            pRight = new NXTAction(NXTMovement.INTER_RIGHT);
+            pUturn = new NXTAction(NXTMovement.UTURN);
         }
 
-        public bool addToBuffer(NXTAction action)
+        protected bool addToBuffer(NXTAction action)
         {
             buffer.Add(action);
             return true;
         }
 
-        public bool sendToVehiculeBuffer()
+        protected bool sendToVehiculeBuffer()
         {
             while (!buffer.isEmpty())
                 vehicule.addToBuffer(buffer.Pop());
