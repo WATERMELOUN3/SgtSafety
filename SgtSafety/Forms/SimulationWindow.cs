@@ -62,7 +62,7 @@ namespace SgtSafety.Forms
         private void PacketReceived(object sender, NXTPacketReceivedEventArgs e)
         {
             UpdateBuffer(vehicule.Buffer);
-            Console.WriteLine("Réponse reçue !");
+            Console.WriteLine("Réponse reçue ! (Autonome)");
             if (button1.Text == "Pause")
             {
                 if (!vehicule.SendNextAction())
@@ -87,6 +87,21 @@ namespace SgtSafety.Forms
             else
             {
                 button1.Text = "Lancer";
+            }
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            UpdateBuffer(vehicule.Buffer);
+            if (button1.Text == "Pause")
+            {
+                button1.Text = "Lancer";
+            }
+            else
+            {
+                vehicule.SendNextAction();
+                vehicule.NxtHelper.WaitForData(new EventHandler<NXTPacketReceivedEventArgs>(PacketReceived));
+                button1.Text = "Pause";
             }
         }
     }

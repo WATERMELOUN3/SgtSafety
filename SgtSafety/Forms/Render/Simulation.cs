@@ -23,6 +23,7 @@ namespace SgtSafety.Forms.Render
         private NXTVehicule vehicule;
         private KeyboardState oldKeyState;
         private IAAStar ia;
+        private IADijkstra bestIa;
 
         private Camera camera;
 
@@ -54,19 +55,15 @@ namespace SgtSafety.Forms.Render
             cRend = new CircuitRenderer(vehicule.Circuit, this.GraphicsDevice);
             camera = new Camera(this.GraphicsDevice.Viewport);
             ia = new IAAStar(this.vehicule);
+            bestIa = new IADijkstra(this.vehicule);
         }
 
         public void CalculatePath()
         {
-            List<Point> chemin = ia.sendPathToVehicule(new Point(0, 3));
+            List<Point> chemin = bestIa.ComputeDijkstra(new Point(0, 3), new Point(2, 0)); //ia.sendPathToVehicule(new Point(0, 3));
             foreach (Point p in chemin)
             {
                 vehicule.Circuit.getCase(p).CaseColor = Color.Blue;
-            }
-
-            foreach (NXTAction a in vehicule.Buffer)
-            {
-                Console.WriteLine(a.ToFancyString());
             }
         }
 

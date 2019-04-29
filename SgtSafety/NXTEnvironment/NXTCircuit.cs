@@ -126,15 +126,21 @@ namespace SgtSafety.NXTEnvironment
 
         public bool hasPatient(Point p)
         {
-            if (patients.Contains(p))
-                return true;
+            foreach (Point pp in patients)
+            {
+                if (pp.Equals(p))
+                    return true;
+            }
             return false;
         }
 
         public bool hasHopital(Point p)
         {
-            if (hopitaux.Contains(p))
-                return true;
+            foreach (Point pp in hopitaux)
+            {
+                if (pp.Equals(p))
+                    return true;
+            }
             return false;
         }
 
@@ -191,16 +197,18 @@ namespace SgtSafety.NXTEnvironment
             return new Point(coord % width, (int)coord / this.width);
         }
 
-        public List<int> getAllCases()
+        public List<Point> getAllCases()
         {
-            List<int> liste = new List<int>();
-            NXTCase casee;
-            int i;
-            for (i = 0; i < height * width; ++i)
+            List<Point> liste = new List<Point>();
+
+            for (int x = 0; x < width; x++)
             {
-                casee = getCase(intToPoint(i));
-                if (casee.TypeCase != Case.EMPTY)
-                    liste.Add(i);
+                for (int y = 0; y < height; y++)
+                {
+                    NXTCase c = getCase(x, y);
+                    if (c.TypeCase != Case.EMPTY)
+                        liste.Add(new Point(x, y));
+                }
             }
 
             return liste;

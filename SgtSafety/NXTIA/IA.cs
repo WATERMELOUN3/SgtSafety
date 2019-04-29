@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SgtSafety.NXTIA
 {
-    class IA
+    public class IA
     {
         protected NXTVehicule vehicule;
         protected NXTCircuit circuit;

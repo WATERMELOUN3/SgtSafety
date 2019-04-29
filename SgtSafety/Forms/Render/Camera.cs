@@ -140,22 +140,15 @@ namespace SgtSafety.Forms.Render
             if (currentMouseWheelValue > previousMouseWheelValue)
             {
                 AdjustZoom(.05f);
-                Console.WriteLine(moveSpeed);
             }
 
             if (currentMouseWheelValue < previousMouseWheelValue)
             {
                 AdjustZoom(-.05f);
-                Console.WriteLine(moveSpeed);
             }
 
             previousZoom = zoom;
             zoom = Zoom;
-            if (previousZoom != zoom)
-            {
-                Console.WriteLine(zoom);
-
-            }
 
             MoveCamera(cameraMovement);
         }

@@ -98,7 +98,7 @@ namespace SgtSafety.Forms
         private void PacketReceived(object sender, NXTPacketReceivedEventArgs e)
         {
             UpdateBuffer(vehicule.Buffer);
-            Console.WriteLine("Réponse reçue !");
+            Console.WriteLine("Réponse reçue ! (Telecommande)");
             if (button10.Text == "Pause")
             {
                 if (!vehicule.SendNextAction())

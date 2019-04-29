@@ -97,61 +97,22 @@ namespace SgtSafety.NXTIA
             int src = circuit.getIntFromPoint(source),
                 gl = circuit.getIntFromPoint(goal);
             initialise(src);
-            List<int> allCases = circuit.getAllCases();
+            List<Point> allCases = circuit.getAllCases();
 
             while (allCases.Count > 0)
             {
-                curr = distMin(allCases);
-                allCases.Remove(curr);
-                foreach (Point neighbour in circuit.GetNeighbours(circuit.intToPoint(curr)))
-                    updateDistance(curr, circuit.getIntFromPoint(neighbour));
+                //curr = distMin(allCases);
+                //allCases.Remove(curr);
+                //foreach (Point neighbour in circuit.GetNeighbours(circuit.intToPoint(curr)))
+                //    updateDistance(curr, circuit.getIntFromPoint(neighbour));
             }
 
             List<Point> path = intListToPointList(getPath(src, gl));
 
-            return path;
-        }
-
-        private List<double> getDistancesPatients(Point start, List<Point> patients)
-        {
-            List<double> dist = new List<double>();
-            double d;
-            foreach(Point p in patients)
-            {
-                d = (Math.Abs(Math.Sqrt(Math.Pow(start.X - p.X, 2) - Math.Pow(start.Y - p.Y, 2))));
-                dist.Add(d);
-            }
-
-            return dist;
-        }
-
-        /*private List<Point> definePath(Point start)
-        {
-            List<Point> path = new List<Point>();
-            List<Point> patients = circuit.Patients;
-            List<Point> hopitaux = circuit.Hopitaux;
-            Point hopital = hopitaux.ElementAt(0);
-            List<double> distancesPatients = getDistancesPatients(start, patients);
-            Point patient1, patient2;
-
-            if (distancesPatients.ElementAt(0) > distancesPatients.ElementAt(1))
-            {
-                patient1 = patients.ElementAt(1);
-                patient2 = patients.ElementAt(0);
-            }
-            else
-            {
-                patient1 = patients.ElementAt(0);
-                patient2 = patients.ElementAt(1);
-            }
-
-            path.AddRange(Dijkstra(start, patient1));
-            path.AddRange(Dijkstra(patient1, patient2));
-            path.AddRange(Dijkstra(patient2, hopital));
-
+            Console.WriteLine(path);
 
             return path;
-        }*/
+        }
 
         private List<Point> definePath(Point start)
         {
@@ -182,7 +143,7 @@ namespace SgtSafety.NXTIA
             return path1;
         }
 
-        private NXTAction directionToAction(Point pos, Point direction, Point directionPrec, bool take=false, bool drop=false)
+        private NXTAction directionToAction(Point pos, Point direction, Point directionPrec)
         {
             NXTCase currentCase = circuit.getCase(pos);
             NXTAction action = new NXTAction(NXTMovement.STRAIGHT);
@@ -195,9 +156,9 @@ namespace SgtSafety.NXTIA
             else if (currentCase.goThrough(pRight, directionPrec).Equals(direction))
                 action.Movement = NXTMovement.INTER_RIGHT;
 
-            if (take)
+            if (circuit.hasPatient(pos + direction))
                 action.Action = NXTAction.TAKE;
-            else if (drop)
+            else if (circuit.hasHopital(pos + direction))
                 action.Action = NXTAction.DROP;
 
             return action;
@@ -211,12 +172,7 @@ namespace SgtSafety.NXTIA
             foreach (Point p in path)
             {
                 direction = new Point(p.X - prec.X, p.Y - prec.Y);
-                if (circuit.hasPatient(p))
-                    liste.Add(directionToAction(p, direction, directionPrec, true));
-                else if (circuit.hasHopital(p))
-                    liste.Add(directionToAction(p, direction, directionPrec, false, true));
-                else
-                    liste.Add(directionToAction(p, direction, directionPrec));
+                liste.Add(directionToAction(p, direction, directionPrec));
 
                 prec = p;
                 directionPrec = direction;

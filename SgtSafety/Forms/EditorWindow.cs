@@ -120,6 +120,9 @@ namespace SgtSafety.Forms
             stream.Close();
 
             this.circuit = c;
+
+            if (this.drawEditor1 != null)
+                this.drawEditor1.InitializeCircuit(this.circuit);
         }
 
         private void EditorWindow_FormClosing(object sender, FormClosingEventArgs e)
