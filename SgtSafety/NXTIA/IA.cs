@@ -61,5 +61,90 @@ namespace SgtSafety.NXTIA
                 addToBuffer(action);
             }
         }
+
+        protected NXTAction MovementToAction(NXTCase currentCase, Point currentPosition, Point currentDirection, Point destination)
+        {
+            NXTAction outInstance = null;
+            if (destination.Equals(currentPosition - currentDirection))
+                outInstance = new NXTAction(NXTMovement.UTURN);
+            else if (currentCase.TypeCase == Case.STRAIGHT || currentCase.TypeCase == Case.VIRAGE)
+                outInstance = new NXTAction(NXTMovement.STRAIGHT);
+            else
+            {
+                Point caseDirection = OrientationToDirection(currentCase.CaseOrientation);
+                Point deplacement = destination - currentPosition;
+
+                // Si la case est dans la meme direction que le vehicule
+                if (caseDirection.Equals(currentDirection))
+                {
+                    if (deplacement.Equals(Rotate90Clockwise(currentDirection)))
+                        outInstance = new NXTAction(NXTMovement.INTER_RIGHT);
+                    else
+                        outInstance = new NXTAction(NXTMovement.INTER_LEFT);
+                }
+                else if (caseDirection.Equals(Rotate90Clockwise(currentDirection))) // r = tout droit
+                {
+                    if (deplacement.Equals(Rotate90AntiClockwise(currentDirection)))
+                        outInstance = new NXTAction(NXTMovement.INTER_LEFT);
+                    else
+                        outInstance = new NXTAction(NXTMovement.INTER_RIGHT);
+                        
+                }
+                else if (caseDirection.Equals(Rotate90AntiClockwise(currentDirection))) // l = tout droit
+                {
+                    if (deplacement.Equals(Rotate90Clockwise(currentDirection)))
+                        outInstance = new NXTAction(NXTMovement.INTER_RIGHT);
+                    else
+                        outInstance = new NXTAction(NXTMovement.INTER_LEFT);
+                }
+            }
+
+            return outInstance;
+        }
+
+        protected Point OrientationToDirection(Orientation orientation)
+        {
+            switch (orientation)
+            {
+                case Orientation.TOP:
+                    return NXTVehicule.TOP;
+                case Orientation.RIGHT:
+                    return NXTVehicule.RIGHT;
+                case Orientation.BOTTOM:
+                    return NXTVehicule.BOTTOM;
+                case Orientation.LEFT:
+                    return NXTVehicule.LEFT;
+                default:
+                    return NXTVehicule.TOP;
+            }
+        }
+
+        protected Orientation DirectionToOrientation(Point direction)
+        {
+            if (direction.Equals(NXTVehicule.TOP))
+                return Orientation.TOP;
+            else if (direction.Equals(NXTVehicule.RIGHT))
+                return Orientation.RIGHT;
+            else if (direction.Equals(NXTVehicule.LEFT))
+                return Orientation.LEFT;
+            else
+                return Orientation.BOTTOM;
+        }
+
+        protected Point Rotate90Clockwise(Point p)
+        {
+            Orientation o = DirectionToOrientation(p);
+            o = (Orientation)(((int)o + 1) % 4);
+
+            return OrientationToDirection(o);
+        }
+
+        protected Point Rotate90AntiClockwise(Point p)
+        {
+            Orientation o = DirectionToOrientation(p);
+            o = (Orientation)(((int)o + 3) % 4);
+
+            return OrientationToDirection(o);
+        }
     }
 }
