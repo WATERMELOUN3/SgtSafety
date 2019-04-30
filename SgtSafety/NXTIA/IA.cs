@@ -1,8 +1,8 @@
-﻿using SgtSafety.NXTEnvironment;
+﻿using Microsoft.Xna.Framework;
+using SgtSafety.NXTEnvironment;
 using SgtSafety.Types;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,6 +50,16 @@ namespace SgtSafety.NXTIA
                 vehicule.addToBuffer(buffer.Pop());
 
             return true;
+        }
+
+        protected void AddToIABuffer(List<Point> path)
+        {
+            NXTAction action;
+            foreach(Point p in path)
+            {
+                action = pStraight;
+                addToBuffer(action);
+            }
         }
     }
 }

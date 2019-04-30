@@ -206,5 +206,10 @@ namespace SgtSafety.NXTEnvironment
                 return false;
         }
 
+        public void ClearBuffer()
+        {
+            this.buffer.Clear();
+        }
+
     }
 }
