@@ -55,14 +55,25 @@ namespace SgtSafety.NXTIA
         protected void AddToIABuffer(List<Point> path)
         {
             NXTAction action;
+            Point oldPos = vehicule.Position;
+            Point direction = vehicule.Direction;
+
             foreach(Point p in path)
             {
                 action = pStraight;
                 addToBuffer(action);
+                oldPos = p;
             }
         }
 
-        protected NXTAction MovementToAction(NXTCase currentCase, Point currentPosition, Point currentDirection, Point destination)
+        /*
+         * IL FAUT FINIR CE MACHIN LA
+         * EN GROS FAUT PRECALCULER L'ORIENTATION POUR LES AUTRES APPELS
+         * ET C'EST GALERE WOLA
+         * 
+         * HELP
+         */
+        protected NXTAction MovementToAction(NXTCase currentCase, Point currentPosition, ref Point currentDirection, Point destination)
         {
             NXTAction outInstance = null;
             if (destination.Equals(currentPosition - currentDirection))
@@ -85,9 +96,14 @@ namespace SgtSafety.NXTIA
                 else if (caseDirection.Equals(Rotate90Clockwise(currentDirection))) // r = tout droit
                 {
                     if (deplacement.Equals(Rotate90AntiClockwise(currentDirection)))
+                    {
                         outInstance = new NXTAction(NXTMovement.INTER_LEFT);
+
+                    }
                     else
+                    {
                         outInstance = new NXTAction(NXTMovement.INTER_RIGHT);
+                    }
                         
                 }
                 else if (caseDirection.Equals(Rotate90AntiClockwise(currentDirection))) // l = tout droit

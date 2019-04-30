@@ -10,14 +10,14 @@ namespace SgtSafety.NXTIA
 {
     public class IADijkstra : IA
     {
-        private List<Point> accessibleNodes;
+        private List<Point> accessibleCases;
         private List<NXTNode> nodes;
 
         public IADijkstra(NXTVehicule vehicule)
             : base(vehicule)
         {
             nodes = new List<NXTNode>();
-            accessibleNodes = new List<Point>();
+            accessibleCases = new List<Point>();
         }
 
         private static int GetManhattanHeuristic(Point a, Point b)
@@ -27,10 +27,10 @@ namespace SgtSafety.NXTIA
 
         private void Initialize(Point start)
         {
-            accessibleNodes = circuit.getAllCases();
+            accessibleCases = circuit.getAllCases();
             NXTNode sNode = new NXTNode(start, 0);
             nodes.Add(sNode);
-            accessibleNodes.Remove(start);
+            accessibleCases.Remove(start);
 
             CreateChilds(start, sNode);
         }
@@ -39,13 +39,12 @@ namespace SgtSafety.NXTIA
         {
             foreach (Point p in circuit.GetNeighbours(current.position))
             {
-                if (accessibleNodes.Contains(p))
+                if (accessibleCases.Contains(p))
                 {
                     NXTNode node = new NXTNode(current, p, (uint)GetManhattanHeuristic(start, p));
-                    Console.WriteLine(node.position + " _ " + node.price);
                     nodes.Add(node);
                     current.neighbours.Add(node);
-                    accessibleNodes.Remove(p);
+                    accessibleCases.Remove(p);
                     CreateChilds(start, node);
                 }
             }
@@ -109,12 +108,11 @@ namespace SgtSafety.NXTIA
 
             while (cNode.price != 0)
             {
-                Console.WriteLine(cNode.position + " _ " + cNode.price);
                 path.Add(cNode.position);
                 cNode = cNode.parent;
-                Console.WriteLine(cNode.position + " _ " + cNode.price);
             }
 
+            path.Reverse();
             return path;
         }
     }
