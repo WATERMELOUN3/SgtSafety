@@ -13,14 +13,14 @@ namespace SgtSafety.NXTIA
         private List<Point> accessibleNodes;
         private List<NXTNode> nodes;
 
-        public IADijkstra(NXTVehicule vehicule)
-            : base(vehicule)
+        public IADijkstra(NXTVehicule vehicule, bool p_simulation = false)
+            : base(vehicule, p_simulation)
         {
             nodes = new List<NXTNode>();
             accessibleNodes = new List<Point>();
         }
 
-        private static int GetManhattanHeuristic(Point a, Point b)
+        protected static int GetManhattanHeuristic(Point a, Point b)
         {
             return Math.Abs(b.X - a.X) + Math.Abs(b.Y - a.Y);
         }
