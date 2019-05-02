@@ -11,6 +11,8 @@ namespace SgtSafety.NXTIA
 {
     class IACoop : IADijkstra
     {
+        public enum Collision { PENETRE_PERIMETRE, PONCTUELLE, FRONTALE};
+
         private List<Point> pathRobotTelecommande;
         private List<Point> pathRobotIA;
         private List<Point> patients;
@@ -31,6 +33,7 @@ namespace SgtSafety.NXTIA
             this.simulRobotTelec = new IADijkstra(p_robotTelec, true);
             this.patients = robotTelec.Circuit.Patients;
             this.patientsDropped = 0;
+            this.targetTelec = NXTVehicule.ERROR;
         }
 
 
@@ -119,10 +122,37 @@ namespace SgtSafety.NXTIA
             return FindClosestPatient(vehicule, targetTelec);
         }
 
+        //Retourne le type de collision (frontale ou ponctuelle)
+        private Collision TypeCollision(int indexPathCross)
+        {
+            if (!pathRobotIA.ElementAt(indexPathCross + 1).Equals(pathRobotTelecommande.ElementAt(indexPathCross + 1)))
+                return Collision.PONCTUELLE;
+            //si le vehicule teleguide se retrouve de face face au vehicule IA
+            //if ()
+            //return Collision.FRONTALE;
+
+            return TypeCollision(indexPathCross + 1);
+        }
+
         //Calcule et retourne le chemin de l'IA, en évitant les collisions avec le robot télécommand (chemin vers 1 patient puis hopital)
-        private List<Point> ComputePathIAWithoutCollision()
+        private List<Point> ComputePathIAWithoutCollision(int indexPathCross)
         {
             List<Point> newPath = new List<Point>();
+
+            switch (TypeCollision(indexPathCross))
+            {
+                case Collision.PENETRE_PERIMETRE:
+                    //OSEF
+                    break;
+                case Collision.PONCTUELLE:
+                    //trouver un moyen d'inserer en debut de path ia une pause, ou la case actuelle
+                    break;
+
+                case Collision.FRONTALE:
+                    //fermer node en pathRobotIA.ElementAt(indexPathCross)
+                    ComputeDijkstra(vehicule.Position, targetIA);
+                    break;
+            }
 
             return newPath;
         }
@@ -140,6 +170,7 @@ namespace SgtSafety.NXTIA
             Point positionTelec, newTargetTelec;
             int indexPathCross;
             NXTAction action;
+            bool pathIAChanged = false;
 
             action = robotTelec.executeCommand();
             if (pathRobotTelecommande.Count > 0)
@@ -157,27 +188,34 @@ namespace SgtSafety.NXTIA
                 if (targetTelec != newTargetTelec)
                 {
                     targetTelec = newTargetTelec;
-                    targetIA = DetermineNewTrgtIA(targetTelec);
+                    targetIA = DetermineNewTrgtIA(newTargetTelec);
 
-                    vehicule.ClearBuffer();
-                    this.pathRobotIA = ComputePathIAWithoutCollision();
+                    this.pathRobotIA = ComputeDijkstra(vehicule.Position, targetIA);
+                    pathIAChanged = true;
                 }
 
                 indexPathCross = int.MaxValue;
                 indexPathCross = PathesCross();
                 if (indexPathCross != int.MaxValue)
                 {
-                    vehicule.ClearBuffer();
-                    this.pathRobotIA = ComputePathIAWithoutCollision();
+                    this.pathRobotIA = ComputePathIAWithoutCollision(indexPathCross);
+                    pathIAChanged = true;
                 }
             }
 
-            AddToIABuffer(pathRobotIA);
-            sendToVehiculeBuffer();
+            if (pathIAChanged)
+            {
+                vehicule.ClearBuffer();
+                AddToIABuffer(pathRobotIA);
+                sendToVehiculeBuffer();
+            }
 
             action = vehicule.executeCommand();
-            pathRobotIA.RemoveAt(0);
-            ComputeAction(action, vehicule.Position);
+            if (pathRobotIA.Count > 0)
+                pathRobotIA.RemoveAt(0);
+
+            if (action != null)
+                ComputeAction(action, vehicule.Position);
         }
 
         public void MainLoop()
