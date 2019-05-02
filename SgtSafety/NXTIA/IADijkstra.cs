@@ -12,12 +12,14 @@ namespace SgtSafety.NXTIA
     {
         private List<Point> accessibleCases;
         private List<NXTNode> nodes;
+        private Dictionary<Point, bool> sptSet;
 
         public IADijkstra(NXTVehicule vehicule)
             : base(vehicule)
         {
             nodes = new List<NXTNode>();
             accessibleCases = new List<Point>();
+            sptSet = new Dictionary<Point, bool>();
         }
 
         private static int GetManhattanHeuristic(Point a, Point b)
@@ -35,18 +37,27 @@ namespace SgtSafety.NXTIA
             CreateChilds(start, sNode);
         }
 
+
+        /*
+         * Petit soucis de parent/voisins, sinon ça marche :)
+         */
         private void CreateChilds(Point start, NXTNode current)
         {
             foreach (Point p in circuit.GetNeighbours(current.position))
             {
                 if (accessibleCases.Contains(p))
                 {
-                    NXTNode node = new NXTNode(current, p, (uint)GetManhattanHeuristic(start, p));
+                    NXTNode node = new NXTNode(current, p, uint.MaxValue);
                     nodes.Add(node);
                     current.neighbours.Add(node);
                     accessibleCases.Remove(p);
-                    CreateChilds(start, node);
+                    sptSet.Add(node.position, false);
                 }
+            }
+
+            foreach (NXTNode n in current.neighbours)
+            {
+                CreateChilds(start, n);
             }
         }
 
@@ -70,10 +81,11 @@ namespace SgtSafety.NXTIA
         private void UpdatePrice(NXTNode na, NXTNode nb)
         {
             uint nPrice = na.price + (uint)GetManhattanHeuristic(na.position, nb.position);
-            if (nb.price > nPrice)
+            if (!sptSet[nb.position] && na.price != uint.MaxValue && nPrice < nb.price)
             {
                 nb.price = nPrice;
                 nb.parent = na;
+                this.circuit.getCase(nb.position).CaseColor = new Color(nb.price / 10f, (10 - nb.price) / 10f, 0f);
                 Console.WriteLine("Parent updated " + na.position + " -> " + nb.position);
             }
         }
@@ -92,9 +104,12 @@ namespace SgtSafety.NXTIA
                 if (s1.position.Equals(goal))
                     break;
 
+                sptSet[s1.position] = true;
+                Console.WriteLine("s1 -> " + s1.position);
                 foreach (NXTNode s2 in s1.neighbours)
                 {
                     UpdatePrice(s1, s2);
+                    Console.WriteLine("s2 -> " + s2.position);
                 }
             }
 

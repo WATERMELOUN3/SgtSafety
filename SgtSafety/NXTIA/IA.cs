@@ -31,28 +31,14 @@ namespace SgtSafety.NXTIA
         {
             this.vehicule = p_vehicule;
             this.circuit = vehicule.Circuit;
-            this.buffer = new NXTBuffer();
+            this.buffer = p_vehicule.Buffer;
             pStraight = new NXTAction(NXTMovement.STRAIGHT);
             pLeft = new NXTAction(NXTMovement.INTER_LEFT);
             pRight = new NXTAction(NXTMovement.INTER_RIGHT);
             pUturn = new NXTAction(NXTMovement.UTURN);
         }
 
-        protected bool addToBuffer(NXTAction action)
-        {
-            buffer.Add(action);
-            return true;
-        }
-
-        protected bool sendToVehiculeBuffer()
-        {
-            while (!buffer.isEmpty())
-                vehicule.addToBuffer(buffer.Pop());
-
-            return true;
-        }
-
-        protected void AddToIABuffer(List<Point> path)
+        public void AddToIABuffer(List<Point> path)
         {
             NXTAction action;
             Point oldPos = vehicule.Position;
@@ -60,26 +46,24 @@ namespace SgtSafety.NXTIA
 
             foreach(Point p in path)
             {
-                action = pStraight;
-                addToBuffer(action);
+                action = MovementToAction(circuit.getCase(oldPos), oldPos, direction, p, out direction);
+                this.buffer.Add(action, false);
                 oldPos = p;
             }
         }
 
-        /*
-         * IL FAUT FINIR CE MACHIN LA
-         * EN GROS FAUT PRECALCULER L'ORIENTATION POUR LES AUTRES APPELS
-         * ET C'EST GALERE WOLA
-         * 
-         * HELP
-         */
-        protected NXTAction MovementToAction(NXTCase currentCase, Point currentPosition, ref Point currentDirection, Point destination)
+        protected NXTAction MovementToAction(NXTCase currentCase, Point currentPosition, Point currentDirection, Point destination, out Point newDirection)
         {
             NXTAction outInstance = null;
+            newDirection = currentDirection;
+            
+            // Si destination derriere direction actuelle, demi tour
             if (destination.Equals(currentPosition - currentDirection))
                 outInstance = new NXTAction(NXTMovement.UTURN);
+            // Sinon si virage ou tout droit envoyer straight
             else if (currentCase.TypeCase == Case.STRAIGHT || currentCase.TypeCase == Case.VIRAGE)
                 outInstance = new NXTAction(NXTMovement.STRAIGHT);
+            // sinon (intersection)
             else
             {
                 Point caseDirection = OrientationToDirection(currentCase.CaseOrientation);
@@ -89,27 +73,35 @@ namespace SgtSafety.NXTIA
                 if (caseDirection.Equals(currentDirection))
                 {
                     if (deplacement.Equals(Rotate90Clockwise(currentDirection)))
+                    {
                         outInstance = new NXTAction(NXTMovement.INTER_RIGHT);
+                        newDirection = Rotate90Clockwise(currentDirection);
+                    }
                     else
+                    {
                         outInstance = new NXTAction(NXTMovement.INTER_LEFT);
+                        newDirection = Rotate90AntiClockwise(currentDirection);
+                    }
                 }
                 else if (caseDirection.Equals(Rotate90Clockwise(currentDirection))) // r = tout droit
                 {
                     if (deplacement.Equals(Rotate90AntiClockwise(currentDirection)))
                     {
                         outInstance = new NXTAction(NXTMovement.INTER_LEFT);
-
+                        newDirection = Rotate90AntiClockwise(currentDirection);
                     }
                     else
-                    {
                         outInstance = new NXTAction(NXTMovement.INTER_RIGHT);
-                    }
                         
                 }
                 else if (caseDirection.Equals(Rotate90AntiClockwise(currentDirection))) // l = tout droit
                 {
+                    Console.WriteLine("prout");
                     if (deplacement.Equals(Rotate90Clockwise(currentDirection)))
+                    {
                         outInstance = new NXTAction(NXTMovement.INTER_RIGHT);
+                        newDirection = Rotate90Clockwise(currentDirection);
+                    }
                     else
                         outInstance = new NXTAction(NXTMovement.INTER_LEFT);
                 }

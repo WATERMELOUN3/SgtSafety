@@ -98,7 +98,7 @@ namespace SgtSafety.NXTIA
             }
 
             AddToIABuffer(pathRobotIA);
-            sendToVehiculeBuffer();
+            //sendToVehiculeBuffer();
             vehicule.executeCommand();
         }
     }
