@@ -29,6 +29,9 @@ namespace SgtSafety.NXTIA
 
         private void Initialize(Point start)
         {
+            nodes.Clear();
+            sptSet.Clear();
+
             accessibleCases = circuit.getAllCases();
             NXTNode sNode = new NXTNode(start, 0);
             nodes.Add(sNode);
@@ -145,6 +148,45 @@ namespace SgtSafety.NXTIA
 
             path.Reverse();
             return path;
+        }
+
+        //Retourne le patient le plus proche du robot, le seconde argument n'est à passer que dans le cas de l'IA, sinon lui passer NXTVehicule.ERROR
+        public Point FindClosestPatient(Point targetTelec)
+        {
+            int distanceMin = int.MaxValue,
+                distance;
+            Point closestPatient = NXTVehicule.ERROR;
+            foreach (Point p in this.vehicule.Circuit.Patients)
+            {
+                distance = GetManhattanHeuristic(p, vehicule.Position);
+                if (distance < distanceMin && !p.Equals(targetTelec))
+                {
+                    distanceMin = distance;
+                    closestPatient = p;
+                }
+            }
+
+            return closestPatient;
+        }
+
+        //Retourne l'hopital le plus proche du robot
+        public Point FindClosestHopital()
+        {
+            List<Point> hopitaux = vehicule.Circuit.Patients;
+            int distanceMin = int.MaxValue,
+                distance;
+            Point closestHopital = NXTVehicule.ERROR;
+            foreach (Point h in hopitaux)
+            {
+                distance = GetManhattanHeuristic(h, vehicule.Position);
+                if (distance < distanceMin)
+                {
+                    distanceMin = distance;
+                    closestHopital = h;
+                }
+            }
+
+            return closestHopital;
         }
     }
 }

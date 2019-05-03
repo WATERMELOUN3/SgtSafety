@@ -75,6 +75,10 @@ namespace SgtSafety.NXTEnvironment
                     return Orientation.BOTTOM;
             }
         }
+        public int MAX_PATIENTS
+        {
+            get { return 1; }
+        }
 
         // --------------------------------------------------------------------------
         // CONSTRUCTORS
@@ -143,9 +147,15 @@ namespace SgtSafety.NXTEnvironment
             return circuit.getCase(this.position);
         }
 
-        // Prend un patient (renvoie le nombre de patients après)
-        private int takePatient(){
-            return (++this.patients);
+        // Prend un patient (renvoie true si le patient a été pris, sinon renvoie false)
+        private bool takePatient(){
+            if (patients < MAX_PATIENTS)
+            {
+                patients++;
+                return true;
+            }
+
+            return false;
         }
 
         // Lache un patient (renvoie le nombre de patients après)
@@ -191,14 +201,17 @@ namespace SgtSafety.NXTEnvironment
         }
 
         // Envoie le paquet de la prochaine action à effectuer (true), ou renvoie false si il n'y a plus d'actions
-        public bool SendNextAction()
+        public bool SendNextAction(bool simulation = false)
         {
             NXTAction action = this.executeCommand();
             if (action != null)
             {
                 Console.WriteLine("Ordre envoyé: " + action.ToString());
-                NXTPacket packet = new NXTPacket(action);
-                nxtHelper.SendNTXPacket(packet);
+                if (!simulation)
+                {
+                    NXTPacket packet = new NXTPacket(action);
+                    nxtHelper.SendNTXPacket(packet);
+                }
 
                 return true;
             }

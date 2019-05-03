@@ -84,7 +84,7 @@ namespace SgtSafety.NXTIA
             // sinon (intersection)
             else
             {
-                Console.WriteLine("[INTERSECTION] Deplacement= " + deplacement);
+                //Console.WriteLine("[INTERSECTION] Deplacement= " + deplacement);
                 // Si la case est dans la meme direction que le vehicule
                 if (caseDirection.Equals(currentDirection))
                 {
@@ -122,7 +122,7 @@ namespace SgtSafety.NXTIA
                 }
             }
 
-            Console.WriteLine(currentCase + " @ " + currentPosition + " -> " + destination + " _ " + DirectionToOrientation(newDirection) + "\nResult= " + outInstance);
+            //Console.WriteLine(currentCase + " @ " + currentPosition + " -> " + destination + " _ " + DirectionToOrientation(newDirection) + "\nResult= " + outInstance);
 
             return outInstance;
         }

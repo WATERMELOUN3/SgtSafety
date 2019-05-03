@@ -56,15 +56,40 @@ namespace SgtSafety.Forms.Render
             ia = new IADijkstra(this.vehicule);
         }
 
-        public void CalculatePath()
+        public bool CalculatePath()
         {
-            List<Point> chemin = ia.ComputeDijkstra(new Point(0, 3), new Point(4, 2)); //ia.sendPathToVehicule(new Point(0, 3));
-            ia.AddToIABuffer(chemin);
-            
-            foreach (Point p in chemin)
+            vehicule.ClearBuffer();
+            if (vehicule.Circuit.Patients.Count > 0 || vehicule.Patients > 0)
             {
-                vehicule.Circuit.getCase(p).CaseColor = Color.Blue;
+                if (vehicule.Patients >= vehicule.MAX_PATIENTS)
+                {
+                    List<Point> chemin = ia.ComputeDijkstra(vehicule.Position, vehicule.Circuit.Hopitaux[0]);
+
+                    ia.AddToIABuffer(chemin);
+                    PaintPath(chemin);
+                    return true;
+                }
+                else
+                {
+                    List<Point> cheminHopital = ia.ComputeDijkstra(vehicule.Position, ia.FindClosestHopital());
+                    List<Point> cheminPatient = ia.ComputeDijkstra(vehicule.Position, ia.FindClosestPatient(NXTVehicule.ERROR));
+
+                    List<Point> chemin = cheminPatient.Count >= cheminHopital.Count ? cheminPatient : cheminHopital;
+
+                    ia.AddToIABuffer(chemin);
+                    PaintPath(chemin);
+                    return true;
+                }
             }
+
+            return false;
+        }
+
+        private void PaintPath(List<Point> path)
+        {
+            vehicule.Circuit.FillColor(Color.White);
+            foreach (Point p in path)
+                vehicule.Circuit.Paint(Color.BlueViolet, p);
         }
 
         // Appelé à chaque boucle logique

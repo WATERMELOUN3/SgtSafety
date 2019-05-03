@@ -144,6 +144,27 @@ namespace SgtSafety.NXTEnvironment
             return false;
         }
 
+        public void FillColor(Color c)
+        {
+            for (int i = 0; i < this.height; i++)
+                for (int j = 0; j < this.width; j++)
+                    circuit[i + j * this.width].CaseColor = c;
+
+            ColorHP();
+        }
+
+        public void Paint(Color c, Point pos)
+        {
+            getCase(pos).CaseColor = c;
+            ColorHP();
+        }
+
+        public void Paint(Color c, int x, int y)
+        {
+            getCase(x, y).CaseColor = c;
+            ColorHP();
+        }
+
         // Ajoute un hopital
         public List<Point> addHopital(Point newHopital){
             if (!hopitaux.Contains(newHopital))
