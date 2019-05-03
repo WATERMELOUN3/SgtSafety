@@ -122,14 +122,40 @@ namespace SgtSafety.NXTIA
             return FindClosestPatient(vehicule, targetTelec);
         }
 
+        /*private bool TelecEntersIAPerimeter()
+        {
+            Point posIA = vehicule.Position, 
+                  posTelec = robotTelec.Position;
+
+            int xIA = posIA.X,
+                yIA = posIA.Y,
+                xTl = posTelec.X,
+                yTl = posTelec.Y;
+
+            return (xIA == xTl && (yIA == yTl + 1 || yIA == yTl - 1) || (yIA == yTl && (xIA == xTl - 1 || xIA == xTl + 1)));
+        }*/
+
         //Retourne le type de collision (frontale ou ponctuelle)
         private Collision TypeCollision(int indexPathCross)
         {
-            if (!pathRobotIA.ElementAt(indexPathCross + 1).Equals(pathRobotTelecommande.ElementAt(indexPathCross + 1)))
+            Point posSuivIA = pathRobotIA.ElementAt(indexPathCross + 1),
+                  posSuivTelec = pathRobotTelecommande.ElementAt(indexPathCross + 1),
+                  pos = pathRobotTelecommande.ElementAt(indexPathCross);
+            int xSuivIA = posSuivIA.X,
+                ySuivIA = posSuivIA.Y,
+                xSuivTl = posSuivTelec.X,
+                ySuivTl = posSuivTelec.Y,
+                x = pos.X,
+                y = pos.Y;
+
+            if (!posSuivIA.Equals(posSuivTelec))
                 return Collision.PONCTUELLE;
             //si le vehicule teleguide se retrouve de face face au vehicule IA
-            //if ()
-            //return Collision.FRONTALE;
+            if ((xSuivIA == xSuivTl && 
+                ((ySuivIA == y-1 && ySuivTl == y+1) || (ySuivIA == y+1 && ySuivTl == y-1))) ||
+                (ySuivIA == ySuivTl &&
+                ((xSuivIA == x - 1 && xSuivTl == x + 1) || (xSuivIA == x + 1 && xSuivTl == x - 1))))
+                return Collision.FRONTALE;
 
             return TypeCollision(indexPathCross + 1);
         }
@@ -146,6 +172,7 @@ namespace SgtSafety.NXTIA
                     break;
                 case Collision.PONCTUELLE:
                     //trouver un moyen d'inserer en debut de path ia une pause, ou la case actuelle
+                    pathRobotIA.Insert(0, vehicule.Position);
                     break;
 
                 case Collision.FRONTALE:
