@@ -207,7 +207,6 @@ namespace SgtSafety.NXTIA
             {
                 vehicule.ClearBuffer();
                 AddToIABuffer(pathRobotIA);
-                sendToVehiculeBuffer();
             }
 
             action = vehicule.executeCommand();

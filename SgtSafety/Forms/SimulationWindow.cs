@@ -104,5 +104,10 @@ namespace SgtSafety.Forms
                 button1.Text = "Pause";
             }
         }
+
+        private void SimulationWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.simulation1.Dispose();
+        }
     }
 }

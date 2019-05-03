@@ -63,7 +63,7 @@ namespace SgtSafety.Forms.Render
             
             foreach (Point p in chemin)
             {
-                //vehicule.Circuit.getCase(p).CaseColor = Color.Blue;
+                vehicule.Circuit.getCase(p).CaseColor = Color.Blue;
             }
         }
 

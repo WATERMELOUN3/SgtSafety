@@ -87,6 +87,11 @@ namespace SgtSafety.NXTEnvironment
         // --------------------------------------------------------------------------
         // METHODS
         // --------------------------------------------------------------------------
+        public override string ToString()
+        {
+            return "[NXTCase Color=" + color + ", TypeCase=" + typeCase + ", Orientation=" + orientation + "]";
+        }
+
         public void NextCase()
         {
             typeCase = (Case)(((int)typeCase + 1) % 3);

@@ -46,7 +46,14 @@ namespace SgtSafety.NXTIA
             Point oldPos = vehicule.Position;
             Point direction = vehicule.Direction;
 
-            foreach(Point p in path)
+            NXTCase currentCase = circuit.getCase(oldPos);
+            if (!(currentCase.goThrough(new NXTAction(NXTMovement.STRAIGHT), direction) + oldPos).Equals(path[0]))
+            {
+                this.buffer.Add(new NXTAction(NXTMovement.UTURN), false);
+                direction = Rotate90Clockwise(Rotate90Clockwise(direction));
+            }
+
+            foreach (Point p in path)
             {
                 action = MovementToAction(circuit.getCase(oldPos), oldPos, direction, p, out direction);
                 this.buffer.Add(action, false);
@@ -58,19 +65,26 @@ namespace SgtSafety.NXTIA
         {
             NXTAction outInstance = null;
             newDirection = currentDirection;
-            
+            Point deplacement = destination - currentPosition;
+            Point caseDirection = OrientationToDirection(currentCase.CaseOrientation);
+
             // Si destination derriere direction actuelle, demi tour
             if (destination.Equals(currentPosition - currentDirection))
                 outInstance = new NXTAction(NXTMovement.UTURN);
             // Sinon si virage ou tout droit envoyer straight
             else if (currentCase.TypeCase == Case.STRAIGHT || currentCase.TypeCase == Case.VIRAGE)
+            {
                 outInstance = new NXTAction(NXTMovement.STRAIGHT);
+
+                if (currentCase.TypeCase == Case.VIRAGE)
+                {
+                    newDirection = caseDirection.Equals(currentDirection) ? Rotate90Clockwise(currentDirection) : Rotate90AntiClockwise(currentDirection);
+                }
+            }
             // sinon (intersection)
             else
             {
-                Point caseDirection = OrientationToDirection(currentCase.CaseOrientation);
-                Point deplacement = destination - currentPosition;
-
+                Console.WriteLine("[INTERSECTION] Deplacement= " + deplacement);
                 // Si la case est dans la meme direction que le vehicule
                 if (caseDirection.Equals(currentDirection))
                 {
@@ -94,11 +108,10 @@ namespace SgtSafety.NXTIA
                     }
                     else
                         outInstance = new NXTAction(NXTMovement.INTER_RIGHT);
-                        
+
                 }
                 else if (caseDirection.Equals(Rotate90AntiClockwise(currentDirection))) // l = tout droit
                 {
-                    Console.WriteLine("prout");
                     if (deplacement.Equals(Rotate90Clockwise(currentDirection)))
                     {
                         outInstance = new NXTAction(NXTMovement.INTER_RIGHT);
@@ -108,6 +121,8 @@ namespace SgtSafety.NXTIA
                         outInstance = new NXTAction(NXTMovement.INTER_LEFT);
                 }
             }
+
+            Console.WriteLine(currentCase + " @ " + currentPosition + " -> " + destination + " _ " + DirectionToOrientation(newDirection) + "\nResult= " + outInstance);
 
             return outInstance;
         }
