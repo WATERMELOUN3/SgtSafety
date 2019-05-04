@@ -71,10 +71,13 @@ namespace SgtSafety.Forms.Render
                 }
                 else
                 {
-                    List<Point> cheminHopital = ia.ComputeDijkstra(vehicule.Position, ia.FindClosestHopital());
-                    List<Point> cheminPatient = ia.ComputeDijkstra(vehicule.Position, ia.FindClosestPatient(NXTVehicule.ERROR));
+                    List<Point> chemin = ia.ComputeDijkstra(vehicule.Position, ia.FindClosestPatient(NXTVehicule.ERROR));
 
-                    List<Point> chemin = cheminPatient.Count >= cheminHopital.Count ? cheminPatient : cheminHopital;
+                    if (vehicule.Patients > 0)
+                    {
+                        List<Point> cheminHopital = ia.ComputeDijkstra(vehicule.Position, ia.FindClosestHopital());
+                        chemin = chemin.Count >= cheminHopital.Count ? chemin : cheminHopital;
+                    }
 
                     ia.AddToIABuffer(chemin);
                     PaintPath(chemin);

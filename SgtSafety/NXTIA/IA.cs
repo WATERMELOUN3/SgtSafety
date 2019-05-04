@@ -47,7 +47,9 @@ namespace SgtSafety.NXTIA
             Point direction = vehicule.Direction;
 
             NXTCase currentCase = circuit.getCase(oldPos);
-            if (!(currentCase.goThrough(new NXTAction(NXTMovement.STRAIGHT), direction) + oldPos).Equals(path[0]))
+            if (!((currentCase.goThrough(new NXTAction(NXTMovement.STRAIGHT), direction) + oldPos).Equals(path[0])
+                || (currentCase.goThrough(new NXTAction(NXTMovement.INTER_LEFT), direction) + oldPos).Equals(path[0])
+                || (currentCase.goThrough(new NXTAction(NXTMovement.INTER_RIGHT), direction) + oldPos).Equals(path[0])))
             {
                 this.buffer.Add(new NXTAction(NXTMovement.UTURN), false);
                 direction = Rotate90Clockwise(Rotate90Clockwise(direction));
@@ -56,6 +58,12 @@ namespace SgtSafety.NXTIA
             foreach (Point p in path)
             {
                 action = MovementToAction(circuit.getCase(oldPos), oldPos, direction, p, out direction);
+
+                if (circuit.hasPatient(p) && vehicule.Patients < vehicule.MAX_PATIENTS)
+                    action.Action = NXTAction.TAKE;
+                else if (circuit.hasHopital(p) && vehicule.Patients > 0)
+                    action.Action = NXTAction.DROP;
+
                 this.buffer.Add(action, false);
                 oldPos = p;
             }
@@ -122,7 +130,7 @@ namespace SgtSafety.NXTIA
                 }
             }
 
-            //Console.WriteLine(currentCase + " @ " + currentPosition + " -> " + destination + " _ " + DirectionToOrientation(newDirection) + "\nResult= " + outInstance);
+            Console.WriteLine(currentCase + " @ " + currentPosition + " -> " + destination + " _ " + DirectionToOrientation(newDirection) + "\nResult= " + outInstance);
 
             return outInstance;
         }

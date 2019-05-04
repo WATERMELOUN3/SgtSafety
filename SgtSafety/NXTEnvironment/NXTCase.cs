@@ -117,6 +117,10 @@ namespace SgtSafety.NXTEnvironment
                         return NXTVehicule.TOP;
                     else if (direction == NXTVehicule.BOTTOM)
                         return NXTVehicule.LEFT;
+                    else if (direction == NXTVehicule.TOP) // weird
+                        return NXTVehicule.TOP;
+                    else if (direction == NXTVehicule.LEFT)
+                        return NXTVehicule.LEFT;
                     return NXTVehicule.ERROR;
 
                 case Orientation.LEFT:
@@ -124,12 +128,20 @@ namespace SgtSafety.NXTEnvironment
                         return NXTVehicule.TOP;
                     else if (direction == NXTVehicule.BOTTOM)
                         return NXTVehicule.RIGHT;
+                    else if (direction == NXTVehicule.RIGHT) // weird
+                        return NXTVehicule.RIGHT;
+                    else if (direction == NXTVehicule.TOP)
+                        return NXTVehicule.TOP;
                     return NXTVehicule.ERROR;
 
                 case Orientation.RIGHT:
                     if (direction == NXTVehicule.RIGHT)
                         return NXTVehicule.BOTTOM;
                     else if (direction == NXTVehicule.TOP)
+                        return NXTVehicule.LEFT;
+                    else if (direction == NXTVehicule.BOTTOM) // weird
+                        return NXTVehicule.BOTTOM;
+                    else if (direction == NXTVehicule.LEFT)
                         return NXTVehicule.LEFT;
                     return NXTVehicule.ERROR;
 
@@ -138,6 +150,10 @@ namespace SgtSafety.NXTEnvironment
                         return NXTVehicule.BOTTOM;
                     else if (direction == NXTVehicule.TOP)
                         return NXTVehicule.RIGHT;
+                    else if (direction == NXTVehicule.RIGHT) // weird
+                        return NXTVehicule.RIGHT;
+                    else if (direction == NXTVehicule.BOTTOM)
+                        return NXTVehicule.BOTTOM;
                     return NXTVehicule.ERROR;
             }
 
@@ -169,9 +185,10 @@ namespace SgtSafety.NXTEnvironment
                 case Case.STRAIGHT:
                     return newDirection;
                 case Case.VIRAGE:
-                    return goThroughVirage(newDirection);
+                    return newDirection;
                 case Case.INTERSECTION:
-                    return NXTVehicule.ERROR;
+                    Console.WriteLine("/!\\ Demi tour sur intersection /!\\");
+                    return newDirection;
                 default:
                     return NXTVehicule.ERROR;
             }

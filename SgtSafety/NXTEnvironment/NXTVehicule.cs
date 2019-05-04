@@ -77,7 +77,7 @@ namespace SgtSafety.NXTEnvironment
         }
         public int MAX_PATIENTS
         {
-            get { return 1; }
+            get { return 2; }
         }
 
         // --------------------------------------------------------------------------
@@ -120,12 +120,6 @@ namespace SgtSafety.NXTEnvironment
         // METHODS
         // --------------------------------------------------------------------------
 
-        // Addition de points, à déplacer dans classe statique "MathTools"
-        public static Point addPoint(Point p1, Point p2)
-        {
-            return new Point(p1.X + p2.X, p1.Y + p2.Y);
-        }
-
         //Retourne l'opposé d'une direction
         public static Point oppositeDirection(Point pDirection)
         {
@@ -148,10 +142,11 @@ namespace SgtSafety.NXTEnvironment
         }
 
         // Prend un patient (renvoie true si le patient a été pris, sinon renvoie false)
-        private bool takePatient(){
+        private bool takePatient(Point p){
             if (patients < MAX_PATIENTS)
             {
                 patients++;
+                circuit.RemovePatient(p);
                 return true;
             }
 
@@ -160,7 +155,7 @@ namespace SgtSafety.NXTEnvironment
 
         // Lache un patient (renvoie le nombre de patients après)
         private int dropPatient(){
-            return (--this.patients);
+            return (this.patients = 0);
         }
 
         // Ajoute une action au buffer du vehicule
@@ -177,12 +172,13 @@ namespace SgtSafety.NXTEnvironment
             Point newDir = caseCur.goThrough(action, this.direction);
 
             Console.WriteLine(this.position);
-            if (newDir != ERROR)
-                this.position = addPoint(this.position, newDir);
+            if (newDir != ERROR && action.Movement != NXTMovement.UTURN)
+                this.position = this.position + newDir;
+
             this.direction = newDir;
-            Console.WriteLine(this.position);
+
             if (actiontd == NXTAction.TAKE)
-                this.takePatient();
+                this.takePatient(this.position);
             else if (actiontd == NXTAction.DROP)
                 this.dropPatient();
         }

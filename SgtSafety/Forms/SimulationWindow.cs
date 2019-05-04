@@ -68,20 +68,22 @@ namespace SgtSafety.Forms
             {
                 if (!vehicule.SendNextAction(radioButton1.Checked))
                 {
+                    await Task.Delay(TimeSpan.FromMilliseconds((int)numericUpDown1.Value));
                     if (simulation1.CalculatePath())
                     {
                         UpdateBuffer(vehicule.Buffer);
-                        Console.WriteLine("test1");
                         if (radioButton1.Checked)
                             await Task.Delay(TimeSpan.FromMilliseconds((int)numericUpDown1.Value));
                         PacketReceived(sender, e);
                     }
                     else
+                    {
+                        vehicule.Circuit.FillColor(Microsoft.Xna.Framework.Color.White);
                         ButtonDisable();
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("test2");
                     if (radioButton1.Checked)
                     {
                         await Task.Delay(TimeSpan.FromMilliseconds((int)numericUpDown1.Value));

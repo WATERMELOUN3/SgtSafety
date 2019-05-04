@@ -153,6 +153,19 @@ namespace SgtSafety.NXTEnvironment
             ColorHP();
         }
 
+        public void RemovePatient(Point p)
+        {
+            Point del = new Point(-1, -1);
+            foreach (Point pp in patients)
+            {
+                if (pp.Equals(p))
+                    del = pp;
+            }
+
+            if (!del.Equals(new Point(-1, -1)))
+                patients.Remove(del);
+        }
+
         public void Paint(Color c, Point pos)
         {
             getCase(pos).CaseColor = c;
