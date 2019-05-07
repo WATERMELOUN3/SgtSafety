@@ -47,7 +47,7 @@ namespace SgtSafety.Forms
         private void MainWindow_Load(object sender, EventArgs e)
         {
             this.remoteVehicule = new NXTVehicule(new Point(0, 2), NXTVehicule.TOP);
-            this.autoVehicule = new NXTVehicule(new Point(0, 3), NXTVehicule.TOP);
+            this.autoVehicule = new NXTVehicule(new Point(0, 3), NXTVehicule.BOTTOM);
         }
 
         // Bouton "Recherche"

@@ -54,13 +54,13 @@ namespace SgtSafety.NXTIA
         //Retourne l'indice auxquel les chemins des 2 robots se croisent, int.MaxValue sinon
         private int PathesCross()
         {
-            int minLenght;
+            int minLength;
             if (pathRobotIA.Count > pathRobotTelecommande.Count)
-                minLenght = pathRobotTelecommande.Count;
+                minLength = pathRobotTelecommande.Count;
             else
-                minLenght = pathRobotIA.Count;
+                minLength = pathRobotIA.Count;
 
-            for (int i = 0; i < minLenght; ++i)
+            for (int i = 0; i < minLength; ++i)
                 if (pathRobotIA.ElementAt(i).Equals(pathRobotTelecommande.ElementAt(i)))
                     return i;
 
@@ -125,6 +125,7 @@ namespace SgtSafety.NXTIA
         private List<Point> ComputePathIAWithoutCollision(int indexPathCross)
         {
             List<Point> newPath = new List<Point>();
+            Initialize(vehicule.Position);
 
             switch (TypeCollision(indexPathCross))
             {
@@ -135,7 +136,6 @@ namespace SgtSafety.NXTIA
                     //trouver un moyen d'inserer en debut de path ia une pause, ou la case actuelle
                     pathRobotIA.Insert(0, vehicule.Position);
                     break;
-
                 case Collision.FRONTALE:
                     //fermer node en pathRobotIA.ElementAt(indexPathCross)
                     ComputeDijkstra(vehicule.Position, targetIA);

@@ -202,7 +202,11 @@ namespace SgtSafety.NXTEnvironment
             NXTAction action = this.executeCommand();
             if (action != null)
             {
-                Console.WriteLine("Ordre envoyé: " + action.ToString());
+                Console.WriteLine("Ordre envoyé: " + action.ToFancyString());
+
+                if (action.Temporisation > 0)
+                    Sleep(action.Temporisation);
+
                 if (!simulation)
                 {
                     NXTPacket packet = new NXTPacket(action);
@@ -213,6 +217,11 @@ namespace SgtSafety.NXTEnvironment
             }
             else
                 return false;
+        }
+
+        private async void Sleep(int ms)
+        {
+            await Task.Delay(ms);
         }
 
         public void ClearBuffer()

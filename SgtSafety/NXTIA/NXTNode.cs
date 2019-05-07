@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SgtSafety.NXTIA
 {
-    class NXTNode
+    public class NXTNode
     {
         public NXTNode parent;
         public List<NXTNode> neighbours;

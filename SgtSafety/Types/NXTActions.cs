@@ -32,6 +32,7 @@ namespace SgtSafety.Types
         // FIELDS
         // --------------------------------------------------------------------------
         private char movement;
+        private int tempo;
 
         private bool hasAction = false;
         private char action = ' ';
@@ -66,6 +67,11 @@ namespace SgtSafety.Types
                 }
             }
         }
+        public int Temporisation
+        {
+            get { return tempo; }
+            set { tempo = value; }
+        }
 
         // --------------------------------------------------------------------------
         // CONSTRUCTORS
@@ -73,11 +79,13 @@ namespace SgtSafety.Types
         public NXTAction(char movement)
         {
             this.movement = movement;
+            this.tempo = 0;
         }
 
         public NXTAction(char movement, char action)
         {
             this.movement = movement;
+            this.tempo = 0;
 
             if (action != ' ')
             {
@@ -142,6 +150,9 @@ namespace SgtSafety.Types
                         break;
                 }
             }
+
+            if (tempo > 0)
+                t += " (temporisation " + tempo + "ms)";
 
             return t;
         }
