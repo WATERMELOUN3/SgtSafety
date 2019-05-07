@@ -67,59 +67,20 @@ namespace SgtSafety.NXTIA
             return int.MaxValue;
         }
 
-        //Retourne le patient le plus proche du robot, le seconde argument n'est à passer que dans le cas de l'IA, sinon lui passer NXTVehicule.ERROR
-        private Point FindClosestPatient(NXTVehicule source, Point targetTelec)
-        {
-            int distanceMin = int.MaxValue, 
-                distance;
-            Point closestPatient = NXTVehicule.ERROR;
-            foreach (Point p in this.patients)
-            {
-                distance = GetManhattanHeuristic(p, source.Position);
-                if (distance < distanceMin && !p.Equals(targetTelec))
-                {
-                    distanceMin = distance;
-                    closestPatient = p;
-                }
-            }
-
-            return closestPatient;
-        }
-
-        //Retourne l'hopital le plus proche du robot
-        private Point FindClosestHopital(NXTVehicule source)
-        {
-            List<Point> hopitaux = robotTelec.Circuit.Patients;
-            int distanceMin = int.MaxValue,
-                distance;
-            Point closestHopital = NXTVehicule.ERROR;
-            foreach (Point h in hopitaux)
-            {
-                distance = GetManhattanHeuristic(h, source.Position);
-                if (distance < distanceMin)
-                {
-                    distanceMin = distance;
-                    closestHopital = h;
-                }
-            }
-
-            return closestHopital;
-        }
-
         //Retourne le point cible attendu du robot télécommandé
         private Point DetermineExcptdTelecTarget()
         {
             if (robotTelec.Patients > 0)
-                return FindClosestHopital(robotTelec);
-            return FindClosestPatient(robotTelec, NXTVehicule.ERROR);
+                return simulRobotTelec.FindClosestHopital();
+            return simulRobotTelec.FindClosestPatient(NXTVehicule.ERROR);
         }
 
         //Retourne le point cible de l'IA
         private Point DetermineNewTrgtIA(Point targetTelec)
         {
             if (vehicule.Patients > 0)
-                return FindClosestHopital(vehicule);
-            return FindClosestPatient(vehicule, targetTelec);
+                return simulRobotTelec.FindClosestHopital();
+            return simulRobotTelec.FindClosestPatient(targetTelec);
         }
 
         /*private bool TelecEntersIAPerimeter()
@@ -234,7 +195,6 @@ namespace SgtSafety.NXTIA
             {
                 vehicule.ClearBuffer();
                 AddToIABuffer(pathRobotIA);
-                //sendToVehiculeBuffer();
             }
 
             action = vehicule.executeCommand();

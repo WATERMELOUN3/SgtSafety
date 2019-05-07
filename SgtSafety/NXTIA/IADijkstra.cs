@@ -29,14 +29,37 @@ namespace SgtSafety.NXTIA
 
         private void Initialize(Point start)
         {
+            nodes.Clear();
+            sptSet.Clear();
+
             accessibleCases = circuit.getAllCases();
             NXTNode sNode = new NXTNode(start, 0);
             nodes.Add(sNode);
             accessibleCases.Remove(start);
 
             CreateChilds(start, sNode);
+
+            foreach (NXTNode n in nodes)
+            {
+                foreach (Point p in circuit.GetNeighbours(n.position))
+                {
+                    NXTNode neighbour = FindNodeAt(p);
+                    n.neighbours.Add(neighbour);
+                }
+            }
         }
 
+        private NXTNode FindNodeAt(Point p)
+        {
+            foreach (NXTNode n in nodes)
+            {
+                if (n.position.Equals(p))
+                    return n;
+            }
+
+            Console.WriteLine("null @ " + p); // Si le noeud n'existe pas, arrive quand des voisins sont manquants
+            return null;
+        }
 
         /*
          * Petit soucis de parent/voisins, sinon ça marche :)
@@ -49,15 +72,10 @@ namespace SgtSafety.NXTIA
                 {
                     NXTNode node = new NXTNode(current, p, uint.MaxValue);
                     nodes.Add(node);
-                    current.neighbours.Add(node);
                     accessibleCases.Remove(p);
                     sptSet.Add(node.position, false);
+                    CreateChilds(start, node);
                 }
-            }
-
-            foreach (NXTNode n in current.neighbours)
-            {
-                CreateChilds(start, n);
             }
         }
 
@@ -80,13 +98,16 @@ namespace SgtSafety.NXTIA
 
         private void UpdatePrice(NXTNode na, NXTNode nb)
         {
-            uint nPrice = na.price + (uint)GetManhattanHeuristic(na.position, nb.position);
-            if (!sptSet[nb.position] && na.price != uint.MaxValue && nPrice < nb.price)
+            if (nb != null)
             {
-                nb.price = nPrice;
-                nb.parent = na;
-                this.circuit.getCase(nb.position).CaseColor = new Color(nb.price / 10f, (10 - nb.price) / 10f, 0f);
-                Console.WriteLine("Parent updated " + na.position + " -> " + nb.position);
+                uint nPrice = na.price + (uint)GetManhattanHeuristic(na.position, nb.position);
+                if (!sptSet[nb.position] && na.price != uint.MaxValue && nPrice < nb.price)
+                {
+                    nb.price = nPrice;
+                    nb.parent = na;
+                    //this.circuit.getCase(nb.position).CaseColor = new Color(nb.price / 10f, (10 - nb.price) / 10f, 0f); // Donne une couleur aux cases selon l'heuristique
+                    //Console.WriteLine("Parent updated " + na.position + " -> " + nb.position);
+                }
             }
         }
 
@@ -105,11 +126,9 @@ namespace SgtSafety.NXTIA
                     break;
 
                 sptSet[s1.position] = true;
-                Console.WriteLine("s1 -> " + s1.position);
                 foreach (NXTNode s2 in s1.neighbours)
                 {
                     UpdatePrice(s1, s2);
-                    Console.WriteLine("s2 -> " + s2.position);
                 }
             }
 
@@ -129,6 +148,45 @@ namespace SgtSafety.NXTIA
 
             path.Reverse();
             return path;
+        }
+
+        //Retourne le patient le plus proche du robot, le seconde argument n'est à passer que dans le cas de l'IA, sinon lui passer NXTVehicule.ERROR
+        public Point FindClosestPatient(Point targetTelec)
+        {
+            int distanceMin = int.MaxValue,
+                distance;
+            Point closestPatient = NXTVehicule.ERROR;
+            foreach (Point p in this.vehicule.Circuit.Patients)
+            {
+                distance = GetManhattanHeuristic(p, vehicule.Position);
+                if (distance < distanceMin && !p.Equals(targetTelec))
+                {
+                    distanceMin = distance;
+                    closestPatient = p;
+                }
+            }
+
+            return closestPatient;
+        }
+
+        //Retourne l'hopital le plus proche du robot
+        public Point FindClosestHopital()
+        {
+            List<Point> hopitaux = vehicule.Circuit.Patients;
+            int distanceMin = int.MaxValue,
+                distance;
+            Point closestHopital = NXTVehicule.ERROR;
+            foreach (Point h in hopitaux)
+            {
+                distance = GetManhattanHeuristic(h, vehicule.Position);
+                if (distance < distanceMin)
+                {
+                    distanceMin = distance;
+                    closestHopital = h;
+                }
+            }
+
+            return closestHopital;
         }
     }
 }

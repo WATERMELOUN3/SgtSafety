@@ -8,6 +8,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -59,19 +60,37 @@ namespace SgtSafety.Forms
         }
 
         // Paquet reçu
-        private void PacketReceived(object sender, NXTPacketReceivedEventArgs e)
+        private async void PacketReceived(object sender, NXTPacketReceivedEventArgs e)
         {
             UpdateBuffer(vehicule.Buffer);
             Console.WriteLine("Réponse reçue ! (Autonome)");
             if (button1.Text == "Pause")
             {
-                if (!vehicule.SendNextAction())
+                if (!vehicule.SendNextAction(radioButton1.Checked))
                 {
-                    ButtonDisable();
+                    await Task.Delay(TimeSpan.FromMilliseconds((int)numericUpDown1.Value));
+                    if (simulation1.CalculatePath())
+                    {
+                        UpdateBuffer(vehicule.Buffer);
+                        if (radioButton1.Checked)
+                            await Task.Delay(TimeSpan.FromMilliseconds((int)numericUpDown1.Value));
+                        PacketReceived(sender, e);
+                    }
+                    else
+                    {
+                        vehicule.Circuit.FillColor(Microsoft.Xna.Framework.Color.White);
+                        ButtonDisable();
+                    }
                 }
                 else
                 {
-                    vehicule.NxtHelper.WaitForData(new EventHandler<NXTPacketReceivedEventArgs>(PacketReceived));
+                    if (radioButton1.Checked)
+                    {
+                        await Task.Delay(TimeSpan.FromMilliseconds((int)numericUpDown1.Value));
+                        PacketReceived(sender, e);
+                    }
+                    else
+                        vehicule.NxtHelper.WaitForData(new EventHandler<NXTPacketReceivedEventArgs>(PacketReceived));
                 }
             }
         }
@@ -99,10 +118,18 @@ namespace SgtSafety.Forms
             }
             else
             {
-                vehicule.SendNextAction();
-                vehicule.NxtHelper.WaitForData(new EventHandler<NXTPacketReceivedEventArgs>(PacketReceived));
                 button1.Text = "Pause";
+                vehicule.SendNextAction(radioButton1.Checked);
+                if (radioButton1.Checked)
+                    PacketReceived(sender, new NXTPacketReceivedEventArgs(new byte[] { }));
+                else
+                    vehicule.NxtHelper.WaitForData(new EventHandler<NXTPacketReceivedEventArgs>(PacketReceived));
             }
+        }
+
+        private void SimulationWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.simulation1.Dispose();
         }
     }
 }
