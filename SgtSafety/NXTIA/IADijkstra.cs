@@ -14,6 +14,11 @@ namespace SgtSafety.NXTIA
         private List<NXTNode> nodes;
         private Dictionary<Point, bool> sptSet;
 
+        protected List<NXTNode> Nodes
+        {
+            get { return nodes; }
+        }
+
         public IADijkstra(NXTVehicule vehicule, bool p_simulation = false)
             : base(vehicule, p_simulation)
         {
@@ -27,7 +32,7 @@ namespace SgtSafety.NXTIA
             return Math.Abs(b.X - a.X) + Math.Abs(b.Y - a.Y);
         }
 
-        private void Initialize(Point start)
+        protected void Initialize(Point start)
         {
             nodes.Clear();
             sptSet.Clear();
@@ -49,7 +54,7 @@ namespace SgtSafety.NXTIA
             }
         }
 
-        private NXTNode FindNodeAt(Point p)
+        protected NXTNode FindNodeAt(Point p)
         {
             foreach (NXTNode n in nodes)
             {
@@ -61,9 +66,6 @@ namespace SgtSafety.NXTIA
             return null;
         }
 
-        /*
-         * Petit soucis de parent/voisins, sinon ça marche :)
-         */
         private void CreateChilds(Point start, NXTNode current)
         {
             foreach (Point p in circuit.GetNeighbours(current.position))

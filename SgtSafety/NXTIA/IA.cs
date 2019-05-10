@@ -90,7 +90,7 @@ namespace SgtSafety.NXTIA
 
                 if (currentCase.TypeCase == Case.VIRAGE)
                 {
-                    newDirection = caseDirection.Equals(currentDirection) ? Rotate90Clockwise(currentDirection) : Rotate90AntiClockwise(currentDirection);
+                    newDirection = currentCase.goThrough(new NXTAction(NXTMovement.STRAIGHT), currentDirection);
                 }
             }
             // sinon (intersection)
