@@ -169,13 +169,16 @@ namespace SgtSafety.NXTEnvironment
         {
             char actiontd = action.Action;
             NXTCase caseCur = currentCase();
-            Point newDir = caseCur.goThrough(action, this.direction);
+            Point newDir = ERROR;
+            if (actiontd != NXTMovement.PAUSE)
+                newDir = caseCur.goThrough(action, this.direction);
 
             Console.WriteLine(this.position);
             if (newDir != ERROR && action.Movement != NXTMovement.UTURN)
                 this.position = this.position + newDir;
 
-            this.direction = newDir;
+            if (actiontd != NXTMovement.PAUSE)
+                this.direction = newDir;
 
             if (actiontd == NXTAction.TAKE)
                 this.takePatient(this.position);
@@ -203,7 +206,7 @@ namespace SgtSafety.NXTEnvironment
             if (action != null)
             {
                 Console.WriteLine("Ordre envoyé: " + action.ToString());
-                if (!simulation)
+                if (!simulation && action.Action != NXTAction.PAUSE)
                 {
                     NXTPacket packet = new NXTPacket(action);
                     nxtHelper.SendNTXPacket(packet);

@@ -18,6 +18,7 @@ namespace SgtSafety.Types
         public const char INTER_RIGHT = 'r';
         public const char INTER_LEFT = 'l';
         public const char UTURN = 'u';
+        public const char PAUSE = 'p';
     }
 
     public class NXTAction : NXTMovement
@@ -120,6 +121,9 @@ namespace SgtSafety.Types
                     break;
                 case NXTMovement.INTER_RIGHT:
                     t = "Tourner à droite";
+                    break;
+                case NXTMovement.PAUSE:
+                    t = "Marquer une pause";
                     break;
                 default:
                     t = "Donnée inconnue";

@@ -188,5 +188,6 @@ namespace SgtSafety.NXTIA
 
             return closestHopital;
         }
+
     }
 }

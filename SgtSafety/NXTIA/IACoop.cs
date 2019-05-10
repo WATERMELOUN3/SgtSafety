@@ -132,7 +132,6 @@ namespace SgtSafety.NXTIA
                     //OSEF
                     break;
                 case Collision.PONCTUELLE:
-                    //trouver un moyen d'inserer en debut de path ia une pause, ou la case actuelle
                     pathRobotIA.Insert(0, vehicule.Position);
                     break;
 
