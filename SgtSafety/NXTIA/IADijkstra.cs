@@ -190,5 +190,25 @@ namespace SgtSafety.NXTIA
 
             return closestHopital;
         }
+
+        protected bool RemoveFullNode(NXTNode node)
+        {
+            if (this.nodes.Remove(node))
+            {
+                foreach (NXTNode n in node.neighbours)
+                {
+                    foreach (NXTNode nn in n.neighbours)
+                    {
+                        if (nn == node)
+                        {
+                            n.neighbours.Remove(nn);
+                        }
+                    }
+                }
+
+                return true;
+            }
+            else return false;
+        }
     }
 }

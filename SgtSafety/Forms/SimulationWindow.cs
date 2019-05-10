@@ -118,12 +118,16 @@ namespace SgtSafety.Forms
             }
             else
             {
-                button1.Text = "Pause";
-                vehicule.SendNextAction(radioButton1.Checked);
-                if (radioButton1.Checked)
-                    PacketReceived(sender, new NXTPacketReceivedEventArgs(new byte[] { }));
-                else
-                    vehicule.NxtHelper.WaitForData(new EventHandler<NXTPacketReceivedEventArgs>(PacketReceived));
+                if (simulation1.CalculatePath())
+                {
+                    UpdateBuffer(vehicule.Buffer);
+                    button1.Text = "Pause";
+                    vehicule.SendNextAction(radioButton1.Checked);
+                    if (radioButton1.Checked)
+                        PacketReceived(sender, new NXTPacketReceivedEventArgs(new byte[] { }));
+                    else
+                        vehicule.NxtHelper.WaitForData(new EventHandler<NXTPacketReceivedEventArgs>(PacketReceived));
+                }
             }
         }
 

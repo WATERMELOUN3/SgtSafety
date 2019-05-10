@@ -137,8 +137,8 @@ namespace SgtSafety.NXTIA
                     pathRobotIA.Insert(0, vehicule.Position);
                     break;
                 case Collision.FRONTALE:
-                    //fermer node en pathRobotIA.ElementAt(indexPathCross)
-                    ComputeDijkstra(vehicule.Position, targetIA);
+                    this.RemoveFullNode(this.FindNodeAt(pathRobotIA[indexPathCross]));
+                    newPath = ComputeDijkstra(vehicule.Position, targetIA);
                     break;
             }
 

@@ -77,7 +77,7 @@ namespace SgtSafety.NXTEnvironment
         }
         public int MAX_PATIENTS
         {
-            get { return 2; }
+            get { return 1; }
         }
 
         // --------------------------------------------------------------------------
