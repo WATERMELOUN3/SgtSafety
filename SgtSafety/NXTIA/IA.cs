@@ -76,6 +76,10 @@ namespace SgtSafety.NXTIA
             Point deplacement = destination - currentPosition;
             Point caseDirection = OrientationToDirection(currentCase.CaseOrientation);
 
+            //Si le robot doit marquer une pause
+            if (destination.Equals(currentPosition))
+                outInstance = new NXTAction(NXTMovement.PAUSE);
+
             // Si destination derriere direction actuelle, demi tour
             if (destination.Equals(currentPosition - currentDirection))
                 outInstance = new NXTAction(NXTMovement.UTURN);
