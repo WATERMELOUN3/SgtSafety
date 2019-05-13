@@ -178,6 +178,14 @@ namespace SgtSafety.NXTEnvironment
             ColorHP();
         }
 
+        public void PaintPath(List<Point> p, Color c)
+        {
+            foreach (Point pp in p)
+            {
+                Paint(c, pp);
+            }
+        }
+
         // Ajoute un hopital
         public List<Point> addHopital(Point newHopital){
             if (!hopitaux.Contains(newHopital))

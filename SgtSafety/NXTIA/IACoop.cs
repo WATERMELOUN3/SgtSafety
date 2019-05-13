@@ -174,6 +174,7 @@ namespace SgtSafety.NXTIA
 
                 newTargetTelec = DetermineExcptdTelecTarget();
                 pathRobotTelecommande = this.simulRobotTelec.ComputeDijkstra(positionTelec, newTargetTelec);
+                vehicule.Circuit.PaintPath(pathRobotTelecommande, Color.Orange);
                 if (targetTelec != newTargetTelec)
                 {
                     targetTelec = newTargetTelec;
