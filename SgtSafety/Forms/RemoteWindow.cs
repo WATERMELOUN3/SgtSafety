@@ -87,27 +87,39 @@ namespace SgtSafety.Forms
             }
             else
             {
-                vehicule.SendNextAction();
-                vehicule.NxtHelper.WaitForData(new EventHandler<NXTPacketReceivedEventArgs>(PacketReceived));
+                vehicule.SendNextAction(checkBox2.Checked);
+
+                if (checkBox2.Checked)
+                    PacketReceived(this, new NXTPacketReceivedEventArgs(new byte[] { }));
+                else
+                    vehicule.NxtHelper.WaitForData(new EventHandler<NXTPacketReceivedEventArgs>(PacketReceived));
                 button10.Text = "Pause";
             }
             
         }
 
         // Paquet reçu
-        private void PacketReceived(object sender, NXTPacketReceivedEventArgs e)
+        private async void PacketReceived(object sender, NXTPacketReceivedEventArgs e)
         {
+            if (checkBox2.Checked)
+                await Task.Delay(TimeSpan.FromMilliseconds((int)numericUpDown1.Value));
+
             UpdateBuffer(vehicule.Buffer);
             Console.WriteLine("Réponse reçue ! (Telecommande)");
             if (button10.Text == "Pause")
             {
-                if (!vehicule.SendNextAction())
+                Console.WriteLine("help");
+                if (!vehicule.SendNextAction(checkBox2.Checked))
                 {
+                    Console.WriteLine("Fin buffer");
                     Button10Disable();
                 }
                 else
                 {
-                    vehicule.NxtHelper.WaitForData(new EventHandler<NXTPacketReceivedEventArgs>(PacketReceived));
+                    if (checkBox2.Checked)
+                        PacketReceived(sender, e);
+                    else
+                        vehicule.NxtHelper.WaitForData(new EventHandler<NXTPacketReceivedEventArgs>(PacketReceived));
                 }
             }
         }

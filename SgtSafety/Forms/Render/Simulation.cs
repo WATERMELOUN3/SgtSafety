@@ -20,8 +20,10 @@ namespace SgtSafety.Forms.Render
         // --------------------------------------------------------------------------
         private Texture2D background;
         private Texture2D robot;
-        private NXTVehicule vehicule;
+        private NXTVehicule iaVehicule;
+        private NXTVehicule remoteVehicule;
         private KeyboardState oldKeyState;
+        private SimulationWindow window;
         private IADijkstra ia;
 
         private Camera camera;
@@ -32,10 +34,12 @@ namespace SgtSafety.Forms.Render
         // --------------------------------------------------------------------------
         // CONSTRUCTOR
         // --------------------------------------------------------------------------
-        public Simulation(NXTVehicule vehicule)
+        public Simulation(NXTVehicule iaVehicule, NXTVehicule remoteVehicule, SimulationWindow window)
             : base()
         {
-            this.vehicule = vehicule;
+            this.iaVehicule = iaVehicule;
+            this.remoteVehicule = remoteVehicule;
+            this.window = window;
             oldKeyState = new KeyboardState();
         }
 
@@ -51,19 +55,19 @@ namespace SgtSafety.Forms.Render
             spriteBatch = new SpriteBatch(this.GraphicsDevice);
             background = RenderTools.LoadTextureFromFile(this.GraphicsDevice, "Data\\damier.png");
             robot = RenderTools.LoadTextureFromFile(this.GraphicsDevice, "Data\\robot.png");
-            cRend = new CircuitRenderer(vehicule.Circuit, this.GraphicsDevice);
+            cRend = new CircuitRenderer(iaVehicule.Circuit, this.GraphicsDevice);
             camera = new Camera(this.GraphicsDevice.Viewport);
-            ia = new IADijkstra(this.vehicule);
+            ia = new IADijkstra(this.iaVehicule);
         }
 
         public bool CalculatePath()
         {
-            vehicule.ClearBuffer();
-            if (vehicule.Circuit.Patients.Count > 0 || vehicule.Patients > 0)
+            iaVehicule.ClearBuffer();
+            if (iaVehicule.Circuit.Patients.Count > 0 || iaVehicule.Patients > 0)
             {
-                if (vehicule.Patients >= vehicule.MAX_PATIENTS)
+                if (iaVehicule.Patients >= iaVehicule.MAX_PATIENTS)
                 {
-                    List<Point> chemin = ia.ComputeDijkstra(vehicule.Position, vehicule.Circuit.Hopitaux[0]);
+                    List<Point> chemin = ia.ComputeDijkstra(iaVehicule.Position, iaVehicule.Circuit.Hopitaux[0]);
 
                     ia.AddToIABuffer(chemin);
                     PaintPath(chemin);
@@ -71,11 +75,11 @@ namespace SgtSafety.Forms.Render
                 }
                 else
                 {
-                    List<Point> chemin = ia.ComputeDijkstra(vehicule.Position, ia.FindClosestPatient(NXTVehicule.ERROR));
+                    List<Point> chemin = ia.ComputeDijkstra(iaVehicule.Position, ia.FindClosestPatient(NXTVehicule.ERROR));
 
-                    if (vehicule.Patients > 0)
+                    if (iaVehicule.Patients > 0)
                     {
-                        List<Point> cheminHopital = ia.ComputeDijkstra(vehicule.Position, ia.FindClosestHopital());
+                        List<Point> cheminHopital = ia.ComputeDijkstra(iaVehicule.Position, ia.FindClosestHopital());
                         chemin = chemin.Count >= cheminHopital.Count ? chemin : cheminHopital;
                     }
 
@@ -90,9 +94,9 @@ namespace SgtSafety.Forms.Render
 
         private void PaintPath(List<Point> path)
         {
-            vehicule.Circuit.FillColor(Color.White);
+            iaVehicule.Circuit.FillColor(Color.White);
             foreach (Point p in path)
-                vehicule.Circuit.Paint(Color.BlueViolet, p);
+                iaVehicule.Circuit.Paint(Color.BlueViolet, p);
         }
 
         // Appelé à chaque boucle logique
@@ -120,10 +124,19 @@ namespace SgtSafety.Forms.Render
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, camera.Transform);
             cRend.Render(spriteBatch);
 
-            // Deprecated but OK
-            spriteBatch.Draw(robot, new Vector2(vehicule.Position.X * 32 + 16, vehicule.Position.Y * 32 + 16),
-                new Rectangle(0, 0, robot.Width, robot.Height), Color.White, (((float)vehicule.ToOrientation) / 2) * (float)Math.PI,
+            // Robot  autonome
+            spriteBatch.Draw(robot, new Vector2(iaVehicule.Position.X * 32 + 16, iaVehicule.Position.Y * 32 + 16),
+                new Rectangle(0, 0, robot.Width, robot.Height), Color.White, (((float)iaVehicule.ToOrientation) / 2) * (float)Math.PI,
                 new Vector2(robot.Width / 2, robot.Height / 2), 1.0f, SpriteEffects.None, 0);
+
+            // Robot télécommandé
+            if (window.RemoteEnabled)
+            {
+                spriteBatch.Draw(robot, new Vector2(remoteVehicule.Position.X * 32 + 16, remoteVehicule.Position.Y * 32 + 16),
+                    new Rectangle(0, 0, robot.Width, robot.Height), Color.White, (((float)remoteVehicule.ToOrientation) / 2) * (float)Math.PI,
+                    new Vector2(robot.Width / 2, robot.Height / 2), 1.0f, SpriteEffects.None, 0);
+            }
+
             spriteBatch.End();
         }
     }

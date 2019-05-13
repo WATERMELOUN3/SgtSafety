@@ -207,7 +207,7 @@ namespace SgtSafety.NXTEnvironment
             {
                 Console.WriteLine("Ordre envoyé: " + action.ToString());
 
-                if (action.Temporisation > 0)
+                if (action.Movement == NXTMovement.PAUSE)
                     Sleep(action.Temporisation);
 
                 if (!simulation && action.Action != NXTAction.PAUSE)

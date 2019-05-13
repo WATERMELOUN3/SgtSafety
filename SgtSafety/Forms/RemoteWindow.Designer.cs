@@ -33,14 +33,19 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button10 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -89,6 +94,10 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.numericUpDown1);
+            this.groupBox1.Controls.Add(this.checkBox2);
             this.groupBox1.Controls.Add(this.button8);
             this.groupBox1.Controls.Add(this.button10);
             this.groupBox1.Controls.Add(this.button7);
@@ -100,6 +109,39 @@
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Buffer";
+            // 
+            // button8
+            // 
+            this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button8.Location = new System.Drawing.Point(6, 119);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(109, 30);
+            this.button8.TabIndex = 11;
+            this.button8.Text = "Supprimer tout";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.Button8_Click);
+            // 
+            // button10
+            // 
+            this.button10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button10.Location = new System.Drawing.Point(6, 31);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(109, 30);
+            this.button10.TabIndex = 10;
+            this.button10.Text = "Lancer";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.Button10_Click);
+            // 
+            // button7
+            // 
+            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button7.Location = new System.Drawing.Point(6, 155);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(109, 30);
+            this.button7.TabIndex = 7;
+            this.button7.Text = "Supprimer action";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.Button7_Click);
             // 
             // listBox1
             // 
@@ -141,38 +183,50 @@
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.Button6_Click);
             // 
-            // button7
+            // checkBox2
             // 
-            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button7.Location = new System.Drawing.Point(6, 155);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(109, 30);
-            this.button7.TabIndex = 7;
-            this.button7.Text = "Supprimer action";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.Button7_Click);
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(6, 61);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(102, 17);
+            this.checkBox2.TabIndex = 12;
+            this.checkBox2.Text = "Mode simulation";
+            this.checkBox2.UseVisualStyleBackColor = true;
             // 
-            // button10
+            // numericUpDown1
             // 
-            this.button10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button10.Location = new System.Drawing.Point(6, 37);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(109, 30);
-            this.button10.TabIndex = 10;
-            this.button10.Text = "Lancer";
-            this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.Button10_Click);
+            this.numericUpDown1.Location = new System.Drawing.Point(22, 93);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            15000,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(60, 20);
+            this.numericUpDown1.TabIndex = 13;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
             // 
-            // button8
+            // label1
             // 
-            this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button8.Location = new System.Drawing.Point(6, 119);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(109, 30);
-            this.button8.TabIndex = 11;
-            this.button8.Text = "Supprimer tout";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.Button8_Click);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(88, 95);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(20, 13);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "ms";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 77);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(106, 13);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "Temporisation (simu):";
             // 
             // RemoteWindow
             // 
@@ -193,6 +247,7 @@
             this.Load += new System.EventHandler(this.RemoteWindow_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -211,5 +266,9 @@
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
     }
 }

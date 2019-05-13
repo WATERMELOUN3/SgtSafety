@@ -46,7 +46,7 @@ namespace SgtSafety.Forms
         // Chargement de la fenêtre
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            this.remoteVehicule = new NXTVehicule(new Point(0, 2), NXTVehicule.TOP);
+            this.remoteVehicule = new NXTVehicule(new Point(1, 2), NXTVehicule.RIGHT);
             this.autoVehicule = new NXTVehicule(new Point(0, 3), NXTVehicule.BOTTOM);
         }
 
@@ -101,7 +101,6 @@ namespace SgtSafety.Forms
             else
             {
                 button2.ForeColor = System.Drawing.Color.Green;
-                button6.Enabled = true;
             }
         }
 
@@ -165,7 +164,7 @@ namespace SgtSafety.Forms
         // Bouton "ouvrir le simulateur / affichage"
         private void Button4_Click(object sender, EventArgs e)
         {
-            SimulationWindow sw = new SimulationWindow(autoVehicule);
+            SimulationWindow sw = new SimulationWindow(autoVehicule, remoteVehicule);
             sw.Show();
         }
 

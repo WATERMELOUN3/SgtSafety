@@ -16,17 +16,23 @@ namespace SgtSafety.Forms
 {
     public partial class SimulationWindow : Form
     {
-        private NXTVehicule vehicule;
+        private NXTVehicule iaVehicule;
+        private NXTVehicule remoteVehicule;
 
         private delegate void SafeCallDelegate(NXTBuffer buffer);
         private delegate void ButtonDisableDelegate();
 
-        public SimulationWindow(NXTVehicule vehicule)
+        public bool RemoteEnabled = false;
+        public bool CoopEnabled = false;
+
+        public SimulationWindow(NXTVehicule iaVehicule, NXTVehicule remoteVehicule)
         {
             InitializeComponent();
 
-            this.vehicule = vehicule;
-            this.simulation1 = new Simulation(vehicule);
+            this.iaVehicule = iaVehicule;
+            this.remoteVehicule = remoteVehicule;
+
+            this.simulation1 = new Simulation(iaVehicule, remoteVehicule, this);
             this.simulation1.Location = new System.Drawing.Point(12, 27);
             this.simulation1.Name = "drawEditor1";
             this.simulation1.Size = new System.Drawing.Size(731, 411);
@@ -38,7 +44,7 @@ namespace SgtSafety.Forms
         private void Button2_Click(object sender, EventArgs e)
         {
             this.simulation1.CalculatePath();
-            UpdateBuffer(this.vehicule.Buffer);
+            UpdateBuffer(this.iaVehicule.Buffer);
         }
 
         // Met à jour la listBox1 pour afficher le buffer
@@ -62,23 +68,23 @@ namespace SgtSafety.Forms
         // Paquet reçu
         private async void PacketReceived(object sender, NXTPacketReceivedEventArgs e)
         {
-            UpdateBuffer(vehicule.Buffer);
+            UpdateBuffer(iaVehicule.Buffer);
             Console.WriteLine("Réponse reçue ! (Autonome)");
             if (button1.Text == "Pause")
             {
-                if (!vehicule.SendNextAction(radioButton1.Checked))
+                if (!iaVehicule.SendNextAction(radioButton1.Checked))
                 {
                     await Task.Delay(TimeSpan.FromMilliseconds((int)numericUpDown1.Value));
                     if (simulation1.CalculatePath())
                     {
-                        UpdateBuffer(vehicule.Buffer);
+                        UpdateBuffer(iaVehicule.Buffer);
                         if (radioButton1.Checked)
                             await Task.Delay(TimeSpan.FromMilliseconds((int)numericUpDown1.Value));
                         PacketReceived(sender, e);
                     }
                     else
                     {
-                        vehicule.Circuit.FillColor(Microsoft.Xna.Framework.Color.White);
+                        iaVehicule.Circuit.FillColor(Microsoft.Xna.Framework.Color.White);
                         ButtonDisable();
                     }
                 }
@@ -90,7 +96,7 @@ namespace SgtSafety.Forms
                         PacketReceived(sender, e);
                     }
                     else
-                        vehicule.NxtHelper.WaitForData(new EventHandler<NXTPacketReceivedEventArgs>(PacketReceived));
+                        iaVehicule.NxtHelper.WaitForData(new EventHandler<NXTPacketReceivedEventArgs>(PacketReceived));
                 }
             }
         }
@@ -111,7 +117,7 @@ namespace SgtSafety.Forms
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            UpdateBuffer(vehicule.Buffer);
+            UpdateBuffer(iaVehicule.Buffer);
             if (button1.Text == "Pause")
             {
                 button1.Text = "Lancer";
@@ -120,13 +126,13 @@ namespace SgtSafety.Forms
             {
                 if (simulation1.CalculatePath())
                 {
-                    UpdateBuffer(vehicule.Buffer);
+                    UpdateBuffer(iaVehicule.Buffer);
                     button1.Text = "Pause";
-                    vehicule.SendNextAction(radioButton1.Checked);
+                    iaVehicule.SendNextAction(radioButton1.Checked);
                     if (radioButton1.Checked)
                         PacketReceived(sender, new NXTPacketReceivedEventArgs(new byte[] { }));
                     else
-                        vehicule.NxtHelper.WaitForData(new EventHandler<NXTPacketReceivedEventArgs>(PacketReceived));
+                        iaVehicule.NxtHelper.WaitForData(new EventHandler<NXTPacketReceivedEventArgs>(PacketReceived));
                 }
             }
         }
@@ -134,6 +140,46 @@ namespace SgtSafety.Forms
         private void SimulationWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             this.simulation1.Dispose();
+        }
+
+        private void CheckBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                checkBox2.Enabled = true;
+                RemoteEnabled = true;
+            }
+            else
+            {
+                checkBox2.Checked = false;
+                checkBox2.Enabled = false;
+                RemoteEnabled = false;
+                CoopEnabled = false;
+            }
+        }
+
+        private void RadioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton1.Checked)
+            {
+                groupBox1.Enabled = true;
+            }
+            else
+            {
+                groupBox1.Enabled = false;
+            }
+        }
+
+        private void CheckBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox2.Checked)
+            {
+                CoopEnabled = true;
+            }
+            else
+            {
+                CoopEnabled = false;
+            }
         }
     }
 }

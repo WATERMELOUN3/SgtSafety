@@ -147,7 +147,6 @@
             // 
             // button6
             // 
-            this.button6.Enabled = false;
             this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button6.Location = new System.Drawing.Point(12, 321);
             this.button6.Name = "button6";
