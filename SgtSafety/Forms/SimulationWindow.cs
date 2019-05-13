@@ -1,5 +1,6 @@
 ﻿using SgtSafety.Forms.Render;
 using SgtSafety.NXTEnvironment;
+using SgtSafety.NXTIA;
 using SgtSafety.Types;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,8 @@ namespace SgtSafety.Forms
         private delegate void SafeCallDelegate(NXTBuffer buffer);
         private delegate void ButtonDisableDelegate();
 
+        private IACoop iaCoop;
+
         public bool RemoteEnabled = false;
         public bool CoopEnabled = false;
 
@@ -39,6 +42,8 @@ namespace SgtSafety.Forms
             this.simulation1.TabIndex = 0;
             this.simulation1.Text = "drawEditor1";
             this.Controls.Add(this.simulation1);
+
+            iaCoop = new IACoop(remoteVehicule, iaVehicule);
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -69,34 +74,42 @@ namespace SgtSafety.Forms
         private async void PacketReceived(object sender, NXTPacketReceivedEventArgs e)
         {
             UpdateBuffer(iaVehicule.Buffer);
-            Console.WriteLine("Réponse reçue ! (Autonome)");
-            if (button1.Text == "Pause")
+
+            if (CoopEnabled)
             {
-                if (!iaVehicule.SendNextAction(radioButton1.Checked))
+                iaCoop.ComputeMove();
+            }
+            else
+            {
+                Console.WriteLine("Réponse reçue ! (Autonome)");
+                if (button1.Text == "Pause")
                 {
-                    await Task.Delay(TimeSpan.FromMilliseconds((int)numericUpDown1.Value));
-                    if (simulation1.CalculatePath())
-                    {
-                        UpdateBuffer(iaVehicule.Buffer);
-                        if (radioButton1.Checked)
-                            await Task.Delay(TimeSpan.FromMilliseconds((int)numericUpDown1.Value));
-                        PacketReceived(sender, e);
-                    }
-                    else
-                    {
-                        iaVehicule.Circuit.FillColor(Microsoft.Xna.Framework.Color.White);
-                        ButtonDisable();
-                    }
-                }
-                else
-                {
-                    if (radioButton1.Checked)
+                    if (!iaVehicule.SendNextAction(radioButton1.Checked))
                     {
                         await Task.Delay(TimeSpan.FromMilliseconds((int)numericUpDown1.Value));
-                        PacketReceived(sender, e);
+                        if (simulation1.CalculatePath())
+                        {
+                            UpdateBuffer(iaVehicule.Buffer);
+                            if (radioButton1.Checked)
+                                await Task.Delay(TimeSpan.FromMilliseconds((int)numericUpDown1.Value));
+                            PacketReceived(sender, e);
+                        }
+                        else
+                        {
+                            iaVehicule.Circuit.FillColor(Microsoft.Xna.Framework.Color.White);
+                            ButtonDisable();
+                        }
                     }
                     else
-                        iaVehicule.NxtHelper.WaitForData(new EventHandler<NXTPacketReceivedEventArgs>(PacketReceived));
+                    {
+                        if (radioButton1.Checked)
+                        {
+                            await Task.Delay(TimeSpan.FromMilliseconds((int)numericUpDown1.Value));
+                            PacketReceived(sender, e);
+                        }
+                        else
+                            iaVehicule.NxtHelper.WaitForData(new EventHandler<NXTPacketReceivedEventArgs>(PacketReceived));
+                    }
                 }
             }
         }

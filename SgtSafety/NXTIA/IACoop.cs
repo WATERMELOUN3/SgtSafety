@@ -34,6 +34,8 @@ namespace SgtSafety.NXTIA
             this.patients = robotTelec.Circuit.Patients;
             this.patientsDropped = 0;
             this.targetTelec = NXTVehicule.ERROR;
+            this.pathRobotTelecommande = new List<Point>();
+            this.pathRobotIA = new List<Point>();
         }
 
 
@@ -152,7 +154,7 @@ namespace SgtSafety.NXTIA
         }
 
         //Calcule potentiellement le nouveau path de l'IA selon le mouvement du robot télécommandé.
-        private void ComputeMove()
+        public void ComputeMove()
         {
             Point positionTelec, newTargetTelec;
             int indexPathCross;
