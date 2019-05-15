@@ -134,7 +134,7 @@ namespace SgtSafety.NXTIA
                 }
             }
 
-            Console.WriteLine(currentCase + " @ " + currentPosition + " -> " + destination + " _ " + DirectionToOrientation(newDirection) + "\nResult= " + outInstance);
+            //Console.WriteLine(currentCase + " @ " + currentPosition + " -> " + destination + " _ " + DirectionToOrientation(newDirection) + "\nResult= " + outInstance);
 
             return outInstance;
         }

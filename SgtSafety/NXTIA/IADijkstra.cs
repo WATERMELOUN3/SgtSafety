@@ -210,5 +210,12 @@ namespace SgtSafety.NXTIA
             }
             else return false;
         }
+
+        protected int WeightObj(int robotCapacity, List<Point> patientsTaken)
+        {
+            int weight = 0;
+
+            return weight;
+        }
     }
 }

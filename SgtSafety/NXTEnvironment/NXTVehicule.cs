@@ -173,7 +173,7 @@ namespace SgtSafety.NXTEnvironment
             if (actiontd != NXTMovement.PAUSE)
                 newDir = caseCur.goThrough(action, this.direction);
 
-            Console.WriteLine(this.position);
+            //Console.WriteLine(this.position);
             if (newDir != ERROR && action.Movement != NXTMovement.UTURN)
                 this.position = this.position + newDir;
 

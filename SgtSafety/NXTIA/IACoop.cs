@@ -34,8 +34,12 @@ namespace SgtSafety.NXTIA
             this.patients = robotTelec.Circuit.Patients;
             this.patientsDropped = 0;
             this.targetTelec = NXTVehicule.ERROR;
-            this.pathRobotTelecommande = new List<Point>();
             this.pathRobotIA = new List<Point>();
+
+            Point ttargetTl = DetermineExcptdTelecTarget();
+            Point positionTelec = robotTelec.Position;
+            //Console.WriteLine("Cible telec : " + ttargetTl);
+            this.pathRobotTelecommande = this.simulRobotTelec.ComputeDijkstra(positionTelec, ttargetTl); ;
         }
 
 
@@ -154,7 +158,7 @@ namespace SgtSafety.NXTIA
         }
 
         //Calcule potentiellement le nouveau path de l'IA selon le mouvement du robot télécommandé.
-        public void ComputeMove()
+        public bool ComputeMove()
         {
             Point positionTelec, newTargetTelec;
             int indexPathCross;
@@ -179,6 +183,7 @@ namespace SgtSafety.NXTIA
                 {
                     targetTelec = newTargetTelec;
                     targetIA = DetermineNewTrgtIA(newTargetTelec);
+                    //Console.WriteLine("Cible telec : " + targetTelec + "Cible IA : " + targetIA);
 
                     this.pathRobotIA = ComputeDijkstra(vehicule.Position, targetIA);
                     pathIAChanged = true;
@@ -205,15 +210,9 @@ namespace SgtSafety.NXTIA
 
             if (action != null)
                 ComputeAction(action, vehicule.Position);
+
+            return patients.Count == 0;
         }
 
-        public void MainLoop()
-        {
-            int nbPatientsStart = patients.Count;
-            while (patientsDropped < nbPatientsStart)
-            {
-                ComputeMove();
-            }
-        }
     }
 }
