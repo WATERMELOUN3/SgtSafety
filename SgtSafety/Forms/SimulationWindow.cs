@@ -77,7 +77,17 @@ namespace SgtSafety.Forms
 
             if (CoopEnabled)
             {
-                iaCoop.ComputeMove();
+                if (!iaCoop.ComputeMove())
+                {
+                    iaVehicule.SendNextAction(radioButton1.Checked);
+                    remoteVehicule.SendNextAction(radioButton1.Checked);
+
+                    if (radioButton1.Checked)
+                    {
+                        await Task.Delay((int)numericUpDown1.Value);
+                        PacketReceived(sender, e);
+                    }
+                }
             }
             else
             {
@@ -141,7 +151,9 @@ namespace SgtSafety.Forms
                 {
                     UpdateBuffer(iaVehicule.Buffer);
                     button1.Text = "Pause";
-                    iaVehicule.SendNextAction(radioButton1.Checked);
+
+                    if (!checkBox2.Checked)
+                        iaVehicule.SendNextAction(radioButton1.Checked);
                     if (radioButton1.Checked)
                         PacketReceived(sender, new NXTPacketReceivedEventArgs(new byte[] { }));
                     else
