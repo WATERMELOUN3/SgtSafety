@@ -65,7 +65,8 @@ namespace SgtSafety.Forms
                 listBox1.Items.Clear();
                 foreach (NXTAction a in buffer)
                 {
-                    listBox1.Items.Add(a.ToFancyString());
+                    if (a != null)
+                        listBox1.Items.Add(a.ToFancyString());
                 }
             }
         }

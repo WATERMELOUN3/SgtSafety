@@ -142,7 +142,7 @@ namespace SgtSafety.NXTEnvironment
         }
 
         // Prend un patient (renvoie true si le patient a été pris, sinon renvoie false)
-        private bool takePatient(Point p){
+        public bool takePatient(Point p){
             if (patients < MAX_PATIENTS)
             {
                 patients++;
@@ -154,7 +154,7 @@ namespace SgtSafety.NXTEnvironment
         }
 
         // Lache un patient (renvoie le nombre de patients après)
-        private int dropPatient(){
+        public int dropPatient(){
             return (this.patients = 0);
         }
 

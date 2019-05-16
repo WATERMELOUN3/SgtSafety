@@ -31,7 +31,9 @@ namespace SgtSafety.NXTIA
         {
             this.robotTelec = p_robotTelec;
             this.simulRobotTelec = new IADijkstra(p_robotTelec, true);
-            this.patients = robotTelec.Circuit.Patients;
+            //this.patients = new List<Point>();
+            //this.patients.AddRange(robotTelec.Circuit.Patients);
+            this.patients = circuit.Patients;
             this.patientsDropped = 0;
             this.targetTelec = NXTVehicule.ERROR;
             this.pathRobotIA = new List<Point>();
@@ -78,15 +80,16 @@ namespace SgtSafety.NXTIA
         {
             if (robotTelec.Patients > 0)
                 return simulRobotTelec.FindClosestHopital();
-            return simulRobotTelec.FindClosestPatient(NXTVehicule.ERROR);
+            return simulRobotTelec.FindClosestPatient(NXTVehicule.ERROR, this.patients);
         }
 
         //Retourne le point cible de l'IA
         private Point DetermineNewTrgtIA(Point targetTelec)
         {
+            //Console.WriteLine("aaaaaaaa");
             if (vehicule.Patients > 0)
                 return simulRobotTelec.FindClosestHopital();
-            return simulRobotTelec.FindClosestPatient(targetTelec);
+            return simulRobotTelec.FindClosestPatient(targetTelec, this.patients);
         }
 
         /*private bool TelecEntersIAPerimeter()
@@ -139,7 +142,7 @@ namespace SgtSafety.NXTIA
                     //OSEF
                     break;
                 case Collision.PONCTUELLE:
-                    pathRobotIA.Insert(0, vehicule.Position);
+                    pathRobotIA.Insert(indexPathCross, pathRobotIA[indexPathCross-1]);
                     break;
                 case Collision.FRONTALE:
                     this.RemoveFullNode(this.FindNodeAt(pathRobotIA[indexPathCross]));
@@ -150,43 +153,36 @@ namespace SgtSafety.NXTIA
             return newPath;
         }
 
-        //Met à jour les patients si take
-        private void ComputeAction(NXTAction action, Point position)
-        {
-            if (action.Action.Equals(NXTAction.TAKE))
-                this.patients.Remove(position);
-        }
-
         //Calcule potentiellement le nouveau path de l'IA selon le mouvement du robot télécommandé.
         public bool ComputeMove()
         {
             Point positionTelec, newTargetTelec;
             int indexPathCross;
-            NXTAction action;
             bool pathIAChanged = false;
 
-            action = robotTelec.executeCommand();
             if (pathRobotTelecommande.Count > 0)
                 pathRobotTelecommande.RemoveAt(0);
 
             positionTelec = robotTelec.Position;
-            if (action != null)
-                ComputeAction(action, positionTelec);
+            //if (circuit.hasPatient(positionTelec))
+                //this.patients.Remove(positionTelec);
 
             if (!TelecFollowsExcptdPath(positionTelec))
             {
 
                 newTargetTelec = DetermineExcptdTelecTarget();
+                pathRobotTelecommande.Clear();
                 pathRobotTelecommande = this.simulRobotTelec.ComputeDijkstra(positionTelec, newTargetTelec);
                 vehicule.Circuit.PaintPath(pathRobotTelecommande, Color.Orange);
                 if (targetTelec != newTargetTelec)
                 {
                     targetTelec = newTargetTelec;
                     targetIA = DetermineNewTrgtIA(newTargetTelec);
-                    //Console.WriteLine("Cible telec : " + targetTelec + "Cible IA : " + targetIA);
+                    Console.WriteLine("Cible telec : " + targetTelec + "Cible IA : " + targetIA);
 
                     this.pathRobotIA = ComputeDijkstra(vehicule.Position, targetIA);
                     pathIAChanged = true;
+
                 }
 
                 indexPathCross = int.MaxValue;
@@ -198,18 +194,24 @@ namespace SgtSafety.NXTIA
                 }
             }
 
+            if (vehicule.Position == targetIA)
+            {
+                //if (circuit.hasPatient(targetIA))
+                    //this.patients.Remove(targetIA);
+                this.targetIA = DetermineNewTrgtIA(targetTelec);
+                this.pathRobotIA = ComputeDijkstra(vehicule.Position, targetIA);
+                pathIAChanged = true;
+            }
+
             if (pathIAChanged)
             {
                 vehicule.ClearBuffer();
                 AddToIABuffer(pathRobotIA);
             }
 
-            action = vehicule.executeCommand();
             if (pathRobotIA.Count > 0)
                 pathRobotIA.RemoveAt(0);
 
-            if (action != null)
-                ComputeAction(action, vehicule.Position);
 
             return patients.Count == 0;
         }

@@ -171,10 +171,28 @@ namespace SgtSafety.NXTIA
             return closestPatient;
         }
 
+        public Point FindClosestPatient(Point targetTelec, List<Point> remainingPatients)
+        {
+            int distanceMin = int.MaxValue,
+                distance;
+            Point closestPatient = NXTVehicule.ERROR;
+            foreach (Point p in remainingPatients)
+            {
+                distance = GetManhattanHeuristic(p, vehicule.Position);
+                if (distance < distanceMin && !p.Equals(targetTelec))
+                {
+                    distanceMin = distance;
+                    closestPatient = p;
+                }
+            }
+
+            return closestPatient;
+        }
+
         //Retourne l'hopital le plus proche du robot
         public Point FindClosestHopital()
         {
-            List<Point> hopitaux = vehicule.Circuit.Patients;
+            List<Point> hopitaux = vehicule.Circuit.Hopitaux;
             int distanceMin = int.MaxValue,
                 distance;
             Point closestHopital = NXTVehicule.ERROR;
