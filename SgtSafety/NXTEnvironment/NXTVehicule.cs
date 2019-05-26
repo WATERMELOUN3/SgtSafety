@@ -47,6 +47,7 @@ namespace SgtSafety.NXTEnvironment
         public Point Position
         {
             get { return position; }
+            set { position = value; }
         }
         public int Patients
         {

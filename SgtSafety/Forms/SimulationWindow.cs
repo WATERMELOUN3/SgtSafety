@@ -207,5 +207,14 @@ namespace SgtSafety.Forms
                 CoopEnabled = false;
             }
         }
+
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            PositionDialog d = new PositionDialog(iaVehicule, remoteVehicule);
+            d.ShowDialog();
+
+            iaVehicule.Position = new Microsoft.Xna.Framework.Point(d.AutoX, d.AutoY);
+            remoteVehicule.Position = new Microsoft.Xna.Framework.Point(d.TelX, d.TelY);
+        }
     }
 }
