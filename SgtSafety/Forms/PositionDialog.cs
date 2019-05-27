@@ -1,4 +1,5 @@
 ﻿using SgtSafety.NXTEnvironment;
+using SgtSafety.NXTIA;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,6 +18,8 @@ namespace SgtSafety.Forms
         public int TelY { get; private set; }
         public int AutoX { get; private set; }
         public int AutoY { get; private set; }
+        public Microsoft.Xna.Framework.Point TelDir { get; private set; }
+        public Microsoft.Xna.Framework.Point AutoDir { get; private set; }
 
         public PositionDialog(NXTVehicule auto, NXTVehicule tel)
         {
@@ -26,6 +29,8 @@ namespace SgtSafety.Forms
             numericUpDown2.Value = tel.Position.Y;
             numericUpDown3.Value = auto.Position.X;
             numericUpDown4.Value = auto.Position.Y;
+            comboBox1.SelectedIndex = (int)tel.ToOrientation;
+            comboBox2.SelectedIndex = (int)auto.ToOrientation;
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -34,6 +39,10 @@ namespace SgtSafety.Forms
             TelY = (int)numericUpDown2.Value;
             AutoX = (int)numericUpDown3.Value;
             AutoY = (int)numericUpDown4.Value;
+            TelDir = IA.OrientationToDirection((NXTEnvironment.Orientation)comboBox1.SelectedIndex);
+            AutoDir = IA.OrientationToDirection((NXTEnvironment.Orientation)comboBox2.SelectedIndex);
+
+            this.Close();
         }
     }
 }
