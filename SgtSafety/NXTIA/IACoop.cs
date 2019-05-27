@@ -89,7 +89,10 @@ namespace SgtSafety.NXTIA
             //Console.WriteLine("aaaaaaaa");
             if (vehicule.Patients > 0)
                 return simulRobotTelec.FindClosestHopital();
-            return simulRobotTelec.FindClosestPatient(targetTelec, this.patients);
+            if (patients.Count > 1)
+                return simulRobotTelec.FindClosestPatient(targetTelec, this.patients);
+
+            return vehicule.Position;
         }
 
         /*private bool TelecEntersIAPerimeter()
@@ -143,8 +146,11 @@ namespace SgtSafety.NXTIA
                     break;
                 case Collision.PONCTUELLE:
                     pathRobotIA.Insert(indexPathCross, pathRobotIA[indexPathCross-1]);
+                    Console.WriteLine("Collision ponctuelle");
                     break;
                 case Collision.FRONTALE:
+
+                    Console.WriteLine("Collision frontale");
                     this.RemoveFullNode(this.FindNodeAt(pathRobotIA[indexPathCross]));
                     newPath = ComputeDijkstra(vehicule.Position, targetIA);
                     break;
@@ -164,6 +170,7 @@ namespace SgtSafety.NXTIA
                 pathRobotTelecommande.RemoveAt(0);
 
             positionTelec = robotTelec.Position;
+            //Console.WriteLine(this.patients.Count);
             //if (circuit.hasPatient(positionTelec))
                 //this.patients.Remove(positionTelec);
 

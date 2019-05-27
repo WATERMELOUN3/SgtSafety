@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SgtSafety.Forms.RemoteWindow" Collapsed="true">
+    <Position X="3.5" Y="8.5" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="SgtSafety.Forms.RemoteWindow.SafeCallDelegate" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Forms\RemoteWindow.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="SgtSafety.Forms.RemoteWindow.Button10DisableDelegate" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Forms\RemoteWindow.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>ACBAAAEAACQAABACACKAACACANS7cE8AADAAAgEAQAA=</HashCode>
+      <FileName>Forms\RemoteWindow.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="vehicule" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="SgtSafety.Forms.Render.Simulation" Collapsed="true">
+    <Position X="13.75" Y="4.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAQBAEEAAgAAAwAAAAAEAgACAAAAEAAIAAAAAAQAJAA=</HashCode>
+      <FileName>Forms\Render\Simulation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SgtSafety.NXTBluetooth.NXTBluetoothHelper" Collapsed="true">
+    <Position X="12" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAhAAAAAAAAAgACCAgGaECAIAIEAAACAAAAAAAAgQ=</HashCode>
+      <FileName>NXTBluetooth\NXTBluetoothHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SgtSafety.NXTBluetooth.NXTDevice" Collapsed="true">
+    <Position X="13.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAIAABABEAAAAAAAgAAAAAAAAAAAqAABAAAA=</HashCode>
+      <FileName>NXTBluetooth\NXTDevice.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SgtSafety.NXTBluetooth.NXTPacket">
+    <Position X="9.5" Y="7" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAABEAAAAABAAAAAAAgAAAAAAAAIAAAAAAAAAAFAAA=</HashCode>
+      <FileName>NXTBluetooth\NXTPacket.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="action" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="SgtSafety.NXTEnvironment.NXTBuffer" Collapsed="true">
+    <Position X="0.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>NXTEnvironment\NXTBuffer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SgtSafety.NXTEnvironment.NXTCase" BaseTypeListCollapsed="true">
+    <Position X="2" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAABAAACAEAIAgAEAAACAEAACAAAIECEAAKAgEAggAA=</HashCode>
+      <FileName>NXTEnvironment\NXTCase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SgtSafety.NXTEnvironment.NXTCircuit" BaseTypeListCollapsed="true">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>gCAAACAABAgAAAQAQAiEAECgBjAFgABEBAgAAAioBgA=</HashCode>
+      <FileName>NXTEnvironment\NXTCircuit.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="circuit" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SgtSafety.NXTEnvironment.NXTVehicule">
+    <Position X="3.5" Y="4.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>EAAAQAABAQAIKgAgADAEIABABBBEAAgkBABAAADAQBg=</HashCode>
+      <FileName>NXTEnvironment\NXTVehicule.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="circuit" />
+      <Field Name="buffer" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="SgtSafety.NXTIA.IA">
+    <Position X="6.5" Y="4" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAIEAAAAAAAAAAAAACAAACAABBQAAEAEQBBAIAgAAAA=</HashCode>
+      <FileName>NXTIA\IA.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="circuit" />
+      <Field Name="vehicule" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="SgtSafety.NXTIA.IACoop" Collapsed="true">
+    <Position X="6.5" Y="7.25" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="SgtSafety.NXTIA.IACoop.Collision" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>NXTIA\IACoop.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AgAEwgABAAAAAAAAAAAAAAAACAkEBAggACAAAAAAAEA=</HashCode>
+      <FileName>NXTIA\IACoop.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="robotTelec" />
+      <Field Name="simulRobotTelec" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="SgtSafety.NXTIA.IADijkstra" Collapsed="true">
+    <Position X="6.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAACAACAIQAACBQAAAAAAAAAgABAACABAFAAIAA=</HashCode>
+      <FileName>NXTIA\IADijkstra.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SgtSafety.NXTIA.NXTNode" Collapsed="true">
+    <Position X="6.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAADAgAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>NXTIA\NXTNode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SgtSafety.Types.NXTMovement" Collapsed="true">
+    <Position X="9.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAgAIAAAAAAIgAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\NXTActions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SgtSafety.Types.NXTAction" Collapsed="true">
+    <Position X="9.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEBAAAABAEAAAEBAAQAAAAAAAAIAAJACAAAAAAAAQ=</HashCode>
+      <FileName>Types\NXTActions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SgtSafety.Types.NXTPacketReceivedEventArgs" Collapsed="true">
+    <Position X="12" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAAAA=</HashCode>
+      <FileName>Types\NXTPacketReceivedEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="SgtSafety.NXTEnvironment.Case" Collapsed="true">
+    <Position X="12" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAIAAAAAAACBAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>NXTEnvironment\NXTCase.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="SgtSafety.NXTEnvironment.Orientation" Collapsed="true">
+    <Position X="13.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAgAAABAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>NXTEnvironment\NXTCase.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

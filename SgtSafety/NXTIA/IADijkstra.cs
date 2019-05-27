@@ -152,6 +152,11 @@ namespace SgtSafety.NXTIA
             return path;
         }
 
+        private int PricePath(Point position, Point goal)
+        {
+            return ComputeDijkstra(position, goal).Count;
+        }
+
         //Retourne le patient le plus proche du robot, le seconde argument n'est à passer que dans le cas de l'IA, sinon lui passer NXTVehicule.ERROR
         public Point FindClosestPatient(Point targetTelec)
         {
@@ -160,7 +165,7 @@ namespace SgtSafety.NXTIA
             Point closestPatient = NXTVehicule.ERROR;
             foreach (Point p in this.vehicule.Circuit.Patients)
             {
-                distance = GetManhattanHeuristic(p, vehicule.Position);
+                distance = PricePath(p, vehicule.Position);
                 if (distance < distanceMin && !p.Equals(targetTelec))
                 {
                     distanceMin = distance;
@@ -178,7 +183,7 @@ namespace SgtSafety.NXTIA
             Point closestPatient = NXTVehicule.ERROR;
             foreach (Point p in remainingPatients)
             {
-                distance = GetManhattanHeuristic(p, vehicule.Position);
+                distance = PricePath(p, vehicule.Position);
                 if (distance < distanceMin && !p.Equals(targetTelec))
                 {
                     distanceMin = distance;
@@ -198,7 +203,7 @@ namespace SgtSafety.NXTIA
             Point closestHopital = NXTVehicule.ERROR;
             foreach (Point h in hopitaux)
             {
-                distance = GetManhattanHeuristic(h, vehicule.Position);
+                distance = PricePath(h, vehicule.Position);
                 if (distance < distanceMin)
                 {
                     distanceMin = distance;

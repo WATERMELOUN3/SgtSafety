@@ -47,13 +47,14 @@ namespace SgtSafety.NXTIA
             Point direction = vehicule.Direction;
 
             NXTCase currentCase = circuit.getCase(oldPos);
-            if (!((currentCase.goThrough(new NXTAction(NXTMovement.STRAIGHT), direction) + oldPos).Equals(path[0])
-                || (currentCase.goThrough(new NXTAction(NXTMovement.INTER_LEFT), direction) + oldPos).Equals(path[0])
-                || (currentCase.goThrough(new NXTAction(NXTMovement.INTER_RIGHT), direction) + oldPos).Equals(path[0])))
-            {
-                this.buffer.Add(new NXTAction(NXTMovement.UTURN), false);
-                direction = Rotate90Clockwise(Rotate90Clockwise(direction));
-            }
+            if (path.Count > 0)
+                if (!((currentCase.goThrough(new NXTAction(NXTMovement.STRAIGHT), direction) + oldPos).Equals(path[0])
+                    || (currentCase.goThrough(new NXTAction(NXTMovement.INTER_LEFT), direction) + oldPos).Equals(path[0])
+                    || (currentCase.goThrough(new NXTAction(NXTMovement.INTER_RIGHT), direction) + oldPos).Equals(path[0])))
+                {
+                    this.buffer.Add(new NXTAction(NXTMovement.UTURN), false);
+                    direction = Rotate90Clockwise(Rotate90Clockwise(direction));
+                }
 
             foreach (Point p in path)
             {

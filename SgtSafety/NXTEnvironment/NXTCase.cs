@@ -188,7 +188,7 @@ namespace SgtSafety.NXTEnvironment
                     return newDirection;
                 case Case.INTERSECTION:
                     Console.WriteLine("/!\\ Demi tour sur intersection /!\\");
-                    return newDirection;
+                    return NXTVehicule.ERROR;
                 default:
                     return NXTVehicule.ERROR;
             }
