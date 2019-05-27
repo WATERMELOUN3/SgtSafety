@@ -214,7 +214,9 @@ namespace SgtSafety.Forms
             d.ShowDialog();
 
             iaVehicule.Position = new Microsoft.Xna.Framework.Point(d.AutoX, d.AutoY);
+            iaVehicule.Direction = d.AutoDir;
             remoteVehicule.Position = new Microsoft.Xna.Framework.Point(d.TelX, d.TelY);
+            remoteVehicule.Direction = d.TelDir;
         }
     }
 }

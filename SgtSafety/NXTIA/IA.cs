@@ -140,7 +140,7 @@ namespace SgtSafety.NXTIA
             return outInstance;
         }
 
-        protected Point OrientationToDirection(Orientation orientation)
+        public static Point OrientationToDirection(Orientation orientation)
         {
             switch (orientation)
             {
@@ -157,7 +157,7 @@ namespace SgtSafety.NXTIA
             }
         }
 
-        protected Orientation DirectionToOrientation(Point direction)
+        public static Orientation DirectionToOrientation(Point direction)
         {
             if (direction.Equals(NXTVehicule.TOP))
                 return Orientation.TOP;

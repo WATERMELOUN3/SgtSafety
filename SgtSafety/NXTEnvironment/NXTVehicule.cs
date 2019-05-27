@@ -56,6 +56,7 @@ namespace SgtSafety.NXTEnvironment
         public Point Direction
         {
             get { return direction; }
+            set { direction = value; }
         }
         public NXTCircuit Circuit
         {
